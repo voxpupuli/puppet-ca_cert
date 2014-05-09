@@ -1,6 +1,8 @@
 ca_cert
 =======
 
+[![Build Status](https://travis-ci.org/pcfens/puppet-ca_cert.png?branch=master)](https://travis-ci.org/pcfens/puppet-ca_cert)
+
 Overview
 --------
 
