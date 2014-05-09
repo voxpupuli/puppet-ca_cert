@@ -23,14 +23,14 @@ your system.
 
 Optional parameters:
   * `always_update_certs`: Run your system's update CA command even when there are no
-                           updates needed.
+                           updates needed. (defaults to false)
   * `purge_unmanaged_CAs`: Purge non-OS default CAs from the system. This will only
                            remove CAs that might be installed using your OS's default
-                           management method.
+                           management method. (defaults to false)
   * `install_package`: Whether or not this module should install the ca_certificates
                        package. The package contains the default trusted (typically
                        Mozilla) CA certificates, as well as the tools required for this
-                       module to manage other installed CA certificates.
+                       module to manage other installed CA certificates. (defaults to true)
   * `ca_certs`: A hash of certificates you would like added. These may also be defined
                 by declaring `ca_cert::ca` once for each certificate.
 
