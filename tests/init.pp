@@ -1,0 +1,1 @@
+class { 'ca_cert': }

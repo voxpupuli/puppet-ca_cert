@@ -1,0 +1,9 @@
+HOSTS:
+  ubuntu-12-04:
+    platform: ubuntu-12.04-x64
+    image: ubuntu:precise
+    hypervisor: docker
+    docker_image_commands:
+      - 'apt-get install -yq wget net-tools curl lsb-release'
+CONFIG: 
+  type: foss

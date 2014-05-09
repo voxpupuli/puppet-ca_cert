@@ -1,0 +1,9 @@
+HOSTS:
+  centos-6-x64:
+    platform: el-6-x86_64
+    image: pcfens/beaker-centos
+    hypervisor: docker
+    docker_image_commands:
+      - 'touch /etc/sysconfig/network'
+CONFIG:
+  type: foss
