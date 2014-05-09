@@ -18,7 +18,7 @@ definition.
 
 ### ca_cert
 
-`ca_cert' ensures that the locations and tools needed to manage the CAs are present on
+`ca_cert` ensures that the locations and tools needed to manage the CAs are present on
 your system.
 
 Optional parameters:
