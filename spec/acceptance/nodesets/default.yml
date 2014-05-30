@@ -4,6 +4,6 @@ HOSTS:
     image: ubuntu:precise
     hypervisor: docker
     docker_image_commands:
-      - 'apt-get install -yq wget net-tools curl lsb-release'
+      - 'apt-get install -yq wget net-tools curl lsb-release rubygems'
 CONFIG: 
   type: foss

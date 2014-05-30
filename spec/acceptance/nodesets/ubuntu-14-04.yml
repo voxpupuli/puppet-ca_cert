@@ -1,0 +1,12 @@
+HOSTS:
+  ubuntu-14-04:
+    platform: ubuntu-14.04-x64
+    image: ubuntu:trusty
+    hypervisor: docker
+    docker_image_commands:
+      - 'apt-get install -yq wget net-tools curl lsb-release ruby ruby-dev'
+      - "sed -ri 's/^session\\s+required\\s+pam_loginuid.so$/session optional pam_loginuid.so/g' /etc/pam.d/sshd"
+      - "sed -ri 's/PermitRootLogin without-password/PermitRootLogin yes/g' /etc/ssh/sshd_config"
+      - "sed -ri 's/PermitEmptyPasswords no/PermitEmptyPasswords yes/g' /etc/ssh/sshd_config"
+CONFIG: 
+  type: foss

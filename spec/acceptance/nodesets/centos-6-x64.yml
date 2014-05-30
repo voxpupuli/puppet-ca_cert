@@ -4,6 +4,7 @@ HOSTS:
     image: pcfens/beaker-centos
     hypervisor: docker
     docker_image_commands:
+      - 'yum install -y rubygems'
       - 'touch /etc/sysconfig/network'
 CONFIG:
   type: foss
