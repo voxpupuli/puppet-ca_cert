@@ -1,5 +1,5 @@
 name    'pcfens-ca_cert'
-version '0.1.0'
+version '0.1.1'
 source 'https://github.com/pcfens/puppet-ca_cert'
 author 'pcfens'
 license 'Apache License, Version 2.0'

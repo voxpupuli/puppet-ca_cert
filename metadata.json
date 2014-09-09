@@ -10,14 +10,20 @@
   "description": "Manage CA certificates on Linux Operating Systems",
   "operatingsystem_support": [
     {
-    "operatingsystem":"RedHat",
-    "operatingsystemrelease":[ "5.0", "6.0" ]
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [
+        "5.0",
+        "6.0"
+      ]
     },
     {
-    "operatingsystem": "Ubuntu",
-    "operatingsystemrelease": [ "12.04", "14.04" ]
+      "operatingsystem": "Ubuntu",
+      "operatingsystemrelease": [
+        "12.04",
+        "14.04"
+      ]
     }
-   ],
+  ],
   "dependencies": [
     {"name":"puppetlabs/stdlib","version_requirement":">= 3.0.0"}
   ]
