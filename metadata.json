@@ -1,0 +1,24 @@
+{
+  "name": "pcfens-ca_cert",
+  "version": "0.1.1",
+  "author": "pcfens",
+  "summary": "Manage system CA certificates",
+  "license": "Apache License, Version 2.0",
+  "source": "https://github.com/pcfens/puppet-ca_cert",
+  "project_page": "https://github.com/pcfens/puppet-ca_cert",
+  "issues_url": "https://github.com/pcfens/puppet-ca_cert/issues",
+  "description": "Manage CA certificates on Linux Operating Systems",
+  "operatingsystem_support": [
+    {
+    "operatingsystem":"RedHat",
+    "operatingsystemrelease":[ "5.0", "6.0" ]
+    },
+    {
+    "operatingsystem": "Ubuntu",
+    "operatingsystemrelease": [ "12.04", "14.04" ]
+    }
+   ],
+  "dependencies": [
+    {"name":"puppetlabs/stdlib","version_requirement":">= 3.0.0"}
+  ]
+}
