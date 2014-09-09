@@ -38,13 +38,14 @@ class ca_cert (
   $always_update_certs = false,
   $purge_unmanaged_CAs = false,
   $install_package     = true,
-  $ca_certs            = undef,
+  $ca_certs            = {},
 ){
 
   include ca_cert::params
   include ca_cert::update
 
   validate_bool($always_update_certs)
+  validate_hash($ca_certs)
 
   if $always_update_certs == true {
     Exec <| title=='ca_cert_update' |> {
@@ -75,8 +76,7 @@ class ca_cert (
     require => Class['ca_cert::update'],
   }
 
-  if $ca_certs != undef {
-    validate_hash($ca_certs)
-    create_resources('ca_cert:ca', $ca_certs)
+  if !empty($ca_certs) {
+    create_resources('ca_cert::ca', $ca_certs)
   }
 }
