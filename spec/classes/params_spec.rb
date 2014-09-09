@@ -21,7 +21,7 @@ describe 'ca_cert::params', :type => :class do
       end
     end
   end
-  context "on an unsupport operating system" do
+  context "on an unsupported operating system" do
     let :facts do
       {
         :osfamily => 'Solaris'
