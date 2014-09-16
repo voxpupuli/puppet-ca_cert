@@ -12,12 +12,12 @@ describe 'ca_cert::params', :type => :class do
     end
     context "with osfamily #{osfamily}" do
 
-      it { should contain_ca_cert__params }
+      it { is_expected.to contain_ca_cert__params }
 
       it "should not contain any resources" do
         # Contains class[ca_cert::params], class[main], stage[main], and
         # class[settings]
-        subject.resources.size.should == 4
+        expect(subject.resources.size).to eq(4)
       end
     end
   end
@@ -28,6 +28,10 @@ describe 'ca_cert::params', :type => :class do
       }
     end
 
-    it { expect { should raise_error(Puppet::Error, /Unsupported osfamily (Solaris)/) }}
+    it "should fail" do
+      expect do
+        subject
+      end.to raise_error(Puppet::Error)
+    end
   end
 end

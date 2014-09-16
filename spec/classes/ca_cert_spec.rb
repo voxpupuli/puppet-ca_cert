@@ -8,10 +8,10 @@ describe 'ca_cert', :type => :class do
       }
     end
 
-    it { should contain_ca_cert__params }
-    it { should contain_package('ca-certificates') }
+    it { is_expected.to contain_ca_cert__params }
+    it { is_expected.to contain_package('ca-certificates') }
 
-    it { should contain_file("trusted_certs").with(
+    it { is_expected.to contain_file("trusted_certs").with(
         'ensure' => 'directory',
         'path'   => '/usr/local/share/ca-certificates',
         'group'  => 'staff',
@@ -25,7 +25,7 @@ describe 'ca_cert', :type => :class do
           :purge_unmanaged_CAs => 'true',
         }
       end
-      it { should contain_file("trusted_certs").with(
+      it { is_expected.to contain_file("trusted_certs").with(
           'ensure' => 'directory',
           'path'   => '/usr/local/share/ca-certificates',
           'group'  => 'staff',
@@ -41,10 +41,10 @@ describe 'ca_cert', :type => :class do
       }
     end
 
-    it { should contain_ca_cert__params }
-    it { should contain_package('ca-certificates') }
+    it { is_expected.to contain_ca_cert__params }
+    it { is_expected.to contain_package('ca-certificates') }
 
-    it { should contain_file("trusted_certs").with(
+    it { is_expected.to contain_file("trusted_certs").with(
         'ensure' => 'directory',
         'path'   => '/etc/pki/ca-trust/source/anchors',
         'group'  => 'root',
@@ -58,7 +58,7 @@ describe 'ca_cert', :type => :class do
           :purge_unmanaged_CAs => 'true',
         }
       end
-      it { should contain_file("trusted_certs").with(
+      it { is_expected.to contain_file("trusted_certs").with(
           'ensure' => 'directory',
           'path'   => '/etc/pki/ca-trust/source/anchors',
           'group'  => 'root',
@@ -73,7 +73,10 @@ describe 'ca_cert', :type => :class do
         :osfamily => 'Solaris',
       }
     end
-
-    it { expect { should raise_error(Puppet::Error, /Unsupported osfamily (Solaris)/) }}
+    it "should fail" do
+      expect do
+        subject
+      end.to raise_error(Puppet::Error)
+    end
   end
 end

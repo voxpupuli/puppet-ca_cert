@@ -29,17 +29,17 @@ describe 'ca_cert::ca', :unless => UNSUPPORTED_PLATFORMS.include?(fact('osfamily
     end
     
     describe file(TRUSTED_CA_FILE) do
-      it { should be_file }
+      it { is_expected.to be_file }
     end
 
     case fact('osfamily')
     when 'Debian'
       describe file(ABSENT_CA_FILE) do
-        it { should_not be_file }
+        it { is_expected.to_not be_file }
       end
     when 'RedHat'
       describe file(UNTRUSTED_CA_FILE) do
-        it { should be_file }
+        it { is_expected.to be_file }
       end
     end
   end
