@@ -1,6 +1,6 @@
 {
   "name": "pcfens-ca_cert",
-  "version": "1.0.0",
+  "version": "0.1.1",
   "author": "pcfens",
   "summary": "Manage system CA certificates",
   "license": "Apache License, Version 2.0",
@@ -22,16 +22,6 @@
         "12.04",
         "14.04"
       ]
-    }
-  ],
-  "requirements": [
-    {
-      "name": "pe",
-      "version_requirement": "3.x"
-    },
-    {
-      "name": "puppet",
-      "version_requirement": "3.x"
     }
   ],
   "dependencies": [
