@@ -5,9 +5,13 @@
 #
 # === Parameters
 #
+# [*ca_text*]
+#   The text of the CA certificate to install. Required if text is the source
+#   (default). If a different source is specified this parameter is ignored.
 # [*source*]
-#   Where the CA certificate should be retrieved from. http, https, ftp,
-#   file, and puppet protocols are supported. A required parameter.
+#   Where the CA certificate should be retrieved from. text, http, https, ftp,
+#   file, and puppet protocols/sources are supported. If text, then the ca_text parameter
+#   is also required. Defaults to text.
 # [*ensure*]
 #   Whether or not the CA certificate should be on a system or not. Valid
 #   values are trusted, present, distrusted, and absent. Note: untrusted is
@@ -24,7 +28,8 @@
 # }
 
 define ca_cert::ca (
-  $source,
+  $ca_text           = undef,
+  $source            = 'text',
   $ensure            = 'trusted',
   $verify_https_cert = true,
 ) {
@@ -34,6 +39,10 @@ define ca_cert::ca (
 
   validate_string($source)
   validate_bool($verify_https_cert)
+
+  if ($ensure == 'trusted' or $ensure == 'disrusted') and $source == 'text' and $ca_text == undef {
+    fail('ca_text is required if source is set to text')
+  }
 
   # Since Debian based OSes don't have explicit distrust directories
   # we need to change untrusted to absent and put a warning in the log.
@@ -83,11 +92,24 @@ define ca_cert::ca (
           file { "${name}.crt":
             ensure => present,
             source => $source_path,
+            path   => $ca_cert,
+            owner  => 'root',
+            group  => 'root',
             notify => Exec['ca_cert_update'],
           }
         }
+        text: {
+          file { "${name}.crt":
+            ensure  => present,
+            content => $ca_text,
+            path    => $ca_cert,
+            owner   => 'root',
+            group   => 'root',
+            notify  => Exec['ca_cert_update'],
+          }
+        }
         default: {
-          fail('Protocol must be puppet, file, http, https, or ftp.')
+          fail('Protocol must be puppet, file, http, https, ftp, or text.')
         }
       }
     }
