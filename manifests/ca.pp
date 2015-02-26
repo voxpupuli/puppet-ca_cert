@@ -86,8 +86,18 @@ define ca_cert::ca (
             notify => Exec['ca_cert_update'],
           }
         }
+        hiera: {
+          $hieraArray = delete_at($sourceArray, 0)
+          $hieraKey = join($hieraArray, ':')
+          file { "${name}.crt":
+            ensure  => present,
+            path    => $ca_cert,
+            content => hiera($hieraKey),
+            notify  => Exec['ca_cert_update'],
+          }
+        }
         default: {
-          fail('Protocol must be puppet, file, http, https, or ftp.')
+          fail('Protocol must be puppet, file, http, https, ftp, or hiera.')
         }
       }
     }
