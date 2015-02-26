@@ -83,6 +83,9 @@ define ca_cert::ca (
           file { "${name}.crt":
             ensure => present,
             source => $source_path,
+            path   => $ca_cert,
+            owner  => 'root',
+            group  => 'root',
             notify => Exec['ca_cert_update'],
           }
         }
