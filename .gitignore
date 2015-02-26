@@ -7,3 +7,4 @@ spec/fixtures
 .vagrant
 .*sw*
 pkg/
+log/
