@@ -1,6 +1,6 @@
 {
   "name": "pcfens-ca_cert",
-  "version": "0.9.0",
+  "version": "1.0.0",
   "author": "pcfens",
   "summary": "Manage system CA certificates",
   "license": "Apache-2.0",
