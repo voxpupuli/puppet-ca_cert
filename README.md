@@ -47,15 +47,20 @@ ca_cert::ca { 'GlobalSign-OrgSSL-Intermediate':
 
 `ca_cert::ca` supports 3 parameters:
 
-  * `source`: (required) Where the CA certificate should be retrieved from. HTTP, HTTPS, 
-              FTP, file, and puppet are all supported protocols.
+  * `ca_text`: The text of the CA certificate to install. Required if text is the source
+               (default). If a different source is specified this parameter is ignored.
+  * `source`: Where the CA certificate should be retrieved from. text, http, https, ftp,
+              file, and puppet protocols/sources are supported. If text, then the ca_text parameter
+              is also required. Defaults to text.
+              **Warning**: certificates delivered via http, https, or ftp won't be
+              updated if the upstream source changes.
   * `ensure`: Whether or not the CA certificate should be on the system or not. Valid
               values are trusted, present, distrusted, and absent. Trusted is the same
               as present. On Debian systems untrusted is the same as absent. On RedHat
               based systems untrusted certificates are placed in a different path before
               calling the update command. (defaults to trusted)
   * `verify_https_cert`: If a certificate is retrieved over HTTPS, whether or not the
-                         server's certificate should be validated against the fetching 
+                         server's certificate should be validated against the fetching
                          machine's trusted CA list or not. (defaults to true)
 
 Supported Platforms
