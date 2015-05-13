@@ -15,9 +15,7 @@ describe 'ca_cert::params', :type => :class do
       it { is_expected.to contain_ca_cert__params }
 
       it "should not contain any resources" do
-        # Contains class[ca_cert::params], class[main], stage[main], and
-        # class[settings]
-        expect(subject.resources.size).to eq(4)
+        should have_resource_count(0)
       end
     end
   end
@@ -28,10 +26,7 @@ describe 'ca_cert::params', :type => :class do
       }
     end
 
-    it "should fail" do
-      expect do
-        subject
-      end.to raise_error(Puppet::Error)
-    end
+    it { expect {catalogue}.to raise_error Puppet::Error, /Unsupported osfamily/ }
+
   end
 end

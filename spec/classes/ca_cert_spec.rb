@@ -73,10 +73,8 @@ describe 'ca_cert', :type => :class do
         :osfamily => 'Solaris',
       }
     end
-    it "should fail" do
-      expect do
-        subject
-      end.to raise_error(Puppet::Error)
-    end
+
+    it { expect {catalogue}.to raise_error Puppet::Error, /Unsupported osfamily/ }
+
   end
 end
