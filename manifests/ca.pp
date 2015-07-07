@@ -40,7 +40,7 @@ define ca_cert::ca (
   validate_string($source)
   validate_bool($verify_https_cert)
 
-  if ($ensure == 'trusted' or $ensure == 'disrusted') and $source == 'text' and $ca_text == undef {
+  if ($ensure == 'trusted' or $ensure == 'distrusted') and $source == 'text' and $ca_text == undef {
     fail('ca_text is required if source is set to text')
   }
 
