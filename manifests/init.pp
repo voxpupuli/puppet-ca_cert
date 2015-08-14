@@ -21,6 +21,8 @@
 # [*ca_certs*]
 #   A hash of CA certificates that should be installed as part of the class
 #   declaration
+# [*package_ensure*]
+#   The ensure parameter to pass to the package resource
 #
 # === Examples
 #
@@ -39,6 +41,7 @@ class ca_cert (
   $purge_unmanaged_CAs = false,
   $install_package     = true,
   $ca_certs            = {},
+  $package_ensure      = present,
 ){
 
   include ca_cert::params
@@ -68,7 +71,7 @@ class ca_cert (
 
   if $install_package == true {
     package { 'ca-certificates':
-      ensure => present,
+      ensure => $package_ensure,
     }
   }
 
