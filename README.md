@@ -43,6 +43,13 @@ ca_cert::ca { 'GlobalSign-OrgSSL-Intermediate':
   ensure => 'trusted',
   source => 'http://secure.globalsign.com/cacert/gsorganizationvalsha2g2r1.crt',
 }
+
+Add a certificate when you have a the certificate file locally.
+
+ca_cert::ca { 'gd_bundle-g2.crt':
+  ensure => 'trusted',
+  source => 'puppet:///modules/ca_cert/gd_bundle-g2.crt',
+}
 ```
 
 `ca_cert::ca` supports 3 parameters:
