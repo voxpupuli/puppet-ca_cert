@@ -36,7 +36,7 @@ Optional parameters:
 
 ### ca_cert::ca
 
-The primary way to add a CA certificate to a system.
+CAs can be added as URLs, text, or a puppet managed file
 
 ```puppet
 ca_cert::ca { 'GlobalSign-OrgSSL-Intermediate':
@@ -45,7 +45,15 @@ ca_cert::ca { 'GlobalSign-OrgSSL-Intermediate':
 }
 ```
 
-`ca_cert::ca` supports 3 parameters:
+```puppet
+ca_cert::ca { 'GlobalSign-OrgSSL-Intermediate':
+  ensure => 'trusted',
+  source => 'puppet:///modules/profiles/CAs/InCommon.crt',
+}
+```
+
+
+`ca_cert::ca`:
 
   * `ca_text`: The text of the CA certificate to install. Required if text is the source
                (default). If a different source is specified this parameter is ignored.
