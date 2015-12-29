@@ -70,7 +70,7 @@ class ca_cert (
   }
 
   if $install_package == true {
-    package { 'ca-certificates':
+    package { $ca_cert::params::ca_package:
       ensure => $package_ensure,
     }
   }

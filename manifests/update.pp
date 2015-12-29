@@ -3,6 +3,8 @@ class ca_cert::update {
   include ca_cert::params
 
   if $::osfamily == 'RedHat' {
+    case $::operatingsystemmajrelease {
+      /^6|7$/:  {
     exec { 'enable_ca_trust':
       command   => 'update-ca-trust enable',
       logoutput => 'on_failure',
@@ -10,6 +12,7 @@ class ca_cert::update {
       onlyif    => 'update-ca-trust check | grep DISABLED',
       before    => Exec['ca_cert_update'],
     }
+} }
   }
 
   exec { 'ca_cert_update':

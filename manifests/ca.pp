@@ -55,8 +55,8 @@ define ca_cert::ca (
   }
 
   $ca_cert = $adjusted_ensure ? {
-    'distrusted' => "${ca_cert::params::distrusted_cert_dir}/${name}.crt",
-    default      => "${ca_cert::params::trusted_cert_dir}/${name}.crt",
+    'distrusted' => "${ca_cert::params::distrusted_cert_dir}/${name}.${ca_cert::params::cert_extension}",
+    default      => "${ca_cert::params::trusted_cert_dir}/${name}.${ca_cert::params::cert_extension}",
   }
 
   case $adjusted_ensure {
@@ -65,7 +65,7 @@ define ca_cert::ca (
       $protocol_type = $sourceArray[0]
       case $protocol_type {
         puppet: {
-          file { "${name}.crt":
+          file { "${name}.${ca_cert::params::cert_extension}":
             ensure => present,
             source => $source,
             path   => $ca_cert,
@@ -79,7 +79,7 @@ define ca_cert::ca (
             true  => '',
             false => '--no-check-certificate',
           }
-          exec { "get_${name}.crt":
+          exec { "get_${name}.${ca_cert::params::cert_extension}":
             command =>
               "wget ${verify_https} -O ${ca_cert} ${source} 2> /dev/null",
             path    => ['/usr/bin', '/bin'],
@@ -89,7 +89,7 @@ define ca_cert::ca (
         }
         file: {
           $source_path = $sourceArray[1]
-          file { "${name}.crt":
+          file { "${name}.${ca_cert::params::cert_extension}":
             ensure => present,
             source => $source_path,
             path   => $ca_cert,
@@ -99,7 +99,7 @@ define ca_cert::ca (
           }
         }
         text: {
-          file { "${name}.crt":
+          file { "${name}.${ca_cert::params::cert_extension}":
             ensure  => present,
             content => $ca_text,
             path    => $ca_cert,
