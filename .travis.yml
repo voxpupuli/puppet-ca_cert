@@ -8,8 +8,8 @@ rvm:
   - 1.9.3
   - 2.0.0
 env:
-  - PUPPET_VERSION="~> 3.0.2" STRICT_VARIABLES="yes" ORDERING="random"
-  - PUPPET_VERSION="~> 3.7.5" STRICT_VARIABLES="yes" ORDERING="random"
-  - PUPPET_VERSION="~> 4.0.0" STRICT_VARIABLES="yes" ORDERING="random"
+  - PUPPET_VERSION="~> 3.5.1" STRICT_VARIABLES="yes" ORDERING="random"
+  - PUPPET_VERSION="~> 3.8.4" STRICT_VARIABLES="yes" ORDERING="random"
+  - PUPPET_VERSION="~> 4.3.1" STRICT_VARIABLES="yes" ORDERING="random"
 notifications:
   email: false
