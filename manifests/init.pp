@@ -70,7 +70,7 @@ class ca_cert (
   }
 
   if $install_package == true {
-    if $package_ensure == present {
+    if $package_ensure == present or $package_ensure == installed {
       ensure_packages(['ca-certificates'])
     }
     else {
