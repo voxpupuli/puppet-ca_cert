@@ -118,6 +118,9 @@ define ca_cert::ca (
         ensure => absent,
       }
     }
+    default: {
+      fail("Ca_cert::Ca[${name}] - ensure must be set to present, trusted, distrusted, or absent.")
+    }
   }
 
   anchor { "ca_cert::ca::${name}":

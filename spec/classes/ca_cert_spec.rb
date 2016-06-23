@@ -8,7 +8,6 @@ describe 'ca_cert', :type => :class do
       }
     end
 
-    it { is_expected.to contain_ca_cert__params }
     it { is_expected.to contain_package('ca-certificates') }
 
     it { is_expected.to contain_file("trusted_certs").with(
@@ -41,7 +40,6 @@ describe 'ca_cert', :type => :class do
       }
     end
 
-    it { is_expected.to contain_ca_cert__params }
     it { is_expected.to contain_package('ca-certificates') }
 
     it { is_expected.to contain_file("trusted_certs").with(

@@ -12,8 +12,6 @@ describe 'ca_cert::params', :type => :class do
     end
     context "with osfamily #{osfamily}" do
 
-      it { is_expected.to contain_ca_cert__params }
-
       it "should not contain any resources" do
         should have_resource_count(0)
       end
