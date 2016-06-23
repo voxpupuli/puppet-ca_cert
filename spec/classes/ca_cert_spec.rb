@@ -1,6 +1,12 @@
 require 'spec_helper'
 
 describe 'ca_cert', :type => :class do
+
+  shared_examples 'compiles and includes params class' do
+    it { should compile }
+    it { should contain_class('ca_cert::params') }
+  end
+
   context "on a Debian based OS" do
     let :facts do
       {
@@ -8,6 +14,8 @@ describe 'ca_cert', :type => :class do
       }
     end
 
+    it_behaves_like 'compiles and includes params class' do
+    end
     it { is_expected.to contain_package('ca-certificates') }
 
     it { is_expected.to contain_file("trusted_certs").with(
@@ -40,6 +48,8 @@ describe 'ca_cert', :type => :class do
       }
     end
 
+    it_behaves_like 'compiles and includes params class' do
+    end
     it { is_expected.to contain_package('ca-certificates') }
 
     it { is_expected.to contain_file("trusted_certs").with(
@@ -59,6 +69,111 @@ describe 'ca_cert', :type => :class do
       it { is_expected.to contain_file("trusted_certs").with(
           'ensure' => 'directory',
           'path'   => '/etc/pki/ca-trust/source/anchors',
+          'group'  => 'root',
+          'purge'  => 'true',
+        )
+      }
+    end
+  end
+  context "on a Suse 11 based OS" do
+    let :facts do
+      {
+        :osfamily => 'Suse',
+        :operatingsystemmajrelease => '11',
+      }
+    end
+
+    it_behaves_like 'compiles and includes params class' do
+    end
+    it { is_expected.to contain_package('ca-certificates') }
+
+    it { is_expected.to contain_file("trusted_certs").with(
+        'ensure' => 'directory',
+        'path'   => '/etc/ssl/certs',
+        'group'  => 'root',
+        'purge'  => 'false',
+      )
+    }
+
+    context "with purge_unmanaged_CAs set to true" do
+      let :params do
+        {
+          :purge_unmanaged_CAs => 'true',
+        }
+      end
+      it { is_expected.to contain_file("trusted_certs").with(
+          'ensure' => 'directory',
+          'path'   => '/etc/ssl/certs',
+          'group'  => 'root',
+          'purge'  => 'true',
+        )
+      }
+    end
+  end
+  context "on a Suse 11 based OS" do
+    let :facts do
+      {
+        :osfamily => 'Suse',
+        :operatingsystemmajrelease => '11',
+      }
+    end
+
+    it_behaves_like 'compiles and includes params class' do
+    end
+    it { is_expected.to contain_package('ca-certificates') }
+
+    it { is_expected.to contain_file("trusted_certs").with(
+        'ensure' => 'directory',
+        'path'   => '/etc/ssl/certs',
+        'group'  => 'root',
+        'purge'  => 'false',
+      )
+    }
+
+    context "with purge_unmanaged_CAs set to true" do
+      let :params do
+        {
+          :purge_unmanaged_CAs => 'true',
+        }
+      end
+      it { is_expected.to contain_file("trusted_certs").with(
+          'ensure' => 'directory',
+          'path'   => '/etc/ssl/certs',
+          'group'  => 'root',
+          'purge'  => 'true',
+        )
+      }
+    end
+  end
+  context "on a Suse 12 based OS" do
+    let :facts do
+      {
+        :osfamily => 'Suse',
+        :operatingsystemmajrelease => '12',
+      }
+    end
+
+    it_behaves_like 'compiles and includes params class' do
+    end
+    it { is_expected.to contain_package('ca-certificates') }
+
+    it { is_expected.to contain_file("trusted_certs").with(
+        'ensure' => 'directory',
+        'path'   => '/etc/pki/trust/anchors',
+        'group'  => 'root',
+        'purge'  => 'false',
+      )
+    }
+
+    context "with purge_unmanaged_CAs set to true" do
+      let :params do
+        {
+          :purge_unmanaged_CAs => 'true',
+        }
+      end
+      it { is_expected.to contain_file("trusted_certs").with(
+          'ensure' => 'directory',
+          'path'   => '/etc/pki/trust/anchors',
           'group'  => 'root',
           'purge'  => 'true',
         )

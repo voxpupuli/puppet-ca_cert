@@ -44,8 +44,8 @@ class ca_cert (
   $package_ensure      = present,
 ){
 
-  include ca_cert::params
-  include ca_cert::update
+  include ::ca_cert::params
+  include ::ca_cert::update
 
   validate_bool($always_update_certs)
   validate_hash($ca_certs)

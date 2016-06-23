@@ -62,6 +62,7 @@ ca_cert::ca { 'GlobalSign-OrgSSL-Intermediate':
               is also required. Defaults to text.
               **Warning**: certificates delivered via http, https, or ftp won't be
               updated if the upstream source changes.
+              ** SLES 11 Specific Detail**: Cert File must be in `.pem` format
   * `ensure`: Whether or not the CA certificate should be on the system or not. Valid
               values are trusted, present, distrusted, and absent. Trusted is the same
               as present. On Debian systems untrusted is the same as absent. On RedHat
@@ -74,4 +75,4 @@ ca_cert::ca { 'GlobalSign-OrgSSL-Intermediate':
 Supported Platforms
 -------------------
 
-This module has been tested on Ubuntu 14.04, Ubuntu 12.04, and on CentOS 6.
+This module has been tested on Ubuntu 14.04, Ubuntu 12.04, CentOS 6, SLES 11, and SLES 12.
