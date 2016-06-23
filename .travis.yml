@@ -11,7 +11,7 @@ rvm:
 env:
   - PUPPET_GEM_VERSION="~> 3.5.1"
   - PUPPET_GEM_VERSION="~> 3.8.6"
-  - PUPPET_GEM_VERSION="~> 4.4.0"
+  - PUPPET_GEM_VERSION="~> 4.5.2"
 matrix:
   allow_failures:
     - rvm: 2.1.8
