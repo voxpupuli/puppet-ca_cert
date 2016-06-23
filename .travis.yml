@@ -1,15 +1,22 @@
 ---
 language: ruby
 cache: bundler
-bundler_args: --without development
+bundler_args: --without system_tests
 script:
-    - "bundle exec rake validate && bundle exec rake lint && bundle exec rake spec SPEC_OPTS='--format documentation'"
+    - "bundle exec rake validate lint parallel_spec SPEC_OPTS='--format documentation'"
 rvm:
   - 1.9.3
   - 2.0.0
+  - 2.1.8
 env:
-  - PUPPET_VERSION="~> 3.5.1" STRICT_VARIABLES="yes" ORDERING="random"
-  - PUPPET_VERSION="~> 3.8.4" STRICT_VARIABLES="yes" ORDERING="random"
-  - PUPPET_VERSION="~> 4.3.1" STRICT_VARIABLES="yes" ORDERING="random"
+  - PUPPET_GEM_VERSION="~> 3.5.1"
+  - PUPPET_GEM_VERSION="~> 3.8.6"
+  - PUPPET_GEM_VERSION="~> 4.4.0"
+matrix:
+  allow_failures:
+    - rvm: 2.1.8
+      env: PUPPET_GEM_VERSION="~> 3.5.1"
+    - rvm: 2.1.8
+      env: PUPPET_GEM_VERSION="~> 3.8.6"
 notifications:
   email: false
