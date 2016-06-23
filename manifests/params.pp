@@ -6,6 +6,7 @@ class ca_cert::params {
       $update_cmd       = 'update-ca-certificates'
       $cert_dir_group   = 'staff'
       $ca_file_extension = 'crt'
+      $package_name      = 'ca-certificates'
     }
     'RedHat': {
       $trusted_cert_dir    = '/etc/pki/ca-trust/source/anchors'
@@ -13,6 +14,7 @@ class ca_cert::params {
       $update_cmd          = 'update-ca-trust extract'
       $cert_dir_group      = 'root'
       $ca_file_extension = 'crt'
+      $package_name      = 'ca-certificates'
     }
     'Suse': {
       if $::operatingsystemmajrelease == '11'  {
@@ -26,6 +28,7 @@ class ca_cert::params {
         $ca_file_extension = 'crt'
       }
       $cert_dir_group      = 'root'
+      $package_name        = 'openssl-certs'
     }
     default: {
       fail("Unsupported osfamily (${::osfamily})")

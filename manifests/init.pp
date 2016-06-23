@@ -42,7 +42,8 @@ class ca_cert (
   $install_package     = true,
   $ca_certs            = {},
   $package_ensure      = present,
-){
+  $package_name        = $ca_cert::params::package_name,
+) inherits ca_cert::params {
 
   include ::ca_cert::params
   include ::ca_cert::update
@@ -71,10 +72,10 @@ class ca_cert (
 
   if $install_package == true {
     if $package_ensure == present or $package_ensure == installed {
-      ensure_packages(['ca-certificates'])
+      ensure_packages([$package_name])
     }
     else {
-      package { 'ca-certificates':
+      package { $package_name:
         ensure => $package_ensure,
       }
     }
