@@ -1,6 +1,12 @@
 require 'spec_helper'
 
 describe 'ca_cert::params', :type => :class do
+
+  shared_examples 'compiles and includes params class' do
+    it { should compile }
+    it { should contain_class('ca_cert::params') }
+  end
+
   [
     'Debian',
     'RedHat',
@@ -12,9 +18,25 @@ describe 'ca_cert::params', :type => :class do
     end
     context "with osfamily #{osfamily}" do
 
+    it_behaves_like 'compiles and includes params class' do
+    end
       it "should not contain any resources" do
         should have_resource_count(0)
       end
+    end
+  end
+  context "On a Suse 12 Operating System" do
+    let :facts do
+      {
+        :osfamily => 'Suse',
+        :operatingsystemmajrelease => '12',
+      }
+    end
+
+    it_behaves_like 'compiles and includes params class' do
+    end
+    it "should not contain any resources" do
+      should have_resource_count(0)
     end
   end
   context "on an unsupported operating system" do

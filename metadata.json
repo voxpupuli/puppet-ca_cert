@@ -17,6 +17,13 @@
       ]
     },
     {
+      "operatingsystem": "Suse",
+      "operatingsystemrelease": [
+        "11.0",
+        "12.0"
+      ]
+    },
+    {
       "operatingsystem": "Ubuntu",
       "operatingsystemrelease": [
         "12.04",

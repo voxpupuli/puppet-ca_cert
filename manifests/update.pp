@@ -1,6 +1,6 @@
 # Private class
 class ca_cert::update {
-  include ca_cert::params
+  include ::ca_cert::params
 
   if $::osfamily == 'RedHat' {
     exec { 'enable_ca_trust':

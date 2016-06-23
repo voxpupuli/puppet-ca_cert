@@ -34,8 +34,8 @@ define ca_cert::ca (
   $verify_https_cert = true,
 ) {
 
-  include ca_cert::params
-  include ca_cert::update
+  include ::ca_cert::params
+  include ::ca_cert::update
 
   validate_string($source)
   validate_bool($verify_https_cert)
@@ -44,28 +44,37 @@ define ca_cert::ca (
     fail('ca_text is required if source is set to text')
   }
 
-  # Since Debian based OSes don't have explicit distrust directories
+  # Since Debian/Suse based OSes don't have explicit distrust directories
   # we need to change untrusted to absent and put a warning in the log.
-  if $::osfamily == 'Debian' and $ensure == 'distrusted' {
+  if $::osfamily =~ /^(Debian|Suse)$/ and $ensure == 'distrusted' {
     warning("Cannot explicitly set CA distrust on ${::operatingsystem}.")
     warning("Ensuring that ${name} CA is absent from the trusted list.")
     $adjusted_ensure = 'absent'
   } else {
     $adjusted_ensure = $ensure
   }
+  # Determine Full Resource Name
+  # Sles 11 Only Supports .pem files
+  # Other supported OS variants default to .crt
+  if $::osfamily == 'Suse' and $::operatingsystemmajrelease == '11' {
+    if $source != 'text' and $source !~ /^.*\.pem$/ {
+      fail("${source} not proper format - SLES 11 CA Files must be in .pem format")
+    }
+  }
+  $resource_name = "${name}.${ca_cert::params::ca_file_extension}"
 
   $ca_cert = $adjusted_ensure ? {
-    'distrusted' => "${ca_cert::params::distrusted_cert_dir}/${name}.crt",
-    default      => "${ca_cert::params::trusted_cert_dir}/${name}.crt",
+    'distrusted' => "${ca_cert::params::distrusted_cert_dir}/${resource_name}",
+    default      => "${ca_cert::params::trusted_cert_dir}/${resource_name}",
   }
 
   case $adjusted_ensure {
-    present, trusted, distrusted: {
-      $sourceArray = split($source, ':')
-      $protocol_type = $sourceArray[0]
+    'present', 'trusted', 'distrusted': {
+      $source_array = split($source, ':')
+      $protocol_type = $source_array[0]
       case $protocol_type {
-        puppet: {
-          file { "${name}.crt":
+        'puppet': {
+          file { $resource_name:
             ensure => present,
             source => $source,
             path   => $ca_cert,
@@ -74,12 +83,12 @@ define ca_cert::ca (
             notify => Exec['ca_cert_update'],
           }
         }
-        ftp, https, http: {
+        'ftp', 'https', 'http': {
           $verify_https = $verify_https_cert ? {
             true  => '',
             false => '--no-check-certificate',
           }
-          exec { "get_${name}.crt":
+          exec { "get_${resource_name}":
             command =>
               "wget ${verify_https} -O ${ca_cert} ${source} 2> /dev/null",
             path    => ['/usr/bin', '/bin'],
@@ -87,9 +96,9 @@ define ca_cert::ca (
             notify  => Exec['ca_cert_update'],
           }
         }
-        file: {
-          $source_path = $sourceArray[1]
-          file { "${name}.crt":
+        'file': {
+          $source_path = $source_array[1]
+          file { $resource_name:
             ensure => present,
             source => $source_path,
             path   => $ca_cert,
@@ -98,8 +107,8 @@ define ca_cert::ca (
             notify => Exec['ca_cert_update'],
           }
         }
-        text: {
-          file { "${name}.crt":
+        'text': {
+          file { $resource_name:
             ensure  => present,
             content => $ca_text,
             path    => $ca_cert,
@@ -113,7 +122,7 @@ define ca_cert::ca (
         }
       }
     }
-    absent: {
+    'absent': {
       file { $ca_cert:
         ensure => absent,
       }
