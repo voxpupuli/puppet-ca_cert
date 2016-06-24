@@ -7,6 +7,7 @@ describe 'ca_cert::ca', :type => :define do
   SUSE_11_HTTP_URL = 'http://secure.globalsign.com/cacert/gsorganizationvalsha2g2r1.pem'
   SUSE_11_CA_FILE = '/etc/ssl/certs/Globalsign_Org_Intermediate.pem'
   SUSE_12_CA_FILE = '/etc/pki/trust/anchors/Globalsign_Org_Intermediate.crt'
+  DISTRUSTED_SUSE_12_CA_FILE = '/etc/pki/trust/blacklist/Globalsign_Org_Intermediate.crt'
   DISTRUSTED_REDHAT_CA_FILE = '/etc/pki/ca-trust/source/blacklist/Globalsign_Org_Intermediate.crt'
   GLOBALSIGN_ORG_CA = '-----BEGIN CERTIFICATE-----
 MIIEaTCCA1GgAwIBAgILBAAAAAABRE7wQkcwDQYJKoZIhvcNAQELBQAwVzELMAkG
@@ -99,9 +100,8 @@ K1pp74P1S8SqtCr4fKGxhZSM9AyHDPSsQPhZSZg=
       end
       it { expect { should raise_error(Puppet::Error, /Protocol must be puppet, file, http, https, ftp, or text/) }}
     end
-
-
   end
+
   describe 'os-dependent items' do
     context "On Debian based systems" do
       let :facts do debian_facts end
@@ -279,6 +279,7 @@ K1pp74P1S8SqtCr4fKGxhZSM9AyHDPSsQPhZSZg=
         end
       end
     end
+
     context "On Suse 12 based systems" do
       let :facts do suse_12_facts end
       let :params do
@@ -322,24 +323,23 @@ K1pp74P1S8SqtCr4fKGxhZSM9AyHDPSsQPhZSZg=
             :ensure => 'absent',
           }
         end
-        it { is_expected.to contain_file(SUSE_12_CA_FILE).with(
-          'ensure' => 'absent'
-        )}
-      end
-      describe "when removing the CA cert" do
-        ['absent', 'distrusted'].each do |suse_ensure|
-          let :params do
-            {
-              :ensure => suse_ensure,
-              :source => HTTP_URL,
-            }
-          end
-          context "with ensure set to #{suse_ensure}" do
-            it { is_expected.to contain_file(SUSE_12_CA_FILE).with(
-              'ensure' => 'absent'
-            ) }
-          end
+        context "with ensure set to absent" do
+          it { is_expected.to contain_file(SUSE_12_CA_FILE).with(
+            'ensure' => 'absent'
+          ) }
         end
+      end
+      describe "when explicitly distrusting a certificate" do
+        let :params do
+          {
+            :source => HTTP_URL,
+            :ensure => 'distrusted',
+          }
+        end
+        it { is_expected.to contain_exec("get_Globalsign_Org_Intermediate.crt").with(
+          'creates' => DISTRUSTED_SUSE_12_CA_FILE,
+          'command' => "wget  -O #{DISTRUSTED_SUSE_12_CA_FILE} #{HTTP_URL} 2> /dev/null",
+        )}
       end
     end
   end
