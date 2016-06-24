@@ -64,7 +64,7 @@ ca_cert::ca { 'GlobalSign-OrgSSL-Intermediate':
               **Warning**: certificates delivered via http, https, or ftp won't be
               updated if the upstream source changes.
 
-              ** SLES 11 Specific Detail**: Cert File must be in `.pem` format
+              **SLES 11 Specific Detail**: Cert File must be in `.pem` format
 
   * `ensure`: Whether or not the CA certificate should be on the system or not. Valid
               values are trusted, present, distrusted, and absent. Trusted is the same
