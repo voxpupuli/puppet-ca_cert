@@ -60,9 +60,12 @@ ca_cert::ca { 'GlobalSign-OrgSSL-Intermediate':
   * `source`: Where the CA certificate should be retrieved from. text, http, https, ftp,
               file, and puppet protocols/sources are supported. If text, then the ca_text parameter
               is also required. Defaults to text.
+
               **Warning**: certificates delivered via http, https, or ftp won't be
               updated if the upstream source changes.
+
               ** SLES 11 Specific Detail**: Cert File must be in `.pem` format
+
   * `ensure`: Whether or not the CA certificate should be on the system or not. Valid
               values are trusted, present, distrusted, and absent. Trusted is the same
               as present. On Debian systems untrusted is the same as absent. On RedHat
