@@ -318,16 +318,15 @@ K1pp74P1S8SqtCr4fKGxhZSM9AyHDPSsQPhZSZg=
         ) }
       end
       describe "when removing the CA cert" do
-          let :params do
-            {
-              :ensure => 'absent',
-            }
-          end
-          context "with ensure set to absent" do
-            it { is_expected.to contain_file(SUSE_12_CA_FILE).with(
-              'ensure' => 'absent'
-            ) }
-          end
+        let :params do
+          {
+            :ensure => 'absent',
+          }
+        end
+        context "with ensure set to absent" do
+          it { is_expected.to contain_file(SUSE_12_CA_FILE).with(
+            'ensure' => 'absent'
+          ) }
         end
       end
       describe "when explicitly distrusting a certificate" do
@@ -344,3 +343,4 @@ K1pp74P1S8SqtCr4fKGxhZSM9AyHDPSsQPhZSZg=
       end
     end
   end
+end
