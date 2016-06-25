@@ -1,21 +1,21 @@
 require 'spec_helper_acceptance'
 
-describe 'ca_cert::ca', :unless => UNSUPPORTED_PLATFORMS.include?(fact('osfamily')) do
-  case fact('osfamily')
-  when 'Debian'
-    TRUSTED_CA_FILE_REMOTE = '/usr/local/share/ca-certificates/Globalsign_Org_Intermediate.crt'
-    ABSENT_CA_FILE_REMOTE = '/etc/pki/ca-trust/source/blacklist/CACert.crt'
-    TRUSTED_CA_FILE_TEXT = '/usr/local/share/ca-certificates/InCommon.crt'
-  when 'RedHat'
-    TRUSTED_CA_FILE_REMOTE = '/etc/pki/ca-trust/source/anchors/Globalsign_Org_Intermediate.crt'
-    UNTRUSTED_CA_FILE_REMOTE = '/etc/pki/ca-trust/source/blacklist/CACert.crt'
-    TRUSTED_CA_FILE_TEXT = '/etc/pki/ca-trust/source/anchors/InCommon.crt'
-  end
+case fact('osfamily')
+when 'Debian'
+  trusted_ca_file_remote = "/usr/local/share/ca-certificates/Globalsign_Org_Intermediate.crt"
+  absent_ca_file_remote = "/etc/pki/ca-trust/source/blacklist/CACert.crt"
+  trusted_ca_file_text = "/usr/local/share/ca-certificates/InCommon.crt"
+when 'RedHat'
+  trusted_ca_file_remote = '/etc/pki/ca-trust/source/anchors/Globalsign_Org_Intermediate.crt'
+  untrusted_ca_file_remote = '/etc/pki/ca-trust/source/blacklist/CACert.crt'
+  trusted_ca_file_text = '/etc/pki/ca-trust/source/anchors/InCommon.crt'
+end
 
-  describe 'running puppet code' do
-    it 'should work with no errors' do
-      pp = <<-EOS
-        class { 'ca_cert': }
+describe 'ca_cert::ca' do
+  context 'with some normal usage' do
+    let (:pp) do
+      <<-EOS
+        include ::ca_cert
 
         ca_cert::ca { 'Globalsign_Org_Intermediate':
           source => 'http://secure.globalsign.com/cacert/gsorganizationvalsha2g2r1.crt',
@@ -57,26 +57,26 @@ FJ4O0dXG14HdrSSrrAcF4h1ow3BmX9M=
           ensure => 'distrusted',
         }
       EOS
-
-      apply_manifest(pp, :catch_failures => true)
     end
 
-    describe file(TRUSTED_CA_FILE_REMOTE) do
-      it { is_expected.to be_file }
+    it_behaves_like "an idempotent resource"
+
+    describe file(trusted_ca_file_remote) do
+      it { should be_file }
     end
 
-    describe file(TRUSTED_CA_FILE_TEXT) do
-      it { is_expected.to be_file }
+    describe file(trusted_ca_file_text) do
+      it { should be_file }
     end
 
     case fact('osfamily')
     when 'Debian'
-      describe file(ABSENT_CA_FILE_REMOTE) do
-        it { is_expected.to_not be_file }
+      describe file(absent_ca_file_remote) do
+        it { should_not be_file }
       end
     when 'RedHat'
-      describe file(UNTRUSTED_CA_FILE_REMOTE) do
-        it { is_expected.to be_file }
+      describe file(untrusted_ca_file_remote) do
+        it { should be_file }
       end
     end
   end
