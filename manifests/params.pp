@@ -16,6 +16,14 @@ class ca_cert::params {
       $ca_file_extension   = 'crt'
       $package_name        = 'ca-certificates'
     }
+    'Archlinux': {
+      $trusted_cert_dir    = '/etc/ca-certificates/trust-source/anchors/'
+      $distrusted_cert_dir = '/etc/ca-certificates/trust-source/blacklist'
+      $update_cmd          = 'trust extract-compat'
+      $cert_dir_group      = 'root'
+      $ca_file_extension   = 'crt'
+      $package_name        = 'ca-certificates'
+    }
     'Suse': {
       if $::operatingsystemmajrelease == '11'  {
         $trusted_cert_dir  = '/etc/ssl/certs'
