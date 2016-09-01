@@ -11,7 +11,7 @@ def location_for(place, version = nil)
 end
 
 group :development, :unit_tests do
-gem 'json',                      :require => false
+  gem 'json',                      :require => false
   gem 'metadata-json-lint',        :require => false
   gem 'puppet_facts',              :require => false
   gem 'puppetlabs_spec_helper',    :require => false
