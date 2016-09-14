@@ -30,7 +30,7 @@ class ca_cert::params {
         $update_cmd        = 'c_rehash'
         $ca_file_extension = 'pem'
       }
-      elsif $::operatingsystemmajrelease == '12' {
+      elsif $::operatingsystemmajrelease >= '12' {
         $trusted_cert_dir    = '/etc/pki/trust/anchors'
         $distrusted_cert_dir = '/etc/pki/trust/blacklist'
         $update_cmd          = 'update-ca-certificates'
