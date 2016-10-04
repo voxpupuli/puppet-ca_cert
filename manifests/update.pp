@@ -4,7 +4,7 @@ class ca_cert::update {
 
   if $::osfamily == 'RedHat' {
     exec { 'enable_ca_trust':
-      command   => 'update-ca-trust enable',
+      command   => 'update-ca-trust force-enable',
       logoutput => 'on_failure',
       path      => ['/usr/sbin', '/usr/bin', '/bin'],
       onlyif    => 'update-ca-trust check | grep DISABLED',
