@@ -33,7 +33,7 @@ describe 'ca_cert::update', :type => :class do
     it_behaves_like 'compiles and includes params class' do
     end
     it { is_expected.to contain_exec('enable_ca_trust').with(
-      :command => 'update-ca-trust enable',
+      :command => 'update-ca-trust force-enable',
     ) }
     it { is_expected.to contain_exec('ca_cert_update').with(
       :command     => 'update-ca-trust extract',
