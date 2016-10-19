@@ -75,8 +75,9 @@ class ca_cert (
       ensure_packages([$package_name])
     }
     else {
-      package { $package_name:
+      package { 'ca-certificates':
         ensure => $package_ensure,
+        name   => $package_name,
       }
     }
   }

@@ -92,12 +92,13 @@ define ca_cert::ca (
       case $protocol_type {
         'puppet': {
           file { $resource_name:
-            ensure => present,
-            source => $source,
-            path   => $ca_cert,
-            owner  => 'root',
-            group  => 'root',
-            notify => Exec['ca_cert_update'],
+            ensure  => present,
+            source  => $source,
+            path    => $ca_cert,
+            owner   => 'root',
+            group   => 'root',
+            require => Package['ca-certificates'],
+            notify  => Exec['ca_cert_update'],
           }
         }
         'ftp', 'https', 'http': {
@@ -116,12 +117,13 @@ define ca_cert::ca (
         'file': {
           $source_path = $source_array[1]
           file { $resource_name:
-            ensure => present,
-            source => $source_path,
-            path   => $ca_cert,
-            owner  => 'root',
-            group  => 'root',
-            notify => Exec['ca_cert_update'],
+            ensure  => present,
+            source  => $source_path,
+            path    => $ca_cert,
+            owner   => 'root',
+            group   => 'root',
+            require => Package['ca-certificates'],
+            notify  => Exec['ca_cert_update'],
           }
         }
         'text': {
@@ -131,6 +133,7 @@ define ca_cert::ca (
             path    => $ca_cert,
             owner   => 'root',
             group   => 'root',
+            require => Package['ca-certificates'],
             notify  => Exec['ca_cert_update'],
           }
         }

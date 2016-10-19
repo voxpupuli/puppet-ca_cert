@@ -11,10 +11,9 @@ def location_for(place, version = nil)
 end
 
 group :development, :unit_tests do
-gem 'json',                      :require => false
+  gem 'json',                      :require => false
   gem 'metadata-json-lint',        :require => false
   gem 'puppet_facts',              :require => false
-  gem 'puppet-blacksmith',         :require => false
   gem 'puppetlabs_spec_helper',    :require => false
   gem 'rspec-puppet', '>= 2.3.2',  :require => false
   gem 'simplecov',                 :require => false
@@ -29,6 +28,10 @@ group :system_tests do
   gem 'master_manipulator',            :require => false
   gem 'beaker-hostgenerator',          *location_for(ENV['BEAKER_HOSTGENERATOR_VERSION'])
 end
+
+# json_pure 2.0.2 added a requirement on ruby >= 2. We pin to json_pure 2.0.1
+# if using ruby 1.x
+gem 'json_pure', '<=2.0.1', :require => false if RUBY_VERSION =~ /^1\./
 
 if facterversion = ENV['FACTER_GEM_VERSION']
   gem 'facter', facterversion, :require => false
