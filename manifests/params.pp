@@ -29,15 +29,16 @@ class ca_cert::params {
         $trusted_cert_dir  = '/etc/ssl/certs'
         $update_cmd        = 'c_rehash'
         $ca_file_extension = 'pem'
+        $package_name      = 'openssl-certs'
       }
       elsif $::operatingsystemmajrelease >= '12' {
         $trusted_cert_dir    = '/etc/pki/trust/anchors'
         $distrusted_cert_dir = '/etc/pki/trust/blacklist'
         $update_cmd          = 'update-ca-certificates'
         $ca_file_extension   = 'crt'
+        $package_name        = 'ca-certificates'
       }
       $cert_dir_group        = 'root'
-      $package_name          = 'openssl-certs'
     }
     default: {
       fail("Unsupported osfamily (${::osfamily})")
