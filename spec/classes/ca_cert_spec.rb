@@ -155,7 +155,7 @@ describe 'ca_cert', :type => :class do
 
     it_behaves_like 'compiles and includes params class' do
     end
-    it { is_expected.to contain_package('openssl-certs') }
+    it { is_expected.to contain_package('ca-certificates') }
 
     it { is_expected.to contain_file("trusted_certs").with(
         'ensure' => 'directory',
