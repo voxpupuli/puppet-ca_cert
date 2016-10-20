@@ -97,7 +97,7 @@ define ca_cert::ca (
             path    => $ca_cert,
             owner   => 'root',
             group   => 'root',
-            require => Package['ca-certificates'],
+            require => Package[$ca_cert::params::package_name],
             notify  => Exec['ca_cert_update'],
           }
         }
@@ -122,7 +122,7 @@ define ca_cert::ca (
             path    => $ca_cert,
             owner   => 'root',
             group   => 'root',
-            require => Package['ca-certificates'],
+            require => Package[$ca_cert::params::package_name],
             notify  => Exec['ca_cert_update'],
           }
         }
@@ -133,7 +133,7 @@ define ca_cert::ca (
             path    => $ca_cert,
             owner   => 'root',
             group   => 'root',
-            require => Package['ca-certificates'],
+            require => Package[$ca_cert::params::package_name],
             notify  => Exec['ca_cert_update'],
           }
         }
