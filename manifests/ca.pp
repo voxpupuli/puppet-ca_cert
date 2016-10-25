@@ -20,11 +20,23 @@
 # [*verify_https_cert*]
 #   When retrieving a certificate whether or not to validate the CA of the
 #   source. (defaults to true)
+# [*username*]
+#   Username for retrieving a certificate from an authenticated http, https or
+#   ftp source. (optional)
+# [*password*]
+#   Password for retrieving a certificate from an authenticated http, https or
+#   ftp source. (optional)
 #
 # === Examples
 #
 # ca_cert::ca { 'globalsign_org_intermediate':
 #   source => 'http://secure.globalsign.com/cacert/gsorganizationvalsha2g2r1.crt',
+# }
+#
+# ca_cert::ca { 'internal_rootca':
+#   source   => 'http://ca.example.com/ca/root.crt',
+#   username => 'puppet',
+#   password => '$3cureP455W0rd',
 # }
 
 define ca_cert::ca (
@@ -32,6 +44,8 @@ define ca_cert::ca (
   $source            = 'text',
   $ensure            = 'trusted',
   $verify_https_cert = true,
+  $username          = undef,
+  $password          = undef,
 ) {
 
   include ::ca_cert::params
@@ -106,9 +120,24 @@ define ca_cert::ca (
             true  => '',
             false => '--no-check-certificate',
           }
+          if $username {
+            if ! $password {
+              fail('Password parameter must be set when username is set')
+            }
+            $wget_username = "--username '${username}'"
+          } else {
+            $wget_username = ''
+          }
+          if $password {
+            if ! $username {
+              fail('Username parameter must be set when password is set')
+            }
+            $wget_password = "--password '${password}'"
+          } else {
+            $wget_password = ''
+          }
           exec { "get_${resource_name}":
-            command =>
-              "wget ${verify_https} -O ${ca_cert} ${source} 2> /dev/null",
+            command => "wget ${verify_https} ${wget_username} ${wget_password} -O ${ca_cert} ${source} 2> /dev/null",
             path    => ['/usr/bin', '/bin'],
             creates => $ca_cert,
             notify  => Exec['ca_cert_update'],

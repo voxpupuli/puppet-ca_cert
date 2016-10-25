@@ -2,6 +2,8 @@ require 'spec_helper'
 
 describe 'ca_cert::ca', :type => :define do
   HTTP_URL  = 'http://secure.globalsign.com/cacert/gsorganizationvalsha2g2r1.crt'
+  USERNAME = 'puppet'
+  PASSWORD = 'puppet'
   DEBIAN_CA_FILE = '/usr/local/share/ca-certificates/Globalsign_Org_Intermediate.crt'
   REDHAT_CA_FILE = '/etc/pki/ca-trust/source/anchors/Globalsign_Org_Intermediate.crt'
   SUSE_11_HTTP_URL = 'http://secure.globalsign.com/cacert/gsorganizationvalsha2g2r1.pem'
@@ -100,6 +102,24 @@ K1pp74P1S8SqtCr4fKGxhZSM9AyHDPSsQPhZSZg=
       end
       it { expect { should raise_error(Puppet::Error, /Protocol must be puppet, file, http, https, ftp, or text/) }}
     end
+    context 'with an missing password' do
+      let :params do
+        {
+          :source => HTTP_URL,
+          :username => USERNAME,
+        }
+      end
+      it { expect { should raise_error(Puppet::Error, /Password parameter must be set when username is set/) }}
+    end
+    context 'with an missing username' do
+      let :params do
+        {
+          :source => HTTP_URL,
+          :password => PASSWORD,
+        }
+      end
+      it { expect { should raise_error(Puppet::Error, /Username parameter must be set when password is set/) }}
+    end
   end
 
   describe 'os-dependent items' do
@@ -120,7 +140,22 @@ K1pp74P1S8SqtCr4fKGxhZSM9AyHDPSsQPhZSZg=
         end
         it { is_expected.to contain_exec("get_Globalsign_Org_Intermediate.crt").with(
             'creates' => DEBIAN_CA_FILE,
-            'command' => "wget  -O #{DEBIAN_CA_FILE} #{HTTP_URL} 2> /dev/null",
+            'command' => "wget    -O #{DEBIAN_CA_FILE} #{HTTP_URL} 2> /dev/null",
+          )
+        }
+        it { is_expected.not_to contain_file(DEBIAN_CA_FILE) }
+      end
+      describe 'with an authenticated remote certificate' do
+        let :params do
+          {
+            :source => HTTP_URL,
+            :username => USERNAME,
+            :password => PASSWORD
+          }
+        end
+        it { is_expected.to contain_exec("get_Globalsign_Org_Intermediate.crt").with(
+            'creates' => DEBIAN_CA_FILE,
+            'command' => "wget  --username '#{USERNAME}' --password '#{PASSWORD}' -O #{DEBIAN_CA_FILE} #{HTTP_URL} 2> /dev/null",
           )
         }
         it { is_expected.not_to contain_file(DEBIAN_CA_FILE) }
@@ -175,8 +210,23 @@ K1pp74P1S8SqtCr4fKGxhZSM9AyHDPSsQPhZSZg=
 
         it { is_expected.to contain_exec("get_Globalsign_Org_Intermediate.crt").with(
             'creates' => REDHAT_CA_FILE,
-            'command' => "wget  -O #{REDHAT_CA_FILE} #{HTTP_URL} 2> /dev/null",
+            'command' => "wget    -O #{REDHAT_CA_FILE} #{HTTP_URL} 2> /dev/null",
           ) }
+        it { is_expected.not_to contain_file(REDHAT_CA_FILE) }
+      end
+      describe 'with an authenticated remote certificate' do
+        let :params do
+          {
+            :source => HTTP_URL,
+            :username => USERNAME,
+            :password => PASSWORD
+          }
+        end
+        it { is_expected.to contain_exec("get_Globalsign_Org_Intermediate.crt").with(
+            'creates' => REDHAT_CA_FILE,
+            'command' => "wget  --username '#{USERNAME}' --password '#{PASSWORD}' -O #{REDHAT_CA_FILE} #{HTTP_URL} 2> /dev/null",
+          )
+        }
         it { is_expected.not_to contain_file(REDHAT_CA_FILE) }
       end
       describe 'with the certificate delivered as a string' do
@@ -211,7 +261,7 @@ K1pp74P1S8SqtCr4fKGxhZSM9AyHDPSsQPhZSZg=
         end
         it { is_expected.to contain_exec("get_Globalsign_Org_Intermediate.crt").with(
           'creates' => DISTRUSTED_REDHAT_CA_FILE,
-          'command' => "wget  -O #{DISTRUSTED_REDHAT_CA_FILE} #{HTTP_URL} 2> /dev/null",
+          'command' => "wget    -O #{DISTRUSTED_REDHAT_CA_FILE} #{HTTP_URL} 2> /dev/null",
         )}
       end
     end
@@ -236,10 +286,27 @@ K1pp74P1S8SqtCr4fKGxhZSM9AyHDPSsQPhZSZg=
 
         it { is_expected.to contain_exec("get_Globalsign_Org_Intermediate.pem").with(
             'creates' => SUSE_11_CA_FILE,
-            'command' => "wget  -O #{SUSE_11_CA_FILE} #{SUSE_11_HTTP_URL} 2> /dev/null",
+            'command' => "wget    -O #{SUSE_11_CA_FILE} #{SUSE_11_HTTP_URL} 2> /dev/null",
           ) }
         it { is_expected.not_to contain_file(SUSE_11_CA_FILE) }
       end
+
+      describe 'with an authenticated remote certificate' do
+        let :params do
+          {
+            :source => SUSE_11_HTTP_URL,
+            :username => USERNAME,
+            :password => PASSWORD,
+          }
+        end
+
+        it { is_expected.to contain_exec("get_Globalsign_Org_Intermediate.pem").with(
+            'creates' => SUSE_11_CA_FILE,
+            'command' => "wget  --username '#{USERNAME}' --password '#{PASSWORD}' -O #{SUSE_11_CA_FILE} #{SUSE_11_HTTP_URL} 2> /dev/null",
+          ) }
+        it { is_expected.not_to contain_file(SUSE_11_CA_FILE) }
+      end
+
       describe 'with the certificate delivered as a string' do
         let :params do
           {
@@ -300,9 +367,24 @@ K1pp74P1S8SqtCr4fKGxhZSM9AyHDPSsQPhZSZg=
 
         it { is_expected.to contain_exec("get_Globalsign_Org_Intermediate.crt").with(
             'creates' => SUSE_12_CA_FILE,
-            'command' => "wget  -O #{SUSE_12_CA_FILE} #{HTTP_URL} 2> /dev/null",
+            'command' => "wget    -O #{SUSE_12_CA_FILE} #{HTTP_URL} 2> /dev/null",
           ) }
         it { is_expected.not_to contain_file(SUSE_12_CA_FILE) }
+      end
+      describe 'with an authenticated remote certificate' do
+        let :params do
+          {
+            :source => HTTP_URL,
+            :username => USERNAME,
+            :password => PASSWORD
+          }
+        end
+        it { is_expected.to contain_exec("get_Globalsign_Org_Intermediate.crt").with(
+            'creates' => SUSE_12_CA_FILE,
+            'command' => "wget  --username '#{USERNAME}' --password '#{PASSWORD}' -O #{SUSE_12_CA_FILE} #{HTTP_URL} 2> /dev/null",
+          )
+        }
+        it { is_expected.not_to contain_file(SUSE_11_CA_FILE) }
       end
       describe 'with the certificate delivered as a string' do
         let :params do
@@ -338,7 +420,7 @@ K1pp74P1S8SqtCr4fKGxhZSM9AyHDPSsQPhZSZg=
         end
         it { is_expected.to contain_exec("get_Globalsign_Org_Intermediate.crt").with(
           'creates' => DISTRUSTED_SUSE_12_CA_FILE,
-          'command' => "wget  -O #{DISTRUSTED_SUSE_12_CA_FILE} #{HTTP_URL} 2> /dev/null",
+          'command' => "wget    -O #{DISTRUSTED_SUSE_12_CA_FILE} #{HTTP_URL} 2> /dev/null",
         )}
       end
     end
