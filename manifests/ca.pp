@@ -126,7 +126,7 @@ define ca_cert::ca (
             if ! $password {
               fail('Password parameter must be set when username is set')
             }
-            $wget_username = "--username '${username}'"
+            $wget_username = "--user '${username}'"
           } else {
             $wget_username = ''
           }
