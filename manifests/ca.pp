@@ -22,10 +22,10 @@
 #   source. (defaults to true)
 # [*username*]
 #   Username for retrieving a certificate from an authenticated http, https or
-#   ftp source. (optional)
+#   ftp source. (required if password is set)
 # [*password*]
 #   Password for retrieving a certificate from an authenticated http, https or
-#   ftp source. (optional)
+#   ftp source. (required if username is set)
 #
 # === Examples
 #
