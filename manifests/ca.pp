@@ -52,6 +52,8 @@ define ca_cert::ca (
   include ::ca_cert::update
 
   validate_string($source)
+  validate_string($username)
+  validate_string($password)
   validate_bool($verify_https_cert)
 
   if ($ensure == 'trusted' or $ensure == 'distrusted') and $source == 'text' and !is_string($ca_text) {
