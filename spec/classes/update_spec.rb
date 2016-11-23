@@ -41,22 +41,24 @@ describe 'ca_cert::update', :type => :class do
     )}
 
   end
-  context "on a Suse 11 based OS" do
-    let :facts do
-      {
-        :osfamily => 'Suse',
-        :operatingsystemmajrelease => '11',
-      }
-    end
+  ['10','11'].each do |osmajrel|
+    context "on a Suse #{osmajrel} based OS" do
+      let :facts do
+        {
+          :osfamily => 'Suse',
+          :operatingsystemmajrelease => "#{osmajrel}",
+        }
+      end
 
-    it_behaves_like 'compiles and includes params class' do
-    end
-    it { is_expected.not_to contain_exec('enable_ca_trust') }
-    it { is_expected.to contain_exec('ca_cert_update').with(
-      :command     => 'c_rehash',
-      :refreshonly => true,
-    )}
+      it_behaves_like 'compiles and includes params class' do
+      end
+      it { is_expected.not_to contain_exec('enable_ca_trust') }
+      it { is_expected.to contain_exec('ca_cert_update').with(
+        :command     => 'c_rehash',
+        :refreshonly => true,
+      )}
 
+    end
   end
   context "on a Suse 12 based OS" do
     let :facts do
