@@ -25,7 +25,7 @@ class ca_cert::params {
       $package_name        = 'ca-certificates'
     }
     'Suse': {
-      if $::operatingsystemmajrelease == '11'  {
+      if $::operatingsystemmajrelease =~ /(10|11)/  {
         $trusted_cert_dir  = '/etc/ssl/certs'
         $update_cmd        = 'c_rehash'
         $ca_file_extension = 'pem'

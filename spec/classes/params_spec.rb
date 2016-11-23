@@ -25,20 +25,24 @@ describe 'ca_cert::params', :type => :class do
       end
     end
   end
-  context "On a Suse 12 Operating System" do
-    let :facts do
-      {
-        :osfamily => 'Suse',
-        :operatingsystemmajrelease => '12',
-      }
-    end
 
-    it_behaves_like 'compiles and includes params class' do
-    end
-    it "should not contain any resources" do
-      should have_resource_count(0)
+  ['10','11','12'].each do |osmajrel|
+    context "On a Suse #{osmajrel} Operating System" do
+      let :facts do
+        {
+          :osfamily => 'Suse',
+          :operatingsystemmajrelease => "#{osmajrel}",
+        }
+      end
+
+      it_behaves_like 'compiles and includes params class' do
+      end
+      it "should not contain any resources" do
+        should have_resource_count(0)
+      end
     end
   end
+
   context "on an unsupported operating system" do
     let :facts do
       {
