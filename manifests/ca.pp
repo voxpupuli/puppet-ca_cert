@@ -100,7 +100,7 @@ define ca_cert::ca (
           }
           exec { "get_${resource_name}":
             command =>
-              "wget ${verify_https} -O ${ca_cert} ${source} 2> /dev/null",
+              "wget ${verify_https} -O '${ca_cert}' '${source}' 2> /dev/null",
             path    => ['/usr/bin', '/bin'],
             creates => $ca_cert,
             notify  => Exec['ca_cert_update'],
