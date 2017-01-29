@@ -120,7 +120,7 @@ K1pp74P1S8SqtCr4fKGxhZSM9AyHDPSsQPhZSZg=
         end
         it { is_expected.to contain_exec("get_Globalsign_Org_Intermediate.crt").with(
             'creates' => DEBIAN_CA_FILE,
-            'command' => "wget  -O '#{DEBIAN_CA_FILE}' '#{HTTP_URL}' 2> /dev/null",
+            'command' => "wget  -O '#{DEBIAN_CA_FILE}' '#{HTTP_URL}' 2> /dev/null || rm -f '#{DEBIAN_CA_FILE}'",
           )
         }
         it { is_expected.not_to contain_file(DEBIAN_CA_FILE) }
@@ -175,7 +175,7 @@ K1pp74P1S8SqtCr4fKGxhZSM9AyHDPSsQPhZSZg=
 
         it { is_expected.to contain_exec("get_Globalsign_Org_Intermediate.crt").with(
             'creates' => REDHAT_CA_FILE,
-            'command' => "wget  -O '#{REDHAT_CA_FILE}' '#{HTTP_URL}' 2> /dev/null",
+            'command' => "wget  -O '#{REDHAT_CA_FILE}' '#{HTTP_URL}' 2> /dev/null || rm -f '#{REDHAT_CA_FILE}'",
           ) }
         it { is_expected.not_to contain_file(REDHAT_CA_FILE) }
       end
@@ -211,7 +211,7 @@ K1pp74P1S8SqtCr4fKGxhZSM9AyHDPSsQPhZSZg=
         end
         it { is_expected.to contain_exec("get_Globalsign_Org_Intermediate.crt").with(
           'creates' => DISTRUSTED_REDHAT_CA_FILE,
-          'command' => "wget  -O '#{DISTRUSTED_REDHAT_CA_FILE}' '#{HTTP_URL}' 2> /dev/null",
+          'command' => "wget  -O '#{DISTRUSTED_REDHAT_CA_FILE}' '#{HTTP_URL}' 2> /dev/null || rm -f '#{DISTRUSTED_REDHAT_CA_FILE}'",
         )}
       end
     end
@@ -236,7 +236,7 @@ K1pp74P1S8SqtCr4fKGxhZSM9AyHDPSsQPhZSZg=
 
         it { is_expected.to contain_exec("get_Globalsign_Org_Intermediate.pem").with(
             'creates' => SUSE_11_CA_FILE,
-            'command' => "wget  -O '#{SUSE_11_CA_FILE}' '#{SUSE_11_HTTP_URL}' 2> /dev/null",
+            'command' => "wget  -O '#{SUSE_11_CA_FILE}' '#{SUSE_11_HTTP_URL}' 2> /dev/null || rm -f '#{SUSE_11_CA_FILE}'",
           ) }
         it { is_expected.not_to contain_file(SUSE_11_CA_FILE) }
       end
@@ -300,7 +300,7 @@ K1pp74P1S8SqtCr4fKGxhZSM9AyHDPSsQPhZSZg=
 
         it { is_expected.to contain_exec("get_Globalsign_Org_Intermediate.crt").with(
             'creates' => SUSE_12_CA_FILE,
-            'command' => "wget  -O '#{SUSE_12_CA_FILE}' '#{HTTP_URL}' 2> /dev/null",
+            'command' => "wget  -O '#{SUSE_12_CA_FILE}' '#{HTTP_URL}' 2> /dev/null || rm -f '#{SUSE_12_CA_FILE}'",
           ) }
         it { is_expected.not_to contain_file(SUSE_12_CA_FILE) }
       end
@@ -338,7 +338,7 @@ K1pp74P1S8SqtCr4fKGxhZSM9AyHDPSsQPhZSZg=
         end
         it { is_expected.to contain_exec("get_Globalsign_Org_Intermediate.crt").with(
           'creates' => DISTRUSTED_SUSE_12_CA_FILE,
-          'command' => "wget  -O '#{DISTRUSTED_SUSE_12_CA_FILE}' '#{HTTP_URL}' 2> /dev/null",
+          'command' => "wget  -O '#{DISTRUSTED_SUSE_12_CA_FILE}' '#{HTTP_URL}' 2> /dev/null || rm -f '#{DISTRUSTED_SUSE_12_CA_FILE}'",
         )}
       end
     end
