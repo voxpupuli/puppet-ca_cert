@@ -58,13 +58,15 @@ class ca_cert (
   }
 
   $trusted_cert_dir = $ca_cert::params::trusted_cert_dir
-  $cert_dir_group = $ca_cert::params::cert_dir_group
+  $cert_dir_group   = $ca_cert::params::cert_dir_group
+  $cert_dir_mode    = $ca_cert::params::cert_dir_mode
 
   file { 'trusted_certs':
     ensure  => directory,
     path    => $trusted_cert_dir,
     owner   => 'root',
     group   => $cert_dir_group,
+    mode    => $cert_dir_mode,
     purge   => $purge_unmanaged_CAs,
     recurse => $purge_unmanaged_CAs,
     notify  => Exec['ca_cert_update'],

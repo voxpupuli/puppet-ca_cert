@@ -20,6 +20,10 @@
 # [*verify_https_cert*]
 #   When retrieving a certificate whether or not to validate the CA of the
 #   source. (defaults to true)
+# [*ca_file_mode*]
+#   The installed CA certificate's POSIX filesystem permissions. This uses
+#   the same syntax as Puppet's native file resource's "mode" parameter.
+#   (defaults to '0444', i.e. world-readable)
 #
 # === Examples
 #
@@ -32,6 +36,7 @@ define ca_cert::ca (
   $source            = 'text',
   $ensure            = 'trusted',
   $verify_https_cert = true,
+  $ca_file_mode      = $ca_cert::params::ca_file_mode,
 ) {
 
   include ::ca_cert::params
@@ -89,6 +94,7 @@ define ca_cert::ca (
             path    => $ca_cert,
             owner   => 'root',
             group   => 'root',
+            mode    => $ca_file_mode,
             require => Package[$ca_cert::params::package_name],
             notify  => Exec['ca_cert_update'],
           }
@@ -114,6 +120,7 @@ define ca_cert::ca (
             path    => $ca_cert,
             owner   => 'root',
             group   => 'root',
+            mode    => $ca_file_mode,
             require => Package[$ca_cert::params::package_name],
             notify  => Exec['ca_cert_update'],
           }
@@ -125,6 +132,7 @@ define ca_cert::ca (
             path    => $ca_cert,
             owner   => 'root',
             group   => 'root',
+            mode    => $ca_file_mode,
             require => Package[$ca_cert::params::package_name],
             notify  => Exec['ca_cert_update'],
           }
