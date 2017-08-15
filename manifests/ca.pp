@@ -101,6 +101,13 @@ define ca_cert::ca (
               }
               $get_command = "wget ${verify_https} -O '${ca_cert}' '${source}' 2> /dev/null || rm -f '${ca_cert}'"
             }
+            'curl': {
+              $verify_https = $verify_https_cert ? {
+                true  => '',
+                false => '--insecure',
+              }
+              $get_command = "curl ${verify_https} '${source}' > '${ca_cert}' 2> /dev/null || rm -f '${ca_cert}'"
+            }
             default: {
               fail("Unknown download provider: \"${::ca_cert::download_with}\"")
             }
