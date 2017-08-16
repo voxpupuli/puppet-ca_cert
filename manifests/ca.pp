@@ -20,6 +20,8 @@
 # [*verify_https_cert*]
 #   When retrieving a certificate whether or not to validate the CA of the
 #   source. (defaults to true)
+# [*checksum*]
+#   The md5sum of the file. (defaults to undef)
 #
 # === Examples
 #
@@ -32,6 +34,7 @@ define ca_cert::ca (
   $source            = 'text',
   $ensure            = 'trusted',
   $verify_https_cert = true,
+  $checksum          = undef,
 ) {
 
   include ::ca_cert::params
@@ -93,22 +96,14 @@ define ca_cert::ca (
           }
         }
         'ftp', 'https', 'http': {
-          $verify_https = $verify_https_cert ? {
-            true  => '',
-            false => '--no-check-certificate',
-          }
-          exec { "get_${resource_name}":
-            command =>
-              "wget ${verify_https} -O '${ca_cert}' '${source}' 2> /dev/null || rm -f '${ca_cert}'",
-            path    => ['/usr/bin', '/bin'],
-            creates => $ca_cert,
-            notify  => Class['::ca_cert::update'],
-          }
-
-          file { $ca_cert:
-            ensure  => present,
-            replace => false,
-            require => Exec["get_${resource_name}"],
+          remote_file { $ca_cert:
+            ensure      => present,
+            source      => $source,
+            checksum    => $checksum,
+            mode        => '0644',
+            verify_peer => $verify_https_cert,
+            require     => Package[$ca_cert::params::package_name],
+            notify      => Class['::ca_cert::update'],
           }
         }
         'file': {
