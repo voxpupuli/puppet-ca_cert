@@ -123,7 +123,7 @@ K1pp74P1S8SqtCr4fKGxhZSM9AyHDPSsQPhZSZg=
             'command' => "wget  -O '#{DEBIAN_CA_FILE}' '#{HTTP_URL}' 2> /dev/null || rm -f '#{DEBIAN_CA_FILE}'",
           )
         }
-        it { is_expected.not_to contain_file(DEBIAN_CA_FILE) }
+        it { is_expected.to contain_file(DEBIAN_CA_FILE) }
       end
       describe 'with the certificate delivered as a string' do
         let :params do
@@ -177,7 +177,7 @@ K1pp74P1S8SqtCr4fKGxhZSM9AyHDPSsQPhZSZg=
             'creates' => REDHAT_CA_FILE,
             'command' => "wget  -O '#{REDHAT_CA_FILE}' '#{HTTP_URL}' 2> /dev/null || rm -f '#{REDHAT_CA_FILE}'",
           ) }
-        it { is_expected.not_to contain_file(REDHAT_CA_FILE) }
+        it { is_expected.to contain_file(REDHAT_CA_FILE) }
       end
       describe 'with the certificate delivered as a string' do
         let :params do
@@ -238,7 +238,7 @@ K1pp74P1S8SqtCr4fKGxhZSM9AyHDPSsQPhZSZg=
             'creates' => SUSE_11_CA_FILE,
             'command' => "wget  -O '#{SUSE_11_CA_FILE}' '#{SUSE_11_HTTP_URL}' 2> /dev/null || rm -f '#{SUSE_11_CA_FILE}'",
           ) }
-        it { is_expected.not_to contain_file(SUSE_11_CA_FILE) }
+        it { is_expected.to contain_file(SUSE_11_CA_FILE) }
       end
       describe 'with the certificate delivered as a string' do
         let :params do
@@ -302,7 +302,7 @@ K1pp74P1S8SqtCr4fKGxhZSM9AyHDPSsQPhZSZg=
             'creates' => SUSE_12_CA_FILE,
             'command' => "wget  -O '#{SUSE_12_CA_FILE}' '#{HTTP_URL}' 2> /dev/null || rm -f '#{SUSE_12_CA_FILE}'",
           ) }
-        it { is_expected.not_to contain_file(SUSE_12_CA_FILE) }
+        it { is_expected.to contain_file(SUSE_12_CA_FILE) }
       end
       describe 'with the certificate delivered as a string' do
         let :params do

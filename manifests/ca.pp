@@ -35,7 +35,6 @@ define ca_cert::ca (
 ) {
 
   include ::ca_cert::params
-  include ::ca_cert::update
 
   validate_string($source)
   validate_bool($verify_https_cert)
@@ -90,7 +89,7 @@ define ca_cert::ca (
             owner   => 'root',
             group   => 'root',
             require => Package[$ca_cert::params::package_name],
-            notify  => Exec['ca_cert_update'],
+            notify  => Class['::ca_cert::update'],
           }
         }
         'ftp', 'https', 'http': {
@@ -103,10 +102,13 @@ define ca_cert::ca (
               "wget ${verify_https} -O '${ca_cert}' '${source}' 2> /dev/null || rm -f '${ca_cert}'",
             path    => ['/usr/bin', '/bin'],
             creates => $ca_cert,
-            notify  => Exec['ca_cert_update'],
+            notify  => Class['::ca_cert::update'],
           }
-          -> file {$ca_cert:
+
+          file { $ca_cert:
+            ensure  => present,
             replace => false,
+            require => Exec["get_${resource_name}"],
           }
         }
         'file': {
@@ -118,7 +120,7 @@ define ca_cert::ca (
             owner   => 'root',
             group   => 'root',
             require => Package[$ca_cert::params::package_name],
-            notify  => Exec['ca_cert_update'],
+            notify  => Class['::ca_cert::update'],
           }
         }
         'text': {
@@ -129,7 +131,7 @@ define ca_cert::ca (
             owner   => 'root',
             group   => 'root',
             require => Package[$ca_cert::params::package_name],
-            notify  => Exec['ca_cert_update'],
+            notify  => Class['::ca_cert::update'],
           }
         }
         default: {
@@ -145,10 +147,6 @@ define ca_cert::ca (
     default: {
       fail("Ca_cert::Ca[${name}] - ensure must be set to present, trusted, distrusted, or absent.")
     }
-  }
-
-  anchor { "ca_cert::ca::${name}":
-    require => Class['ca_cert::update'],
   }
 
 }
