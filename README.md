@@ -33,6 +33,8 @@ Optional parameters:
                        module to manage other installed CA certificates. (defaults to true)
   * `ca_certs`: A hash of certificates you would like added. These may also be defined
                 by declaring `ca_cert::ca` once for each certificate.
+  * `download_with`: A string that defines what program to download the certificate with.
+                     The available values are `wget` (default).
 
 ### ca_cert::ca
 

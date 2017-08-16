@@ -23,6 +23,10 @@
 #   declaration
 # [*package_ensure*]
 #   The ensure parameter to pass to the package resource
+# [*download_with*]
+#   Choose what program to download the certificate with. Supported programs
+#   are 'wget' (default).
+#
 #
 # === Examples
 #
@@ -43,6 +47,7 @@ class ca_cert (
   $ca_certs            = {},
   $package_ensure      = present,
   $package_name        = $ca_cert::params::package_name,
+  $download_with       = $ca_cert::params::download_with,
 ) inherits ca_cert::params {
 
   include ::ca_cert::params
