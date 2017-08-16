@@ -104,9 +104,6 @@ define ca_cert::ca (
             path    => ['/usr/bin', '/bin'],
             creates => $ca_cert,
             notify  => Exec['ca_cert_update'],
-          } ->
-          file {$ca_cert:
-            replace => false,
           }
         }
         'file': {
