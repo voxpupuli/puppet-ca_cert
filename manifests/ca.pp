@@ -20,6 +20,8 @@
 # [*verify_https_cert*]
 #   When retrieving a certificate whether or not to validate the CA of the
 #   source. (defaults to true)
+# [*checksum*]
+#   The md5sum of the file. Only used if $::ca_cert::download_with is 'remote_file'.
 #
 # === Examples
 #
@@ -32,6 +34,7 @@ define ca_cert::ca (
   $source            = 'text',
   $ensure            = 'trusted',
   $verify_https_cert = true,
+  $checksum          = undef,
 ) {
 
   include ::ca_cert::params
@@ -107,6 +110,15 @@ define ca_cert::ca (
                 false => '--insecure',
               }
               $get_command = "curl ${verify_https} '${source}' > '${ca_cert}' 2> /dev/null || rm -f '${ca_cert}'"
+            }
+            'remote_file': {
+              remote_file { $ca_cert:
+                ensure   => present,
+                source   => $source,
+                checksum => $checksum,
+                notify   => Exec['ca_cert_update'],
+                mode     => '0644',
+              }
             }
             default: {
               fail("Unknown download provider: \"${::ca_cert::download_with}\"")

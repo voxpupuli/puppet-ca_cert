@@ -25,7 +25,7 @@
 #   The ensure parameter to pass to the package resource
 # [*download_with*]
 #   Choose what program to download the certificate with. Supported programs
-#   are 'wget' (default) and 'curl'.
+#   are 'wget' (default), 'curl' and `remote_file`.
 #
 #
 # === Examples
