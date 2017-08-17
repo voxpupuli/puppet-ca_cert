@@ -113,11 +113,12 @@ define ca_cert::ca (
             }
             'remote_file': {
               remote_file { $ca_cert:
-                ensure   => present,
-                source   => $source,
-                checksum => $checksum,
-                notify   => Exec['ca_cert_update'],
-                mode     => '0644',
+                ensure      => present,
+                source      => $source,
+                checksum    => $checksum,
+                notify      => Exec['ca_cert_update'],
+                mode        => '0644',
+                verify_peer => $verify_https_cert,
               }
             }
             default: {
