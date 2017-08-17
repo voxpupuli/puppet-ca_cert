@@ -20,6 +20,8 @@
 # [*verify_https_cert*]
 #   When retrieving a certificate whether or not to validate the CA of the
 #   source. (defaults to true)
+# [*checksum*]
+#   The md5sum of the file. Only used if $::ca_cert::download_with is 'remote_file'.
 #
 # === Examples
 #
@@ -32,6 +34,7 @@ define ca_cert::ca (
   $source            = 'text',
   $ensure            = 'trusted',
   $verify_https_cert = true,
+  $checksum          = undef,
 ) {
 
   include ::ca_cert::params
@@ -93,22 +96,49 @@ define ca_cert::ca (
           }
         }
         'ftp', 'https', 'http': {
-          $verify_https = $verify_https_cert ? {
-            true  => '',
-            false => '--no-check-certificate',
-          }
-          exec { "get_${resource_name}":
-            command =>
-              "wget ${verify_https} -O '${ca_cert}' '${source}' 2> /dev/null || rm -f '${ca_cert}'",
-            path    => ['/usr/bin', '/bin'],
-            creates => $ca_cert,
-            notify  => Class['::ca_cert::update'],
+          case $::ca_cert::download_with {
+            'wget': {
+              $verify_https = $verify_https_cert ? {
+                true  => '',
+                false => '--no-check-certificate',
+              }
+              $get_command = "wget ${verify_https} -O '${ca_cert}' '${source}' 2> /dev/null || rm -f '${ca_cert}'"
+            }
+            'curl': {
+              $verify_https = $verify_https_cert ? {
+                true  => '',
+                false => '--insecure',
+              }
+              $get_command = "curl ${verify_https} '${source}' > '${ca_cert}' 2> /dev/null || rm -f '${ca_cert}'"
+            }
+            'remote_file': {
+              remote_file { $ca_cert:
+                ensure      => present,
+                source      => $source,
+                checksum    => $checksum,
+                notify      => Exec['ca_cert_update'],
+                mode        => '0644',
+                verify_peer => $verify_https_cert,
+              }
+            }
+            default: {
+              fail("Unknown download provider: \"${::ca_cert::download_with}\"")
+            }
           }
 
-          file { $ca_cert:
-            ensure  => present,
-            replace => false,
-            require => Exec["get_${resource_name}"],
+          if $get_command {
+            exec { "get_${resource_name}":
+              command => $get_command,
+              path    => ['/usr/bin', '/bin'],
+              creates => $ca_cert,
+              notify  => Class['::ca_cert::update'],
+            }
+
+            file { $ca_cert:
+              ensure  => present,
+              replace => false,
+              require => Exec["get_${resource_name}"],
+            }
           }
         }
         'file': {

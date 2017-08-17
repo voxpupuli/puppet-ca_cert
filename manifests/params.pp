@@ -1,5 +1,6 @@
 # Private class
 class ca_cert::params {
+  $download_with = 'wget'
   case $::osfamily {
     'Debian': {
       $trusted_cert_dir  = '/usr/local/share/ca-certificates'

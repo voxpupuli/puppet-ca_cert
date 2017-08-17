@@ -33,6 +33,9 @@ Optional parameters:
                        module to manage other installed CA certificates. (defaults to true)
   * `ca_certs`: A hash of certificates you would like added. These may also be defined
                 by declaring `ca_cert::ca` once for each certificate.
+  * `download_with`: A string that defines what program to download the certificate with.
+                     The available values are `wget` (default), `curl` and `remote_file`.
+                     Note that `remote_file` requires [lwf/puppet-remote_file](https://github.com/lwf/puppet-remote_file).
 
 ### ca_cert::ca
 
@@ -74,6 +77,10 @@ ca_cert::ca { 'GlobalSign-OrgSSL-Intermediate':
   * `verify_https_cert`: If a certificate is retrieved over HTTPS, whether or not the
                          server's certificate should be validated against the fetching
                          machine's trusted CA list or not. (defaults to true)
+  * `checksum`: The md5sum of the CA certificate. Only used when `download_with` is
+                set to `remote_file`. The file will be downloaded if the checksum does not match this value.
+                See the `checksum` parameter at [lwf/puppet-remote_file](https://github.com/lwf/puppet-remote_file)
+                for details.
 
 Supported Platforms
 -------------------
