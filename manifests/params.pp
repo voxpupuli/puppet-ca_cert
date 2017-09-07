@@ -37,7 +37,7 @@ class ca_cert::params {
         $ca_file_extension = 'pem'
         $package_name      = 'openssl-certs'
       }
-      elsif $::operatingsystemmajrelease >= '12' {
+      elsif versioncmp($::operatingsystemmajrelease, '12') >= 0 {
         $trusted_cert_dir    = '/etc/pki/trust/anchors'
         $distrusted_cert_dir = '/etc/pki/trust/blacklist'
         $update_cmd          = 'update-ca-certificates'

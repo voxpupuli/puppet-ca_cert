@@ -1,7 +1,9 @@
 HOSTS:
   ubuntu-1404-x64:
     roles:
-      - agent
+      - master
+      - database
+      - dashboard
     platform: ubuntu-14.04-amd64
     hypervisor: docker
     image: ubuntu:14.04
@@ -9,7 +11,7 @@ HOSTS:
     docker_cmd: '["/sbin/init"]'
     docker_image_commands:
       # ensure that upstart is booting correctly in the container
-      - 'rm /usr/sbin/policy-rc.d && rm /sbin/initctl && dpkg-divert --rename --remove /sbin/initctl && apt-get update && apt-get install -y net-tools wget && locale-gen en_US.UTF-8'
+      - 'rm /usr/sbin/policy-rc.d && rm /sbin/initctl && dpkg-divert --rename --remove /sbin/initctl && apt-get update && apt-get install -y net-tools && locale-gen en_US.UTF-8'
 CONFIG:
   trace_limit: 200
   type: foss

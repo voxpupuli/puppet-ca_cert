@@ -4,7 +4,7 @@ describe 'ca_cert class' do
   context 'default parameters' do
     let(:pp) do
       <<-EOS
-        class { 'ca_cert': }
+        include ::ca_cert
       EOS
     end
 

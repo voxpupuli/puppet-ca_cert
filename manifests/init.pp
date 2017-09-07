@@ -84,10 +84,6 @@ class ca_cert (
     }
   }
 
-  anchor { 'ca_cert::update':
-    require => Class['ca_cert::update'],
-  }
-
   if !empty($ca_certs) {
     create_resources('ca_cert::ca', $ca_certs)
   }

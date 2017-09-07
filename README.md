@@ -74,6 +74,9 @@ ca_cert::ca { 'GlobalSign-OrgSSL-Intermediate':
   * `verify_https_cert`: If a certificate is retrieved over HTTPS, whether or not the
                          server's certificate should be validated against the fetching
                          machine's trusted CA list or not. (defaults to true)
+  * `checksum`: The file will be downloaded if the checksum does not match this value.
+                See the `checksum` parameter at [lwf/puppet-remote_file](https://github.com/lwf/puppet-remote_file)
+                for details.
 
 Supported Platforms
 -------------------

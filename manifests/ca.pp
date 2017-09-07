@@ -20,6 +20,8 @@
 # [*verify_https_cert*]
 #   When retrieving a certificate whether or not to validate the CA of the
 #   source. (defaults to true)
+# [*checksum*]
+#   The md5sum of the file. (defaults to undef)
 # [*ca_file_mode*]
 #   The installed CA certificate's POSIX filesystem permissions. This uses
 #   the same syntax as Puppet's native file resource's "mode" parameter.
@@ -36,11 +38,11 @@ define ca_cert::ca (
   $source            = 'text',
   $ensure            = 'trusted',
   $verify_https_cert = true,
+  $checksum          = undef,
   $ca_file_mode      = $ca_cert::params::ca_file_mode,
 ) {
 
   include ::ca_cert::params
-  include ::ca_cert::update
 
   validate_string($source)
   validate_bool($verify_https_cert)
@@ -96,20 +98,18 @@ define ca_cert::ca (
             group   => 'root',
             mode    => $ca_file_mode,
             require => Package[$ca_cert::params::package_name],
-            notify  => Exec['ca_cert_update'],
+            notify  => Class['::ca_cert::update'],
           }
         }
         'ftp', 'https', 'http': {
-          $verify_https = $verify_https_cert ? {
-            true  => '',
-            false => '--no-check-certificate',
-          }
-          exec { "get_${resource_name}":
-            command =>
-              "wget ${verify_https} -O '${ca_cert}' '${source}' 2> /dev/null || rm -f '${ca_cert}'",
-            path    => ['/usr/bin', '/bin'],
-            creates => $ca_cert,
-            notify  => Exec['ca_cert_update'],
+          remote_file { $ca_cert:
+            ensure      => present,
+            source      => $source,
+            checksum    => $checksum,
+            mode        => '0644',
+            verify_peer => $verify_https_cert,
+            require     => Package[$ca_cert::params::package_name],
+            notify      => Class['::ca_cert::update'],
           }
         }
         'file': {
@@ -122,7 +122,7 @@ define ca_cert::ca (
             group   => 'root',
             mode    => $ca_file_mode,
             require => Package[$ca_cert::params::package_name],
-            notify  => Exec['ca_cert_update'],
+            notify  => Class['::ca_cert::update'],
           }
         }
         'text': {
@@ -134,7 +134,7 @@ define ca_cert::ca (
             group   => 'root',
             mode    => $ca_file_mode,
             require => Package[$ca_cert::params::package_name],
-            notify  => Exec['ca_cert_update'],
+            notify  => Class['::ca_cert::update'],
           }
         }
         default: {
@@ -150,10 +150,6 @@ define ca_cert::ca (
     default: {
       fail("Ca_cert::Ca[${name}] - ensure must be set to present, trusted, distrusted, or absent.")
     }
-  }
-
-  anchor { "ca_cert::ca::${name}":
-    require => Class['ca_cert::update'],
   }
 
 }
