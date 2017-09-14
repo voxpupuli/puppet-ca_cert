@@ -11,6 +11,7 @@ describe 'ca_cert::update', :type => :class do
     let :facts do
       {
         :osfamily => 'Debian',
+        :operatingsystem => 'Ubuntu'
       }
     end
 
