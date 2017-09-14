@@ -22,6 +22,10 @@
 #   source. (defaults to true)
 # [*checksum*]
 #   The md5sum of the file. (defaults to undef)
+# [*ca_file_mode*]
+#   The installed CA certificate's POSIX filesystem permissions. This uses
+#   the same syntax as Puppet's native file resource's "mode" parameter.
+#   (defaults to '0444', i.e. world-readable)
 #
 # === Examples
 #
@@ -35,6 +39,7 @@ define ca_cert::ca (
   $ensure            = 'trusted',
   $verify_https_cert = true,
   $checksum          = undef,
+  $ca_file_mode      = $ca_cert::params::ca_file_mode,
 ) {
 
   include ::ca_cert::params
@@ -91,6 +96,7 @@ define ca_cert::ca (
             path    => $ca_cert,
             owner   => 'root',
             group   => 'root',
+            mode    => $ca_file_mode,
             require => Package[$ca_cert::params::package_name],
             notify  => Class['::ca_cert::update'],
           }
@@ -114,6 +120,7 @@ define ca_cert::ca (
             path    => $ca_cert,
             owner   => 'root',
             group   => 'root',
+            mode    => $ca_file_mode,
             require => Package[$ca_cert::params::package_name],
             notify  => Class['::ca_cert::update'],
           }
@@ -125,6 +132,7 @@ define ca_cert::ca (
             path    => $ca_cert,
             owner   => 'root',
             group   => 'root',
+            mode    => $ca_file_mode,
             require => Package[$ca_cert::params::package_name],
             notify  => Class['::ca_cert::update'],
           }
