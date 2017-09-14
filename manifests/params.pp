@@ -5,10 +5,20 @@ class ca_cert::params {
       $trusted_cert_dir  = '/usr/local/share/ca-certificates'
       $update_cmd        = 'update-ca-certificates'
       $cert_dir_group    = 'staff'
-      $cert_dir_mode     = '2665'
       $ca_file_mode      = '0444'
       $ca_file_extension = 'crt'
       $package_name      = 'ca-certificates'
+      case $::operatingsystem {
+        'Ubuntu': {
+          $cert_dir_mode     = '0755'
+        }
+        'Debian': {
+          $cert_dir_mode     = '2665'
+        }
+        default: {
+          fail("Unsupported operatingsystem (${::operatingsystem})")
+        }
+      }
     }
     'RedHat': {
       $trusted_cert_dir    = '/etc/pki/ca-trust/source/anchors'
