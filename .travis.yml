@@ -32,6 +32,15 @@ matrix:
     env: PUPPET_GEM_VERSION="~> 4.0" STRICT_VARIABLES=yes
   - rvm: 2.4.0
     bundler_args: --without system_tests development
-    env: PUPPET_GEM_VERSION="~> 5.0" STRICT_VARIABLES=yes
+    env: PUPPET_GEM_VERSION="~> 5.0" STRICT_VARIABLES=yes DEPLOY_TO_FORGE=yes
+deploy:
+  provider: puppetforge
+  user: "pcfens"
+  password:
+    secure: "XVGxqfPUDznxOF3GNz2ztpthET0dXApOMK5ppwhnbd4Chde1QKtJJkz3fi8UqDE+juDv/CUukhXf7rNiAR+KEtxCJYJ3UM6huYLPDKnvsVDqi4MBpMDZf7x0AVmCFeLAroSrN3DAjkNsQyPFTh+vOeAzI5JlWGP9LjrfSIBJcSo="
+  on:
+    tags: true
+    all_branches: true
+    condition: "$DEPLOY_TO_FORGE = yes"
 notifications:
   email: false
