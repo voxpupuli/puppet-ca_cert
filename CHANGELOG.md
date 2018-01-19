@@ -4,6 +4,12 @@ Changelog
 ## Unreleased
 [Full Changelog](https://github.com/pcfens/puppet-ca_cert/compare/v1.7.0...HEAD)
 
+## [v1.7.1](https://github.com/pcfens/puppet-ca_cert/tree/v1.7.1)
+[Full Changelog](https://github.com/pcfens/puppet-ca_cert/compare/v1.7.0...v1.7.1)
+
+- Set better default folder permissions [\#37](https://github.com/pcfens/puppet-ca_cert/pull/37)
+
+
 ## [v1.7.0](https://github.com/pcfens/puppet-ca_cert/tree/v1.7.0)
 [Full Changelog](https://github.com/pcfens/puppet-ca_cert/compare/v1.6.1...v1.7.0)
 
