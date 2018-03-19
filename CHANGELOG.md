@@ -2,7 +2,13 @@ Changelog
 =========
 
 ## Unreleased
-[Full Changelog](https://github.com/pcfens/puppet-ca_cert/compare/v1.7.0...HEAD)
+[Full Changelog](https://github.com/pcfens/puppet-ca_cert/compare/v1.8.0...HEAD)
+
+## [v1.8.0](https://github.com/pcfens/puppet-ca_cert/tree/v1.8.0)
+[Full Changelog](https://github.com/pcfens/puppet-ca_cert/compare/v1.7.1...v1.8.0)
+
+- Don't run enable_ca_trust on RHEL7 [\#37](https://github.com/pcfens/puppet-ca_cert/pull/40)
+
 
 ## [v1.7.1](https://github.com/pcfens/puppet-ca_cert/tree/v1.7.1)
 [Full Changelog](https://github.com/pcfens/puppet-ca_cert/compare/v1.7.0...v1.7.1)
