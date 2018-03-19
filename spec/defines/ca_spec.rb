@@ -55,6 +55,7 @@ K1pp74P1S8SqtCr4fKGxhZSM9AyHDPSsQPhZSZg=
     {
       :osfamily => 'RedHat',
       :operatingsystem => 'RedHat',
+      :operatingsystemrelease => '7.0'
     }
   end
 

@@ -12,24 +12,24 @@
     {
       "operatingsystem": "RedHat",
       "operatingsystemrelease": [
-        "5.0",
-        "6.0",
-        "7.0"
+        "5",
+        "6",
+        "7"
       ]
     },
     {
-      "operatingsystem": "Suse",
+      "operatingsystem": "SLES",
       "operatingsystemrelease": [
-        "10.0",
-        "11.0",
-        "12.0"
+        "10",
+        "11",
+        "12"
       ]
     },
     {
       "operatingsystem": "OpenSuSE",
       "operatingsystemrelease": [
-        "13.2",
-        "42.1"
+        "13",
+        "42"
       ]
     },
     {
@@ -41,10 +41,7 @@
       ]
     },
     {
-      "operatingsystem": "Archlinux",
-      "operatingsystemrelease": [
-        "4.x"
-      ]
+      "operatingsystem": "Archlinux"
     }
   ],
   "requirements": [
