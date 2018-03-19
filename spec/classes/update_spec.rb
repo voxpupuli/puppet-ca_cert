@@ -1,81 +1,47 @@
 require 'spec_helper'
 
 describe 'ca_cert::update', :type => :class do
-
-  shared_examples 'compiles and includes params class' do
-    it { should compile }
-    it { should contain_class('ca_cert::params') }
-  end
-
-  context "on a Debian based OS" do
-    let :facts do
-      {
-        :osfamily => 'Debian',
-        :operatingsystem => 'Ubuntu'
-      }
-    end
-
-    it_behaves_like 'compiles and includes params class' do
-    end
-    it { is_expected.not_to contain_exec('enable_ca_trust') }
-    it { is_expected.to contain_exec('ca_cert_update').with(
-      :command     => 'update-ca-certificates',
-      :refreshonly => true,
-    )}
-
-  end
-  context "on a RedHat based OS" do
-    let :facts do
-      {
-        :osfamily => 'RedHat',
-      }
-    end
-
-    it_behaves_like 'compiles and includes params class' do
-    end
-    it { is_expected.to contain_exec('enable_ca_trust').with(
-      :command => 'update-ca-trust enable',
-    ) }
-    it { is_expected.to contain_exec('ca_cert_update').with(
-      :command     => 'update-ca-trust extract',
-      :refreshonly => true,
-    )}
-
-  end
-  ['10','11'].each do |osmajrel|
-    context "on a Suse #{osmajrel} based OS" do
-      let :facts do
-        {
-          :osfamily => 'Suse',
-          :operatingsystemmajrelease => "#{osmajrel}",
-        }
+  on_supported_os.each do |os, facts|
+    context "on #{os}" do
+      let(:facts) do
+        facts
       end
 
-      it_behaves_like 'compiles and includes params class' do
+      it { is_expected.to compile.with_all_deps }
+      it { is_expected.to contain_class('ca_cert::params') }
+
+      case facts[:osfamily]
+      when 'Debian'
+        it { is_expected.not_to contain_exec('enable_ca_trust') }
+        it { is_expected.to contain_exec('ca_cert_update').with(
+          :command     => 'update-ca-certificates',
+          :refreshonly => true,
+        )}
+      when 'RedHat'
+        if facts[:operatingsystemrelease] == '7.0'
+          it { is_expected.not_to contain_exec('enable_ca_trust') }
+        else
+          it { is_expected.to contain_exec('enable_ca_trust').with_command('update-ca-trust enable') }
+        end
+        it { is_expected.to contain_exec('ca_cert_update').with(
+          :command     => 'update-ca-trust extract',
+          :refreshonly => true,
+        )}
+      when 'Suse'
+        it { is_expected.not_to contain_exec('enable_ca_trust') }
+        case facts[:operatingsystemmajrelease]
+        when '10','11'
+          it { is_expected.to contain_exec('ca_cert_update').with(
+            :command     => 'c_rehash',
+            :refreshonly => true,
+          )}
+        when '12','13','42'
+          it { is_expected.to contain_exec('ca_cert_update').with(
+            :command     => 'update-ca-certificates',
+            :refreshonly => true,
+          )}
+        end
       end
-      it { is_expected.not_to contain_exec('enable_ca_trust') }
-      it { is_expected.to contain_exec('ca_cert_update').with(
-        :command     => 'c_rehash',
-        :refreshonly => true,
-      )}
-
     end
-  end
-  context "on a Suse 12 based OS" do
-    let :facts do
-      {
-        :osfamily => 'Suse',
-        :operatingsystemmajrelease => '12',
-      }
-    end
-
-    it_behaves_like 'compiles and includes params class' do
-    end
-    it { is_expected.not_to contain_exec('enable_ca_trust') }
-    it { is_expected.to contain_exec('ca_cert_update').with(
-      :command     => 'update-ca-certificates',
-      :refreshonly => true,
-    )}
-
   end
 end
