@@ -34,18 +34,15 @@
 # }
 
 define ca_cert::ca (
-  $ca_text           = undef,
-  $source            = 'text',
-  $ensure            = 'trusted',
-  $verify_https_cert = true,
-  $checksum          = undef,
-  $ca_file_mode      = $ca_cert::params::ca_file_mode,
+  Optional[String] $ca_text  = undef,
+  String $source             = 'text',
+  String $ensure             = 'trusted',
+  Boolean $verify_https_cert = true,
+  Optional[String] $checksum = undef,
+  String $ca_file_mode       = $ca_cert::params::ca_file_mode,
 ) {
 
   include ::ca_cert::params
-
-  validate_string($source)
-  validate_bool($verify_https_cert)
 
   if ($ensure == 'trusted' or $ensure == 'distrusted') and $source == 'text' and !is_string($ca_text) {
     fail('ca_text is required if source is set to text')

@@ -37,19 +37,16 @@
 # Phil Fenstermacher <phillip.fenstermacher@gmail.com>
 #
 class ca_cert (
-  $always_update_certs = false,
-  $purge_unmanaged_CAs = false,
-  $install_package     = true,
-  $ca_certs            = {},
-  $package_ensure      = present,
-  $package_name        = $ca_cert::params::package_name,
+  Boolean $always_update_certs = false,
+  Boolean $purge_unmanaged_CAs = false,
+  Boolean $install_package     = true,
+  Hash    $ca_certs            = {},
+  String  $package_ensure      = present,
+  String  $package_name        = $ca_cert::params::package_name,
 ) inherits ca_cert::params {
 
   include ::ca_cert::params
   include ::ca_cert::update
-
-  validate_bool($always_update_certs)
-  validate_hash($ca_certs)
 
   if $always_update_certs == true {
     Exec <| title=='ca_cert_update' |> {
