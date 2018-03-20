@@ -30,7 +30,7 @@ describe 'ca_cert', :type => :class do
     context "with purge_unmanaged_CAs set to true" do
       let :params do
         {
-          :purge_unmanaged_CAs => 'true',
+          :purge_unmanaged_CAs => true,
         }
       end
       it { is_expected.to contain_file("trusted_certs").with(
@@ -65,7 +65,7 @@ describe 'ca_cert', :type => :class do
     context "with purge_unmanaged_CAs set to true" do
       let :params do
         {
-          :purge_unmanaged_CAs => 'true',
+          :purge_unmanaged_CAs => true,
         }
       end
       it { is_expected.to contain_file("trusted_certs").with(
@@ -102,7 +102,7 @@ describe 'ca_cert', :type => :class do
       context "with purge_unmanaged_CAs set to true" do
         let :params do
           {
-            :purge_unmanaged_CAs => 'true',
+            :purge_unmanaged_CAs => true,
           }
         end
         it { is_expected.to contain_file("trusted_certs").with(
@@ -139,7 +139,7 @@ describe 'ca_cert', :type => :class do
     context "with purge_unmanaged_CAs set to true" do
       let :params do
         {
-          :purge_unmanaged_CAs => 'true',
+          :purge_unmanaged_CAs => true,
         }
       end
       it { is_expected.to contain_file("trusted_certs").with(
