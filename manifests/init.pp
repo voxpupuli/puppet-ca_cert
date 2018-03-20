@@ -48,8 +48,8 @@ class ca_cert (
   include ::ca_cert::params
   include ::ca_cert::update
 
-  validate_bool($always_update_certs)
-  validate_hash($ca_certs)
+  validate_legacy($always_update_certs)
+  validate_legacy($ca_certs)
 
   if $always_update_certs == true {
     Exec <| title=='ca_cert_update' |> {
