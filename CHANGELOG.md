@@ -2,7 +2,15 @@ Changelog
 =========
 
 ## Unreleased
-[Full Changelog](https://github.com/pcfens/puppet-ca_cert/compare/v1.8.0...HEAD)
+[Full Changelog](https://github.com/pcfens/puppet-ca_cert/compare/v2.0.0...HEAD)
+
+## [v2.0.0](https://github.com/pcfens/puppet-ca_cert/tree/v2.0.0)
+[Full Changelog](https://github.com/pcfens/puppet-ca_cert/compare/v1.8.0...v2.0.0)
+
+This release has potentially breaking changes
+
+- Move type validation from validate_type to Puppet  data types (removes support for Puppet 3) [\#42](https://github.com/pcfens/puppet-ca_cert/pull/42)
+
 
 ## [v1.8.0](https://github.com/pcfens/puppet-ca_cert/tree/v1.8.0)
 [Full Changelog](https://github.com/pcfens/puppet-ca_cert/compare/v1.7.1...v1.8.0)
