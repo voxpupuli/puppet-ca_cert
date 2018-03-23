@@ -34,12 +34,12 @@
 # }
 
 define ca_cert::ca (
-  Optional[String] $ca_text  = undef,
-  String $source             = 'text',
-  String $ensure             = 'trusted',
-  Boolean $verify_https_cert = true,
-  Optional[String] $checksum = undef,
-  String $ca_file_mode       = $ca_cert::params::ca_file_mode,
+  Optional[String] $ca_text      = undef,
+  String $source                 = 'text',
+  String $ensure                 = 'trusted',
+  Boolean $verify_https_cert     = true,
+  Optional[String] $checksum     = undef,
+  Optional[String] $ca_file_mode = $ca_cert::params::ca_file_mode,
 ) {
 
   include ::ca_cert::params
