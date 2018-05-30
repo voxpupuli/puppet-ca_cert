@@ -37,6 +37,7 @@ describe 'ca_cert::update', :type => :class do
             end
             it { is_expected.to contain_exec('enable_ca_trust').with_command('update-ca-trust enable') }
           end
+        end
         it { is_expected.to contain_exec('ca_cert_update').with(
           :command     => 'update-ca-trust extract',
           :refreshonly => true,
