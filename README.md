@@ -33,6 +33,8 @@ Optional parameters:
                        module to manage other installed CA certificates. (defaults to true)
   * `ca_certs`: A hash of certificates you would like added. These may also be defined
                 by declaring `ca_cert::ca` once for each certificate.
+  * `force_enable`:  For RHEL 6 and earlier. When set to true, creates backups of the legacy config, removes it,
+                     and creates symlinks to the new config.
 
 ### ca_cert::ca
 
