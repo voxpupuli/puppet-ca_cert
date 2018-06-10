@@ -2,7 +2,13 @@ Changelog
 =========
 
 ## Unreleased
-[Full Changelog](https://github.com/pcfens/puppet-ca_cert/compare/v2.0.0...HEAD)
+[Full Changelog](https://github.com/pcfens/puppet-ca_cert/compare/v2.1.0...HEAD)
+
+## [v2.1.0](https://github.com/pcfens/puppet-ca_cert/tree/v2.1.0)
+[Full Changelog](https://github.com/pcfens/puppet-ca_cert/compare/v2.0.0...v2.1.0)
+
+- Enable vs. force-enable for RHEL versions 6 and older [\#45](https://github.com/pcfens/puppet-ca_cert/pull/45)
+
 
 ## [v2.0.0](https://github.com/pcfens/puppet-ca_cert/tree/v2.0.0)
 [Full Changelog](https://github.com/pcfens/puppet-ca_cert/compare/v1.8.0...v2.0.0)
