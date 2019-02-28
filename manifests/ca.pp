@@ -88,14 +88,13 @@ define ca_cert::ca (
       case $protocol_type {
         'puppet': {
           file { $resource_name:
-            ensure  => present,
-            source  => $source,
-            path    => $ca_cert,
-            owner   => 'root',
-            group   => 'root',
-            mode    => $ca_file_mode,
-            require => Package[$ca_cert::params::package_name],
-            notify  => Class['::ca_cert::update'],
+            ensure => present,
+            source => $source,
+            path   => $ca_cert,
+            owner  => 'root',
+            group  => 'root',
+            mode   => $ca_file_mode,
+            notify => Class['::ca_cert::update'],
           }
         }
         'ftp', 'https', 'http': {
@@ -105,21 +104,19 @@ define ca_cert::ca (
             checksum    => $checksum,
             mode        => '0644',
             verify_peer => $verify_https_cert,
-            require     => Package[$ca_cert::params::package_name],
             notify      => Class['::ca_cert::update'],
           }
         }
         'file': {
           $source_path = $source_array[1]
           file { $resource_name:
-            ensure  => present,
-            source  => $source_path,
-            path    => $ca_cert,
-            owner   => 'root',
-            group   => 'root',
-            mode    => $ca_file_mode,
-            require => Package[$ca_cert::params::package_name],
-            notify  => Class['::ca_cert::update'],
+            ensure => present,
+            source => $source_path,
+            path   => $ca_cert,
+            owner  => 'root',
+            group  => 'root',
+            mode   => $ca_file_mode,
+            notify => Class['::ca_cert::update'],
           }
         }
         'text': {
@@ -130,7 +127,6 @@ define ca_cert::ca (
             owner   => 'root',
             group   => 'root',
             mode    => $ca_file_mode,
-            require => Package[$ca_cert::params::package_name],
             notify  => Class['::ca_cert::update'],
           }
         }
