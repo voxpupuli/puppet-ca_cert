@@ -2,7 +2,14 @@ Changelog
 =========
 
 ## Unreleased
-[Full Changelog](https://github.com/pcfens/puppet-ca_cert/compare/v2.1.0...HEAD)
+[Full Changelog](https://github.com/pcfens/puppet-ca_cert/compare/v2.1.1...HEAD)
+
+## [v2.1.1](https://github.com/pcfens/puppet-ca_cert/tree/v2.1.1)
+[Full Changelog](https://github.com/pcfens/puppet-ca_cert/compare/v2.1.0...v2.1.1)
+
+- Fix the package dependency when `install_package` is set to false [\#47](https://github.com/pcfens/puppet-ca_cert/issues/47)
+- Update the stdlib dependency constraint. [\#48](https://github.com/pcfens/puppet-ca_cert/pull/48)
+
 
 ## [v2.1.0](https://github.com/pcfens/puppet-ca_cert/tree/v2.1.0)
 [Full Changelog](https://github.com/pcfens/puppet-ca_cert/compare/v2.0.0...v2.1.0)
