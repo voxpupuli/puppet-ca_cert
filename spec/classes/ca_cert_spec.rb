@@ -5,6 +5,8 @@ describe 'ca_cert', :type => :class do
   shared_examples 'compiles and includes params class' do
     it { should compile }
     it { should contain_class('ca_cert::params') }
+    it { should contain_ca_cert__ca('ca1') }
+    it { should contain_ca_cert__ca('ca2') }
   end
 
   context "on a Debian based OS" do
