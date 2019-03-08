@@ -54,10 +54,6 @@ class ca_cert (
     }
   }
 
-  if $install_package {
-    Class['::ca_cert'] -> Ca_cert::Ca <| |>
-  }
-
   $trusted_cert_dir = $ca_cert::params::trusted_cert_dir
   $cert_dir_group   = $ca_cert::params::cert_dir_group
   $cert_dir_mode    = $ca_cert::params::cert_dir_mode
@@ -76,6 +72,7 @@ class ca_cert (
   if $install_package == true {
     if $package_ensure == present or $package_ensure == installed {
       ensure_packages([$package_name])
+      Package[$package_name] -> Ca_cert::Ca <| |>
     }
     else {
       package { 'ca-certificates':
