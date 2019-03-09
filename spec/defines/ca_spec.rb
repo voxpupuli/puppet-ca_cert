@@ -1,14 +1,15 @@
 require 'spec_helper'
+# rubocop:disable RSpec/VoidExpect
 
-describe 'ca_cert::ca', :type => :define do
-  HTTP_URL  = 'http://secure.globalsign.com/cacert/gsorganizationvalsha2g2r1.crt'
-  DEBIAN_CA_FILE = '/usr/local/share/ca-certificates/Globalsign_Org_Intermediate.crt'
-  REDHAT_CA_FILE = '/etc/pki/ca-trust/source/anchors/Globalsign_Org_Intermediate.crt'
-  SUSE_11_HTTP_URL = 'http://secure.globalsign.com/cacert/gsorganizationvalsha2g2r1.pem'
-  SUSE_11_CA_FILE = '/etc/ssl/certs/Globalsign_Org_Intermediate.pem'
-  SUSE_12_CA_FILE = '/etc/pki/trust/anchors/Globalsign_Org_Intermediate.crt'
-  DISTRUSTED_SUSE_12_CA_FILE = '/etc/pki/trust/blacklist/Globalsign_Org_Intermediate.crt'
-  DISTRUSTED_REDHAT_CA_FILE = '/etc/pki/ca-trust/source/blacklist/Globalsign_Org_Intermediate.crt'
+describe 'ca_cert::ca', type: :define do
+  HTTP_URL = 'http://secure.globalsign.com/cacert/gsorganizationvalsha2g2r1.crt'.freeze
+  DEBIAN_CA_FILE = '/usr/local/share/ca-certificates/Globalsign_Org_Intermediate.crt'.freeze
+  REDHAT_CA_FILE = '/etc/pki/ca-trust/source/anchors/Globalsign_Org_Intermediate.crt'.freeze
+  SUSE_11_HTTP_URL = 'http://secure.globalsign.com/cacert/gsorganizationvalsha2g2r1.pem'.freeze
+  SUSE_11_CA_FILE = '/etc/ssl/certs/Globalsign_Org_Intermediate.pem'.freeze
+  SUSE_12_CA_FILE = '/etc/pki/trust/anchors/Globalsign_Org_Intermediate.crt'.freeze
+  DISTRUSTED_SUSE_12_CA_FILE = '/etc/pki/trust/blacklist/Globalsign_Org_Intermediate.crt'.freeze
+  DISTRUSTED_REDHAT_CA_FILE = '/etc/pki/ca-trust/source/blacklist/Globalsign_Org_Intermediate.crt'.freeze
   GLOBALSIGN_ORG_CA = '-----BEGIN CERTIFICATE-----
 MIIEaTCCA1GgAwIBAgILBAAAAAABRE7wQkcwDQYJKoZIhvcNAQELBQAwVzELMAkG
 A1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYtc2ExEDAOBgNVBAsTB1Jv
@@ -34,7 +35,7 @@ XN0cvfNVlg/UBsD84iOKJHDTu/B5GqdhcIOKrwbFINihY9Bsrk8y1658GEV1BSl3
 30JAZGSGvip2CTFvHST0mdCF/vIhCPnG9vHQWe3WVjwIKANnuvD58ZAWR65n5ryA
 SOlCdjSXVWkkDoPWoC209fN5ikkodBpBocLTJIg1MGCUF7ThBCIxPTsvFwayuJ2G
 K1pp74P1S8SqtCr4fKGxhZSM9AyHDPSsQPhZSZg=
------END CERTIFICATE-----'
+-----END CERTIFICATE-----'.freeze
 
   let :pre_condition do
     'class {"ca_cert": }'
@@ -46,119 +47,131 @@ K1pp74P1S8SqtCr4fKGxhZSM9AyHDPSsQPhZSZg=
 
   let :debian_facts do
     {
-      :osfamily => 'Debian',
-      :operatingsystem => 'Ubuntu',
+      osfamily: 'Debian',
+      operatingsystem: 'Ubuntu',
     }
   end
 
   let :redhat_facts do
     {
-      :osfamily => 'RedHat',
-      :operatingsystem => 'RedHat',
-      :operatingsystemrelease => '7.0'
+      osfamily: 'RedHat',
+      operatingsystem: 'RedHat',
+      operatingsystemrelease: '7.0',
     }
   end
 
   let :suse_11_facts do
     {
-      :osfamily => 'Suse',
-      :operatingsystem => 'Suse',
-      :operatingsystemmajrelease => '11',
+      osfamily: 'Suse',
+      operatingsystem: 'Suse',
+      operatingsystemmajrelease: '11',
     }
   end
 
   let :suse_12_facts do
     {
-      :osfamily => 'Suse',
-      :operatingsystem => 'Suse',
-      :operatingsystemmajrelease => '12',
+      osfamily: 'Suse',
+      operatingsystem: 'Suse',
+      operatingsystemmajrelease: '12',
     }
   end
 
   shared_examples 'compiles and includes main and params classes' do
-    it { should compile }
-    it { is_expected.to contain_class("ca_cert") }
-    it { is_expected.to contain_class("ca_cert::params") }
+    it { is_expected.to compile }
+    it { is_expected.to contain_class('ca_cert') }
+    it { is_expected.to contain_class('ca_cert::params') }
   end
 
   describe 'failure conditions' do
-    let :facts do debian_facts end
+    let(:facts) { debian_facts }
 
     context 'with no certificate text' do
       let :params do
         {
-          :source => 'text',
+          source: 'text',
         }
       end
-      it { expect { should raise_error(Puppet::Error, /ca_text is required if source is set to text/) }}
+
+      it { expect { is_expected.to raise_error(Puppet::Error, %r{ca_text is required if source is set to text}) } }
     end
 
     context 'with an invalid source' do
       let :params do
         {
-          :source => 'rsync://certificate.crt',
+          source: 'rsync://certificate.crt',
         }
       end
-      it { expect { should raise_error(Puppet::Error, /Protocol must be puppet, file, http, https, ftp, or text/) }}
+
+      it { expect { is_expected.to raise_error(Puppet::Error, %r{Protocol must be puppet, file, http, https, ftp, or text}) } }
     end
   end
 
   describe 'os-dependent items' do
-    context "On Debian based systems" do
-      let :facts do debian_facts end
-      let :params do
+    context 'On Debian based systems' do
+      let(:facts) { debian_facts }
+      let(:params) do
         {
-          :source => HTTP_URL
+          source: HTTP_URL,
         }
       end
+
       it_behaves_like 'compiles and includes main and params classes' do
       end
       describe 'with a remote certificate' do
         let :params do
           {
-            :source => HTTP_URL
+            source: HTTP_URL,
           }
         end
-        it { is_expected.to contain_remote_file(DEBIAN_CA_FILE).with(
-          'ensure' => 'present',
-          'source' => HTTP_URL,
-        ) }
+
+        it {
+          is_expected.to contain_remote_file(DEBIAN_CA_FILE).with(
+            'ensure' => 'present',
+            'source' => HTTP_URL,
+          )
+        }
       end
       describe 'with the certificate delivered as a string' do
         let :params do
           {
-            :source  => 'text',
-            :ca_text => GLOBALSIGN_ORG_CA,
+            source: 'text',
+            ca_text: GLOBALSIGN_ORG_CA,
           }
         end
-        it { is_expected.to contain_file('Globalsign_Org_Intermediate.crt').with(
-          'ensure'  => 'present',
-          'content' => GLOBALSIGN_ORG_CA,
-          'path'    => DEBIAN_CA_FILE,
-        ) }
+
+        it {
+          is_expected.to contain_file('Globalsign_Org_Intermediate.crt').with(
+            'ensure'  => 'present',
+            'content' => GLOBALSIGN_ORG_CA,
+            'path'    => DEBIAN_CA_FILE,
+          )
+        }
       end
-      describe "when removing the CA cert" do
+      describe 'when removing the CA cert' do
         ['absent', 'distrusted'].each do |deb_ensure|
           let :params do
             {
-              :ensure => deb_ensure,
-              :source => HTTP_URL,
+              ensure: deb_ensure,
+              source: HTTP_URL,
             }
           end
+
           context "with ensure set to #{deb_ensure}" do
-            it { is_expected.to contain_file(DEBIAN_CA_FILE).with(
-              'ensure' => 'absent'
-            ) }
+            it {
+              is_expected.to contain_file(DEBIAN_CA_FILE).with(
+                'ensure' => 'absent',
+              )
+            }
           end
         end
       end
     end
 
-    context "On RedHat based systems" do
-      let :facts do redhat_facts end
-      let :params do
+    context 'On RedHat based systems' do
+      let(:facts) { redhat_facts }
+      let(:params) do
         {
-          :source => HTTP_URL
+          source: HTTP_URL,
         }
       end
 
@@ -168,56 +181,68 @@ K1pp74P1S8SqtCr4fKGxhZSM9AyHDPSsQPhZSZg=
       describe 'with a remote certificate' do
         let :params do
           {
-            :source => HTTP_URL,
+            source: HTTP_URL,
           }
         end
-        it { is_expected.to contain_remote_file(REDHAT_CA_FILE).with(
-          'ensure' => 'present',
-          'source' => HTTP_URL,
-        ) }
+
+        it {
+          is_expected.to contain_remote_file(REDHAT_CA_FILE).with(
+            'ensure' => 'present',
+            'source' => HTTP_URL,
+          )
+        }
       end
       describe 'with the certificate delivered as a string' do
         let :params do
           {
-            :source  => 'text',
-            :ca_text => GLOBALSIGN_ORG_CA,
+            source: 'text',
+            ca_text: GLOBALSIGN_ORG_CA,
           }
         end
-        it { is_expected.to contain_file('Globalsign_Org_Intermediate.crt').with(
-          'ensure'  => 'present',
-          'content' => GLOBALSIGN_ORG_CA,
-          'path'    => REDHAT_CA_FILE,
-        ) }
+
+        it {
+          is_expected.to contain_file('Globalsign_Org_Intermediate.crt').with(
+            'ensure'  => 'present',
+            'content' => GLOBALSIGN_ORG_CA,
+            'path'    => REDHAT_CA_FILE,
+          )
+        }
       end
-      describe "when removing the CA cert" do
+      describe 'when removing the CA cert' do
         let :params do
           {
-            :ensure => 'absent',
+            ensure: 'absent',
           }
         end
-        it { is_expected.to contain_file(REDHAT_CA_FILE).with(
-          'ensure' => 'absent'
-        )}
+
+        it {
+          is_expected.to contain_file(REDHAT_CA_FILE).with(
+            'ensure' => 'absent',
+          )
+        }
       end
-      describe "when explicitly distrusting a certificate" do
+      describe 'when explicitly distrusting a certificate' do
         let :params do
           {
-            :source => HTTP_URL,
-            :ensure => 'distrusted',
+            source: HTTP_URL,
+            ensure: 'distrusted',
           }
         end
-        it { is_expected.to contain_remote_file(DISTRUSTED_REDHAT_CA_FILE).with(
-          'ensure' => 'present',
-          'source' => HTTP_URL,
-        ) }
+
+        it {
+          is_expected.to contain_remote_file(DISTRUSTED_REDHAT_CA_FILE).with(
+            'ensure' => 'present',
+            'source' => HTTP_URL,
+          )
+        }
       end
     end
 
-    context "On Suse 11 based systems" do
-      let :facts do suse_11_facts end
-      let :params do
+    context 'On Suse 11 based systems' do
+      let(:facts) { suse_11_facts }
+      let(:params) do
         {
-          :source => SUSE_11_HTTP_URL
+          source: SUSE_11_HTTP_URL,
         }
       end
 
@@ -227,59 +252,71 @@ K1pp74P1S8SqtCr4fKGxhZSM9AyHDPSsQPhZSZg=
       describe 'with a remote certificate' do
         let :params do
           {
-            :source => SUSE_11_HTTP_URL,
+            source: SUSE_11_HTTP_URL,
           }
         end
-        it { is_expected.to contain_remote_file(SUSE_11_CA_FILE).with(
-          'ensure' => 'present',
-          'source' => SUSE_11_HTTP_URL,
-        ) }
+
+        it {
+          is_expected.to contain_remote_file(SUSE_11_CA_FILE).with(
+            'ensure' => 'present',
+            'source' => SUSE_11_HTTP_URL,
+          )
+        }
       end
       describe 'with the certificate delivered as a string' do
         let :params do
           {
-            :source  => 'text',
-            :ca_text => GLOBALSIGN_ORG_CA,
+            source: 'text',
+            ca_text: GLOBALSIGN_ORG_CA,
           }
         end
-        it { is_expected.to contain_file('Globalsign_Org_Intermediate.pem').with(
-          'ensure'  => 'present',
-          'content' => GLOBALSIGN_ORG_CA,
-          'path'    => SUSE_11_CA_FILE,
-        ) }
+
+        it {
+          is_expected.to contain_file('Globalsign_Org_Intermediate.pem').with(
+            'ensure'  => 'present',
+            'content' => GLOBALSIGN_ORG_CA,
+            'path'    => SUSE_11_CA_FILE,
+          )
+        }
       end
-      describe "when removing the CA cert" do
+      describe 'when removing the CA cert' do
         let :params do
           {
-            :ensure => 'absent',
+            ensure: 'absent',
           }
         end
-        it { is_expected.to contain_file(SUSE_11_CA_FILE).with(
-          'ensure' => 'absent'
-        )}
+
+        it {
+          is_expected.to contain_file(SUSE_11_CA_FILE).with(
+            'ensure' => 'absent',
+          )
+        }
       end
-      describe "when removing the CA cert" do
+      describe 'when removing the CA cert' do
         ['absent', 'distrusted'].each do |suse_ensure|
           let :params do
             {
-              :ensure => suse_ensure,
-              :source => SUSE_11_HTTP_URL,
+              ensure: suse_ensure,
+              source: SUSE_11_HTTP_URL,
             }
           end
+
           context "with ensure set to #{suse_ensure}" do
-            it { is_expected.to contain_file(SUSE_11_CA_FILE).with(
-              'ensure' => 'absent'
-            ) }
+            it {
+              is_expected.to contain_file(SUSE_11_CA_FILE).with(
+                'ensure' => 'absent',
+              )
+            }
           end
         end
       end
     end
 
-    context "On Suse 12 based systems" do
-      let :facts do suse_12_facts end
-      let :params do
+    context 'On Suse 12 based systems' do
+      let(:facts) { suse_12_facts }
+      let(:params) do
         {
-          :source => HTTP_URL
+          source: HTTP_URL,
         }
       end
 
@@ -289,50 +326,62 @@ K1pp74P1S8SqtCr4fKGxhZSM9AyHDPSsQPhZSZg=
       describe 'with a remote certificate' do
         let :params do
           {
-            :source => HTTP_URL,
+            source: HTTP_URL,
           }
         end
-        it { is_expected.to contain_remote_file(SUSE_12_CA_FILE).with(
-          'ensure' => 'present',
-          'source' => HTTP_URL,
-        ) }
+
+        it {
+          is_expected.to contain_remote_file(SUSE_12_CA_FILE).with(
+            'ensure' => 'present',
+            'source' => HTTP_URL,
+          )
+        }
       end
       describe 'with the certificate delivered as a string' do
         let :params do
           {
-            :source  => 'text',
-            :ca_text => GLOBALSIGN_ORG_CA,
+            source: 'text',
+            ca_text: GLOBALSIGN_ORG_CA,
           }
         end
-        it { is_expected.to contain_file('Globalsign_Org_Intermediate.crt').with(
-          'ensure'  => 'present',
-          'content' => GLOBALSIGN_ORG_CA,
-          'path'    => SUSE_12_CA_FILE,
-        ) }
+
+        it {
+          is_expected.to contain_file('Globalsign_Org_Intermediate.crt').with(
+            'ensure'  => 'present',
+            'content' => GLOBALSIGN_ORG_CA,
+            'path'    => SUSE_12_CA_FILE,
+          )
+        }
       end
-      describe "when removing the CA cert" do
+      describe 'when removing the CA cert' do
         let :params do
           {
-            :ensure => 'absent',
+            ensure: 'absent',
           }
         end
-        context "with ensure set to absent" do
-          it { is_expected.to contain_file(SUSE_12_CA_FILE).with(
-            'ensure' => 'absent'
-          ) }
+
+        context 'with ensure set to absent' do
+          it {
+            is_expected.to contain_file(SUSE_12_CA_FILE).with(
+              'ensure' => 'absent',
+            )
+          }
         end
       end
-      describe "when explicitly distrusting a certificate" do
+      describe 'when explicitly distrusting a certificate' do
         let :params do
           {
-            :source => HTTP_URL,
-            :ensure => 'distrusted',
+            source: HTTP_URL,
+            ensure: 'distrusted',
           }
         end
-        it { is_expected.to contain_remote_file(DISTRUSTED_SUSE_12_CA_FILE).with(
-          'ensure' => 'present',
-          'source' => HTTP_URL,
-        ) }
+
+        it {
+          is_expected.to contain_remote_file(DISTRUSTED_SUSE_12_CA_FILE).with(
+            'ensure' => 'present',
+            'source' => HTTP_URL,
+          )
+        }
       end
     end
   end

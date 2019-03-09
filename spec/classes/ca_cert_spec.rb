@@ -1,19 +1,18 @@
 require 'spec_helper'
 
-describe 'ca_cert', :type => :class do
-
+describe 'ca_cert', type: :class do
   shared_examples 'compiles and includes params class' do
-    it { should compile }
-    it { should contain_class('ca_cert::params') }
-    it { should contain_ca_cert__ca('ca1') }
-    it { should contain_ca_cert__ca('ca2') }
+    it { is_expected.to compile }
+    it { is_expected.to contain_class('ca_cert::params') }
+    it { is_expected.to contain_ca_cert__ca('ca1') }
+    it { is_expected.to contain_ca_cert__ca('ca2') }
   end
 
-  context "on a Debian based OS" do
+  context 'on a Debian based OS' do
     let :facts do
       {
-        :osfamily => 'Debian',
-        :operatingsystem => 'Ubuntu',
+        osfamily: 'Debian',
+        operatingsystem: 'Ubuntu',
       }
     end
 
@@ -21,7 +20,8 @@ describe 'ca_cert', :type => :class do
     end
     it { is_expected.to contain_package('ca-certificates') }
 
-    it { is_expected.to contain_file("trusted_certs").with(
+    it {
+      is_expected.to contain_file('trusted_certs').with(
         'ensure' => 'directory',
         'path'   => '/usr/local/share/ca-certificates',
         'group'  => 'staff',
@@ -29,13 +29,15 @@ describe 'ca_cert', :type => :class do
       )
     }
 
-    context "with purge_unmanaged_CAs set to true" do
+    context 'with purge_unmanaged_CAs set to true' do
       let :params do
         {
-          :purge_unmanaged_CAs => true,
+          purge_unmanaged_CAs: true,
         }
       end
-      it { is_expected.to contain_file("trusted_certs").with(
+
+      it {
+        is_expected.to contain_file('trusted_certs').with(
           'ensure' => 'directory',
           'path'   => '/usr/local/share/ca-certificates',
           'group'  => 'staff',
@@ -44,11 +46,11 @@ describe 'ca_cert', :type => :class do
       }
     end
   end
-  context "on a RedHat based OS" do
+  context 'on a RedHat based OS' do
     let :facts do
       {
-        :osfamily => 'RedHat',
-        :operatingsystemrelease => '7.0'
+        osfamily: 'RedHat',
+        operatingsystemrelease: '7.0',
       }
     end
 
@@ -56,7 +58,8 @@ describe 'ca_cert', :type => :class do
     end
     it { is_expected.to contain_package('ca-certificates') }
 
-    it { is_expected.to contain_file("trusted_certs").with(
+    it {
+      is_expected.to contain_file('trusted_certs').with(
         'ensure' => 'directory',
         'path'   => '/etc/pki/ca-trust/source/anchors',
         'group'  => 'root',
@@ -64,13 +67,15 @@ describe 'ca_cert', :type => :class do
       )
     }
 
-    context "with purge_unmanaged_CAs set to true" do
+    context 'with purge_unmanaged_CAs set to true' do
       let :params do
         {
-          :purge_unmanaged_CAs => true,
+          purge_unmanaged_CAs: true,
         }
       end
-      it { is_expected.to contain_file("trusted_certs").with(
+
+      it {
+        is_expected.to contain_file('trusted_certs').with(
           'ensure' => 'directory',
           'path'   => '/etc/pki/ca-trust/source/anchors',
           'group'  => 'root',
@@ -80,12 +85,12 @@ describe 'ca_cert', :type => :class do
     end
   end
 
-  ['10','11'].each do |osmajrel|
+  ['10', '11'].each do |osmajrel|
     context "on a Suse #{osmajrel} based OS" do
       let :facts do
         {
-          :osfamily => 'Suse',
-          :operatingsystemmajrelease => "#{osmajrel}",
+          osfamily: 'Suse',
+          operatingsystemmajrelease: osmajrel.to_s,
         }
       end
 
@@ -93,7 +98,8 @@ describe 'ca_cert', :type => :class do
       end
       it { is_expected.to contain_package('openssl-certs') }
 
-      it { is_expected.to contain_file("trusted_certs").with(
+      it {
+        is_expected.to contain_file('trusted_certs').with(
           'ensure' => 'directory',
           'path'   => '/etc/ssl/certs',
           'group'  => 'root',
@@ -101,13 +107,15 @@ describe 'ca_cert', :type => :class do
         )
       }
 
-      context "with purge_unmanaged_CAs set to true" do
+      context 'with purge_unmanaged_CAs set to true' do
         let :params do
           {
-            :purge_unmanaged_CAs => true,
+            purge_unmanaged_CAs: true,
           }
         end
-        it { is_expected.to contain_file("trusted_certs").with(
+
+        it {
+          is_expected.to contain_file('trusted_certs').with(
             'ensure' => 'directory',
             'path'   => '/etc/ssl/certs',
             'group'  => 'root',
@@ -118,11 +126,11 @@ describe 'ca_cert', :type => :class do
     end
   end
 
-  context "on a Suse 12 based OS" do
+  context 'on a Suse 12 based OS' do
     let :facts do
       {
-        :osfamily => 'Suse',
-        :operatingsystemmajrelease => '12',
+        osfamily: 'Suse',
+        operatingsystemmajrelease: '12',
       }
     end
 
@@ -130,7 +138,8 @@ describe 'ca_cert', :type => :class do
     end
     it { is_expected.to contain_package('ca-certificates') }
 
-    it { is_expected.to contain_file("trusted_certs").with(
+    it {
+      is_expected.to contain_file('trusted_certs').with(
         'ensure' => 'directory',
         'path'   => '/etc/pki/trust/anchors',
         'group'  => 'root',
@@ -138,13 +147,15 @@ describe 'ca_cert', :type => :class do
       )
     }
 
-    context "with purge_unmanaged_CAs set to true" do
+    context 'with purge_unmanaged_CAs set to true' do
       let :params do
         {
-          :purge_unmanaged_CAs => true,
+          purge_unmanaged_CAs: true,
         }
       end
-      it { is_expected.to contain_file("trusted_certs").with(
+
+      it {
+        is_expected.to contain_file('trusted_certs').with(
           'ensure' => 'directory',
           'path'   => '/etc/pki/trust/anchors',
           'group'  => 'root',
@@ -153,14 +164,13 @@ describe 'ca_cert', :type => :class do
       }
     end
   end
-  context "on a Solaris based OS" do
+  context 'on a Solaris based OS' do
     let :facts do
       {
-        :osfamily => 'Solaris',
+        osfamily: 'Solaris',
       }
     end
 
-    it { expect {catalogue}.to raise_error Puppet::Error, /Unsupported osfamily/ }
-
+    it { expect { catalogue }.to raise_error Puppet::Error, %r{Unsupported osfamily} }
   end
 end

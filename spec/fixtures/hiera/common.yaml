@@ -1,0 +1,7 @@
+---
+
+ca_cert::ca_certs:
+  ca1:
+    source: "puppet:///modules/ca_cert/ca1.pem"
+  ca2:
+    source: "puppet:///modules/ca_cert/ca2.pem"

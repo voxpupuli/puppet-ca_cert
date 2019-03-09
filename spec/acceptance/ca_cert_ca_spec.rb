@@ -2,9 +2,9 @@ require 'spec_helper_acceptance'
 
 case fact('osfamily')
 when 'Debian'
-  trusted_ca_file_remote = "/usr/local/share/ca-certificates/Globalsign_Org_Intermediate.crt"
-  absent_ca_file_remote = "/etc/pki/ca-trust/source/blacklist/CACert.crt"
-  trusted_ca_file_text = "/usr/local/share/ca-certificates/InCommon.crt"
+  trusted_ca_file_remote = '/usr/local/share/ca-certificates/Globalsign_Org_Intermediate.crt'
+  absent_ca_file_remote = '/etc/pki/ca-trust/source/blacklist/CACert.crt'
+  trusted_ca_file_text = '/usr/local/share/ca-certificates/InCommon.crt'
 when 'RedHat'
   trusted_ca_file_remote = '/etc/pki/ca-trust/source/anchors/Globalsign_Org_Intermediate.crt'
   untrusted_ca_file_remote = '/etc/pki/ca-trust/source/blacklist/CACert.crt'
@@ -13,7 +13,7 @@ end
 
 describe 'ca_cert::ca' do
   context 'with some normal usage' do
-    let (:pp) do
+    let(:pp) do
       <<-EOS
         include ::ca_cert
 
@@ -59,24 +59,24 @@ FJ4O0dXG14HdrSSrrAcF4h1ow3BmX9M=
       EOS
     end
 
-    it_behaves_like "an idempotent resource"
+    it_behaves_like 'an idempotent resource'
 
     describe file(trusted_ca_file_remote) do
-      it { should be_file }
+      it { is_expected.to be_file }
     end
 
     describe file(trusted_ca_file_text) do
-      it { should be_file }
+      it { is_expected.to be_file }
     end
 
     case fact('osfamily')
     when 'Debian'
       describe file(absent_ca_file_remote) do
-        it { should_not be_file }
+        it { is_expected.not_to be_file }
       end
     when 'RedHat'
       describe file(untrusted_ca_file_remote) do
-        it { should be_file }
+        it { is_expected.to be_file }
       end
     end
   end
