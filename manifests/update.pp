@@ -1,11 +1,9 @@
 # Private class
-class ca_cert::update (
-  Boolean $force_enable = false,
-)  {
+class ca_cert::update {
   include ::ca_cert::params
 
   if ($::osfamily == 'RedHat' and versioncmp($::operatingsystemrelease, '7') < 0) {
-    if $force_enable {
+    if $ca_cert::force_enable {
       exec { 'enable_ca_trust':
         command   => 'update-ca-trust force-enable',
         logoutput => 'on_failure',
