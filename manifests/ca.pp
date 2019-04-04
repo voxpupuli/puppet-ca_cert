@@ -43,6 +43,8 @@ define ca_cert::ca (
 ) {
 
   include ::ca_cert::params
+  include ::ca_cert::update
+  require ::ca_cert::enable
 
   if ($ensure == 'trusted' or $ensure == 'distrusted') and $source == 'text' and !is_string($ca_text) {
     fail('ca_text is required if source is set to text')
