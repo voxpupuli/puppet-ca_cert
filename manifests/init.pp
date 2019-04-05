@@ -38,6 +38,7 @@
 #
 # Phil Fenstermacher <phillip.fenstermacher@gmail.com>
 #
+# lint:ignore:variable_is_lowercase
 class ca_cert (
   Boolean $always_update_certs = false,
   Boolean $purge_unmanaged_CAs = false,
@@ -89,3 +90,4 @@ class ca_cert (
     create_resources('ca_cert::ca', $ca_certs)
   }
 }
+# lint:endignore:variable_is_lowercase

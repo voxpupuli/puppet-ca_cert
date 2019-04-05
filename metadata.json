@@ -7,7 +7,16 @@
   "source": "https://github.com/pcfens/puppet-ca_cert",
   "project_page": "https://github.com/pcfens/puppet-ca_cert",
   "issues_url": "https://github.com/pcfens/puppet-ca_cert/issues",
-  "description": "Manage CA certificates on Linux Operating Systems",
+  "dependencies": [
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": ">= 3.0.0 < 6.0.0"
+    },
+    {
+      "name": "lwf/remote_file",
+      "version_requirement": ">= 1.1.2"
+    }
+  ],
   "operatingsystem_support": [
     {
       "operatingsystem": "RedHat",
@@ -50,8 +59,8 @@
       "version_requirement": ">= 4.0.0 < 6.0.0"
     }
   ],
-  "dependencies": [
-    {"name":"puppetlabs/stdlib","version_requirement":">= 3.0.0 < 6.0.0"},
-    {"name":"lwf/remote_file","version_requirement":">= 1.1.2"}
-  ]
+  "description": "Manage CA certificates on Linux Operating Systems",
+  "pdk-version": "1.9.0",
+  "template-url": "file:///opt/puppetlabs/pdk/share/cache/pdk-templates.git",
+  "template-ref": "1.9.0-0-g7281db5"
 }

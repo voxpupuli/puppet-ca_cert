@@ -8,6 +8,6 @@ describe 'ca_cert class' do
       EOS
     end
 
-    it_behaves_like "an idempotent resource"
+    it_behaves_like 'an idempotent resource'
   end
 end
