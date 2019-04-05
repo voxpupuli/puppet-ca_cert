@@ -60,7 +60,7 @@
     }
   ],
   "description": "Manage CA certificates on Linux Operating Systems",
-  "pdk-version": "1.9.0",
-  "template-url": "file:///opt/puppetlabs/pdk/share/cache/pdk-templates.git",
-  "template-ref": "1.9.0-0-g7281db5"
+  "pdk-version": "1.10.0",
+  "template-url": "file:///opt/puppetlabs/pdk/share/cache/pdk-templates.git#1.10.0",
+  "template-ref": "1.10.0-0-gbba9ac3"
 }
