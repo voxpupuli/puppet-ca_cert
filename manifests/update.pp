@@ -1,6 +1,6 @@
 # Private class
 class ca_cert::update {
-  
+
   include ::ca_cert::params
   require ::ca_cert::enable
 

@@ -3,7 +3,7 @@ class ca_cert::enable {
 
   include ::ca_cert::params
 
-  if ($::osfamily == 'RedHat' and versioncmp($::operatingsystemrelease, '7') < 0) { 
+  if ($::osfamily == 'RedHat' and versioncmp($::operatingsystemrelease, '7') < 0) {
     if $ca_cert::force_enable {
       exec { 'enable_ca_trust':
         command   => 'update-ca-trust force-enable',
