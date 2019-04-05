@@ -2,7 +2,12 @@ Changelog
 =========
 
 ## Unreleased
-[Full Changelog](https://github.com/pcfens/puppet-ca_cert/compare/v2.1.2...HEAD)
+[Full Changelog](https://github.com/pcfens/puppet-ca_cert/compare/v2.1.3...HEAD)
+
+## [v2.1.3](https://github.com/pcfens/puppet-ca_cert/tree/v2.1.3)
+[Full Changelog](https://github.com/pcfens/puppet-ca_cert/compare/v2.1.2...v2.1.3)
+
+- Fix dependency issue with dropping certificate [\#55](https://github.com/pcfens/puppet-ca_cert/pull/55)
 
 ## [v2.1.2](https://github.com/pcfens/puppet-ca_cert/tree/v2.1.2)
 [Full Changelog](https://github.com/pcfens/puppet-ca_cert/compare/v2.1.1...v2.1.2)
