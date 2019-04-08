@@ -1,7 +1,7 @@
 # Private class
 class ca_cert::enable {
 
-  include ::ca_cert::params
+  include ca_cert
 
   if ($::osfamily == 'RedHat' and versioncmp($::operatingsystemrelease, '7') < 0) {
     if $ca_cert::force_enable {
