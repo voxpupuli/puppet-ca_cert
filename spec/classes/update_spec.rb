@@ -25,21 +25,14 @@ describe 'ca_cert::update', type: :class do
           it { is_expected.not_to contain_exec('enable_ca_trust') }
         else
           context 'with force_enable set to true' do
-            let :params do
-              {
-                force_enable: true,
-              }
+            let :pre_condition do
+              'class { "ca_cert": force_enable => true }'
             end
 
             it { is_expected.to contain_exec('enable_ca_trust').with_command('update-ca-trust force-enable') }
           end
-          context 'with force_enable set to false' do
-            let :params do
-              {
-                force_enable: false,
-              }
-            end
 
+          context 'with force_enable set to false' do
             it { is_expected.to contain_exec('enable_ca_trust').with_command('update-ca-trust enable') }
           end
         end

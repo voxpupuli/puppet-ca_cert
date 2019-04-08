@@ -1,8 +1,8 @@
 # Private class
 class ca_cert::update {
 
-  include ::ca_cert::params
-  require ::ca_cert::enable
+  require ca_cert
+  require ca_cert::enable
 
   exec { 'ca_cert_update':
     command     => $ca_cert::params::update_cmd,
