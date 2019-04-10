@@ -51,7 +51,7 @@ define ca_cert::ca (
   } else {
     $file_mode = $ca_file_mode
   }
- 
+
   if ($ensure == 'trusted' or $ensure == 'distrusted') and $source == 'text' and !is_string($ca_text) {
     fail('ca_text is required if source is set to text')
   }
