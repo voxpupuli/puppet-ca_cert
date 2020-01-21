@@ -2,7 +2,14 @@ Changelog
 =========
 
 ## Unreleased
-[Full Changelog](https://github.com/pcfens/puppet-ca_cert/compare/v2.1.3...HEAD)
+[Full Changelog](https://github.com/pcfens/puppet-ca_cert/compare/v2.1.4...HEAD)
+
+## [v2.1.4](https://github.com/pcfens/puppet-ca_cert/tree/v2.1.4)
+[Full Changelog](https://github.com/pcfens/puppet-ca_cert/compare/v2.1.3...v2.1.4)
+
+- Upgrade PDK
+- Note support for puppetlabs/stdlib <= 7.0
+
 
 ## [v2.1.3](https://github.com/pcfens/puppet-ca_cert/tree/v2.1.3)
 [Full Changelog](https://github.com/pcfens/puppet-ca_cert/compare/v2.1.2...v2.1.3)
