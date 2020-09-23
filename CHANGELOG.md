@@ -2,7 +2,12 @@ Changelog
 =========
 
 ## Unreleased
-[Full Changelog](https://github.com/pcfens/puppet-ca_cert/compare/v2.1.4...HEAD)
+[Full Changelog](https://github.com/pcfens/puppet-ca_cert/compare/v2.2.0...HEAD)
+
+## [v2.2.0](https://github.com/pcfens/puppet-ca_cert/tree/v2.2.0)
+[Full Changelog](https://github.com/pcfens/puppet-ca_cert/compare/v2.1.5...v2.2.0)
+
+- Allow `package_ensure` to be set to latest [\#62](https://github.com/pcfens/puppet-ca_cert/pull/62)
 
 ## [v2.1.5](https://github.com/pcfens/puppet-ca_cert/tree/v2.1.5)
 [Full Changelog](https://github.com/pcfens/puppet-ca_cert/compare/v2.1.4...v2.1.5)
