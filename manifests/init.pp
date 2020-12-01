@@ -25,6 +25,8 @@
 #   declaration
 # [*package_ensure*]
 #   The ensure parameter to pass to the package resource
+# [*package_name*]
+#   The name of the package(s) to be installed
 #
 # === Examples
 #
@@ -73,16 +75,13 @@ class ca_cert (
     notify  => Exec['ca_cert_update'],
   }
 
-  if $install_package == true {
-    if $package_ensure in ['present', 'installed', 'latest'] {
-      ensure_packages([$package_name])
-      Package[$package_name] -> Ca_cert::Ca <| |>
+  if $install_package {
+    package { 'ca-certificates':
+      ensure => $package_ensure,
+      name   => $package_name,
     }
-    else {
-      package { 'ca-certificates':
-        ensure => $package_ensure,
-        name   => $package_name,
-      }
+    if $package_ensure != 'absent' {
+      Package['ca-certificates'] -> Ca_cert::Ca <| |>
     }
   }
 
