@@ -146,6 +146,7 @@ define ca_cert::ca (
     'absent': {
       file { $ca_cert:
         ensure => absent,
+        notify => Class['::ca_cert::update'],
       }
     }
     default: {
