@@ -1,6 +1,6 @@
 {
   "name": "pcfens-ca_cert",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "author": "pcfens",
   "summary": "Manage system CA certificates",
   "license": "Apache-2.0",
@@ -57,7 +57,7 @@
   "requirements": [
     {
       "name": "puppet",
-      "version_requirement": ">= 4.0.0 < 7.0.0"
+      "version_requirement": ">= 4.0.0 < 8.0.0"
     }
   ],
   "pdk-version": "1.18.0",

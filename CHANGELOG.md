@@ -2,7 +2,14 @@ Changelog
 =========
 
 ## Unreleased
-[Full Changelog](https://github.com/pcfens/puppet-ca_cert/compare/v2.2.0...HEAD)
+[Full Changelog](https://github.com/pcfens/puppet-ca_cert/compare/v2.3.0...HEAD)
+
+## [v2.3.0](https://github.com/pcfens/puppet-ca_cert/tree/v2.3.0)
+[Full Changelog](https://github.com/pcfens/puppet-ca_cert/compare/v2.2.0...v2.3.0)
+
+- Make better use of `package_ensure` [\#63](https://github.com/pcfens/puppet-ca_cert/pull/63)
+- Deleting a CA updates the list [\#65](https://github.com/pcfens/puppet-ca_cert/pull/65)
+
 
 ## [v2.2.0](https://github.com/pcfens/puppet-ca_cert/tree/v2.2.0)
 [Full Changelog](https://github.com/pcfens/puppet-ca_cert/compare/v2.1.5...v2.2.0)
