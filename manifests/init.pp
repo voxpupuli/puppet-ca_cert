@@ -47,7 +47,7 @@ class ca_cert (
   Boolean $install_package     = true,
   Boolean $force_enable        = false,
   Hash    $ca_certs            = {},
-  String  $package_ensure      = 'present',
+  String  $package_ensure      = 'installed',
   String  $package_name        = $ca_cert::params::package_name,
 ) inherits ca_cert::params {
 
