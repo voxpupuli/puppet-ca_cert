@@ -21,7 +21,9 @@
 #   When retrieving a certificate whether or not to validate the CA of the
 #   source. (defaults to true)
 # [*checksum*]
-#   The md5sum of the file. (defaults to undef)
+#   The checksum of the file. (defaults to undef)
+# [*checksum_type*]
+#   The type of file checksum. (defauts to undef)
 # [*ca_file_mode*]
 #   The installed CA certificate's POSIX filesystem permissions. This uses
 #   the same syntax as Puppet's native file resource's "mode" parameter.
@@ -39,6 +41,7 @@ define ca_cert::ca (
   String $ensure                 = 'trusted',
   Boolean $verify_https_cert     = true,
   Optional[String] $checksum     = undef,
+  Optional[String[1]] $checksum_type = undef,
   Optional[String] $ca_file_mode = undef,
 ) {
 
@@ -106,13 +109,13 @@ define ca_cert::ca (
           }
         }
         'ftp', 'https', 'http': {
-          remote_file { $ca_cert:
-            ensure      => present,
-            source      => $source,
-            checksum    => $checksum,
-            mode        => '0644',
-            verify_peer => $verify_https_cert,
-            notify      => Class['::ca_cert::update'],
+          archive { $ca_cert:
+            ensure         => present,
+            source         => $source,
+            checksum       => $checksum,
+            checksum_type  => $checksum_type,
+            allow_insecure => !$verify_https_cert,
+            notify         => Class['ca_cert::update'],
           }
         }
         'file': {

@@ -13,8 +13,8 @@
       "version_requirement": ">= 3.0.0 < 9.0.0"
     },
     {
-      "name": "lwf/remote_file",
-      "version_requirement": ">= 1.1.2"
+      "name": "puppet/archive",
+      "version_requirement": ">= 6.0.0"
     }
   ],
   "operatingsystem_support": [
