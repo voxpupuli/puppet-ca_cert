@@ -2,7 +2,13 @@ Changelog
 =========
 
 ## Unreleased
-[Full Changelog](https://github.com/pcfens/puppet-ca_cert/compare/v2.3.0...HEAD)
+[Full Changelog](https://github.com/pcfens/puppet-ca_cert/compare/v2.3.1...HEAD)
+
+## [v2.3.1](https://github.com/pcfens/puppet-ca_cert/tree/v2.3.1)
+[Full Changelog](https://github.com/pcfens/puppet-ca_cert/compare/v2.3.0...v2.3.1)
+
+- Update stdlib dependency [\#68](https://github.com/pcfens/puppet-ca_cert/pull/68)
+
 
 ## [v2.3.0](https://github.com/pcfens/puppet-ca_cert/tree/v2.3.0)
 [Full Changelog](https://github.com/pcfens/puppet-ca_cert/compare/v2.2.0...v2.3.0)
