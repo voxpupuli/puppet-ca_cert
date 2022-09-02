@@ -4,6 +4,13 @@ Changelog
 ## Unreleased
 [Full Changelog](https://github.com/pcfens/puppet-ca_cert/compare/v2.3.1...HEAD)
 
+
+## [v2.3.2](https://github.com/pcfens/puppet-ca_cert/tree/v2.3.2)
+[Full Changelog](https://github.com/pcfens/puppet-ca_cert/compare/v2.3.1...v2.3.2)
+
+- Fix dependency setting [\#70](https://github.com/pcfens/puppet-ca_cert/pull/70)
+
+
 ## [v2.3.1](https://github.com/pcfens/puppet-ca_cert/tree/v2.3.1)
 [Full Changelog](https://github.com/pcfens/puppet-ca_cert/compare/v2.3.0...v2.3.1)
 
