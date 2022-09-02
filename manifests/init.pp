@@ -79,7 +79,7 @@ class ca_cert (
     ensure_packages($package_name, { ensure => $package_ensure })
 
     if $package_ensure != 'absent' {
-      Package['ca-certificates'] -> Ca_cert::Ca <| |>
+      Package[$package_name] -> Ca_cert::Ca <| |>
     }
   }
 
