@@ -5,6 +5,7 @@ class ca_cert::params {
       $trusted_cert_dir  = '/usr/local/share/ca-certificates'
       $update_cmd        = 'update-ca-certificates'
       $cert_dir_group    = 'staff'
+      $ca_file_group     = 'root'
       $ca_file_mode      = '0444'
       $ca_file_extension = 'crt'
       $package_name      = 'ca-certificates'
@@ -26,6 +27,7 @@ class ca_cert::params {
       $update_cmd          = 'update-ca-trust extract'
       $cert_dir_group      = 'root'
       $cert_dir_mode       = '0755'
+      $ca_file_group       = 'root'
       $ca_file_mode        = '0644'
       $ca_file_extension   = 'crt'
       $package_name        = 'ca-certificates'
@@ -36,6 +38,7 @@ class ca_cert::params {
       $update_cmd          = 'trust extract-compat'
       $cert_dir_group      = 'root'
       $cert_dir_mode       = '0755'
+      $ca_file_group       = 'root'
       $ca_file_mode        = '0644'
       $ca_file_extension   = 'crt'
       $package_name        = 'ca-certificates'
@@ -56,7 +59,18 @@ class ca_cert::params {
       }
       $cert_dir_group        = 'root'
       $cert_dir_mode         = '0755'
+      $ca_file_group         = 'root'
       $ca_file_mode          = '0644'
+    }
+    'AIX': {
+      $trusted_cert_dir    = '/var/ssl/certs'
+      $update_cmd          = '/usr/bin/c_rehash'
+      $cert_dir_group      = 'system'
+      $cert_dir_mode       = '0755'
+      $ca_file_group       = 'system'
+      $ca_file_mode        = '0644'
+      $ca_file_extension   = 'crt'
+      $package_name        = 'ca-certificates'
     }
     default: {
       fail("Unsupported osfamily (${::osfamily})")
