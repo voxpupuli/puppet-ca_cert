@@ -72,6 +72,21 @@ class ca_cert::params {
       $ca_file_extension   = 'crt'
       $package_name        = 'ca-certificates'
     }
+    'Solaris': {
+      if versioncmp($::operatingsystemmajrelease, '11') >= 0  {
+        $trusted_cert_dir    = '/etc/certs/CA/'
+        $update_cmd          = '/usr/sbin/svcadm restart /system/ca-certificates'
+        $cert_dir_group      = 'sys'
+        $cert_dir_mode       = '0755'
+        $ca_file_group       = 'root'
+        $ca_file_mode        = '0444'
+        $ca_file_extension   = 'pem'
+        $package_name        = 'ca-certificates'
+      }
+      else {
+        fail("Unsupported OS Major release (${::operatingsystemmajrelease})")  
+      }
+    }
     default: {
       fail("Unsupported osfamily (${::osfamily})")
     }
