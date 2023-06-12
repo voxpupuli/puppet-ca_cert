@@ -47,32 +47,46 @@ K1pp74P1S8SqtCr4fKGxhZSM9AyHDPSsQPhZSZg=
 
   let :debian_facts do
     {
-      osfamily: 'Debian',
-      operatingsystem: 'Ubuntu',
+      os: {
+        family: 'Debian',
+        name: 'Ubuntu',
+      },
     }
   end
 
   let :redhat_facts do
     {
-      osfamily: 'RedHat',
-      operatingsystem: 'RedHat',
-      operatingsystemrelease: '7.0',
+      os: {
+        family: 'RedHat',
+        name: 'RedHat',
+        release: {
+          full: '7.0',
+        },
+      },
     }
   end
 
   let :suse_11_facts do
     {
-      osfamily: 'Suse',
-      operatingsystem: 'Suse',
-      operatingsystemmajrelease: '11',
+      os: {
+        family: 'Suse',
+        name: 'Suse',
+        release: {
+          major: '11',
+        },
+      },
     }
   end
 
   let :suse_12_facts do
     {
-      osfamily: 'Suse',
-      operatingsystem: 'Suse',
-      operatingsystemmajrelease: '12',
+      os: {
+        family: 'Suse',
+        name: 'Suse',
+        release: {
+          major: '12',
+        },
+      },
     }
   end
 

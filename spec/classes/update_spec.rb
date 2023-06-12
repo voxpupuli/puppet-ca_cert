@@ -11,7 +11,7 @@ describe 'ca_cert::update', type: :class do
       it { is_expected.to compile.with_all_deps }
       it { is_expected.to contain_class('ca_cert::params') }
 
-      case facts[:osfamily]
+      case facts[:os]['family']
       when 'Debian'
         it { is_expected.not_to contain_exec('enable_ca_trust') }
         it {
@@ -21,7 +21,7 @@ describe 'ca_cert::update', type: :class do
           )
         }
       when 'RedHat'
-        if facts[:operatingsystemmajrelease] == '7'
+        if facts[:os]['release']['major'] == '7'
           it { is_expected.not_to contain_exec('enable_ca_trust') }
         else
           context 'with force_enable set to true' do
@@ -44,7 +44,7 @@ describe 'ca_cert::update', type: :class do
         }
       when 'Suse'
         it { is_expected.not_to contain_exec('enable_ca_trust') }
-        case facts[:operatingsystemmajrelease]
+        case facts[:os]['release']['major']
         when '10', '11'
           it {
             is_expected.to contain_exec('ca_cert_update').with(

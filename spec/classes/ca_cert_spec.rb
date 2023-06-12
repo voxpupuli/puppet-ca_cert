@@ -11,8 +11,10 @@ describe 'ca_cert', type: :class do
   context 'on a Debian based OS' do
     let :facts do
       {
-        osfamily: 'Debian',
-        operatingsystem: 'Ubuntu',
+        'os' => {
+          'family' => 'Debian',
+          'name'   => 'Ubuntu',
+        },
       }
     end
 
@@ -49,8 +51,14 @@ describe 'ca_cert', type: :class do
   context 'on a RedHat based OS' do
     let :facts do
       {
-        osfamily: 'RedHat',
-        operatingsystemrelease: '7.0',
+        'os' => {
+          'family'  => 'RedHat',
+          'release' => {
+            'major' => '7',
+            'minor' => '0',
+            'full'  => '7.0',
+          },
+        },
       }
     end
 
@@ -89,8 +97,12 @@ describe 'ca_cert', type: :class do
     context "on a Suse #{osmajrel} based OS" do
       let :facts do
         {
-          osfamily: 'Suse',
-          operatingsystemmajrelease: osmajrel.to_s,
+          'os' => {
+            'family'  => 'Suse',
+            'release' => {
+              'major' => osmajrel.to_s,
+            },
+          },
         }
       end
 
@@ -129,8 +141,12 @@ describe 'ca_cert', type: :class do
   context 'on a Suse 12 based OS' do
     let :facts do
       {
-        osfamily: 'Suse',
-        operatingsystemmajrelease: '12',
+        'os' => {
+          'family'  => 'Suse',
+          'release' => {
+            'major' => '12',
+          },
+        },
       }
     end
 
@@ -167,7 +183,9 @@ describe 'ca_cert', type: :class do
   context 'on a Solaris based OS' do
     let :facts do
       {
-        osfamily: 'Solaris',
+        'os' => {
+          'family' => 'Solaris',
+        },
       }
     end
 
