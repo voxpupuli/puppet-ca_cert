@@ -2,5 +2,6 @@ fixtures:
   repositories:
     stdlib: "https://github.com/puppetlabs/puppetlabs-stdlib.git"
     remote_file: "https://github.com/lwf/puppet-remote_file.git"
+    puppet_archive: "https://github.com/voxpupuli/puppet-archive.git"
   symlinks:
     ca_cert: "#{source_dir}"

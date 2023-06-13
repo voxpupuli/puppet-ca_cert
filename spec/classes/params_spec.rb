@@ -12,7 +12,9 @@ describe 'ca_cert::params', type: :class do
   ].each do |osfamily|
     let :facts do
       {
-        osfamily: osfamily,
+        'os' => {
+          'family' => osfamily,
+        },
       }
     end
 
@@ -29,8 +31,12 @@ describe 'ca_cert::params', type: :class do
     context "On a Suse #{osmajrel} Operating System" do
       let :facts do
         {
-          osfamily: 'Suse',
-          operatingsystemmajrelease: osmajrel.to_s,
+          'os' => {
+            'family'  => 'Suse',
+            'release' => {
+              'major' => osmajrel.to_s,
+            },
+          },
         }
       end
 
@@ -45,7 +51,9 @@ describe 'ca_cert::params', type: :class do
   context 'on an unsupported operating system' do
     let :facts do
       {
-        osfamily: 'Solaris',
+        'os' => {
+          'family' => 'Solaris',
+        },
       }
     end
 

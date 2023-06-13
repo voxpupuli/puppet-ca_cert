@@ -1,6 +1,6 @@
 require 'spec_helper_acceptance'
 
-case fact('osfamily')
+case fact('os.family')
 when 'Debian'
   trusted_ca_file_remote = '/usr/local/share/ca-certificates/Globalsign_Org_Intermediate.crt'
   absent_ca_file_remote = '/etc/pki/ca-trust/source/blacklist/CACert.crt'
@@ -69,7 +69,7 @@ FJ4O0dXG14HdrSSrrAcF4h1ow3BmX9M=
       it { is_expected.to be_file }
     end
 
-    case fact('osfamily')
+    case fact('os.family')
     when 'Debian'
       describe file(absent_ca_file_remote) do
         it { is_expected.not_to be_file }
