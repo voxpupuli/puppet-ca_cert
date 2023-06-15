@@ -2,8 +2,17 @@ Changelog
 =========
 
 ## Unreleased
-[Full Changelog](https://github.com/pcfens/puppet-ca_cert/compare/v2.3.1...HEAD)
+[Full Changelog](https://github.com/pcfens/puppet-ca_cert/compare/v2.4.0...HEAD)
 
+
+## [v2.4.0](https://github.com/pcfens/puppet-ca_cert/tree/v2.4.0)
+[Full Changelog](https://github.com/pcfens/puppet-ca_cert/compare/v2.3.2...v2.4.0)
+
+- Support Puppet 8 by replacing references to legacy facts [\#75](https://github.com/pcfens/puppet-ca_cert/pull/75)
+- Add support for RHEL8 [\#73](https://github.com/pcfens/puppet-ca_cert/pull/73)
+- Add support for Solaris 11 [\#72](https://github.com/pcfens/puppet-ca_cert/pull/72)
+- Add support for AIX [\#71](https://github.com/pcfens/puppet-ca_cert/pull/71)
+- Use puppet/archive instead of remote_file [\#69](https://github.com/pcfens/puppet-ca_cert/pull/69)
 
 ## [v2.3.2](https://github.com/pcfens/puppet-ca_cert/tree/v2.3.2)
 [Full Changelog](https://github.com/pcfens/puppet-ca_cert/compare/v2.3.1...v2.3.2)
