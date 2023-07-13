@@ -76,7 +76,7 @@ class ca_cert (
   }
 
   if $install_package {
-    ensure_packages($package_name, { ensure => $package_ensure })
+    stdlib::ensure_packages($package_name, { ensure => $package_ensure })
 
     if $package_ensure != 'absent' {
       Package[$package_name] -> Ca_cert::Ca <| |>
