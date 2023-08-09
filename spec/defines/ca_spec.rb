@@ -138,7 +138,7 @@ K1pp74P1S8SqtCr4fKGxhZSM9AyHDPSsQPhZSZg=
         end
 
         it {
-          is_expected.to contain_remote_file(DEBIAN_CA_FILE).with(
+          is_expected.to contain_archive(DEBIAN_CA_FILE).with(
             'ensure' => 'present',
             'source' => HTTP_URL,
           )
@@ -199,7 +199,7 @@ K1pp74P1S8SqtCr4fKGxhZSM9AyHDPSsQPhZSZg=
         end
 
         it {
-          is_expected.to contain_remote_file(REDHAT_CA_FILE).with(
+          is_expected.to contain_archive(REDHAT_CA_FILE).with(
             'ensure' => 'present',
             'source' => HTTP_URL,
           )
@@ -243,7 +243,7 @@ K1pp74P1S8SqtCr4fKGxhZSM9AyHDPSsQPhZSZg=
         end
 
         it {
-          is_expected.to contain_remote_file(DISTRUSTED_REDHAT_CA_FILE).with(
+          is_expected.to contain_archive(DISTRUSTED_REDHAT_CA_FILE).with(
             'ensure' => 'present',
             'source' => HTTP_URL,
           )
@@ -270,7 +270,7 @@ K1pp74P1S8SqtCr4fKGxhZSM9AyHDPSsQPhZSZg=
         end
 
         it {
-          is_expected.to contain_remote_file(SUSE_11_CA_FILE).with(
+          is_expected.to contain_archive(SUSE_11_CA_FILE).with(
             'ensure' => 'present',
             'source' => SUSE_11_HTTP_URL,
           )
@@ -344,7 +344,7 @@ K1pp74P1S8SqtCr4fKGxhZSM9AyHDPSsQPhZSZg=
         end
 
         it {
-          is_expected.to contain_remote_file(SUSE_12_CA_FILE).with(
+          is_expected.to contain_archive(SUSE_12_CA_FILE).with(
             'ensure' => 'present',
             'source' => HTTP_URL,
           )
@@ -390,7 +390,7 @@ K1pp74P1S8SqtCr4fKGxhZSM9AyHDPSsQPhZSZg=
         end
 
         it {
-          is_expected.to contain_remote_file(DISTRUSTED_SUSE_12_CA_FILE).with(
+          is_expected.to contain_archive(DISTRUSTED_SUSE_12_CA_FILE).with(
             'ensure' => 'present',
             'source' => HTTP_URL,
           )
