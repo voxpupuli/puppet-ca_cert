@@ -24,6 +24,10 @@
 #   The checksum of the file. (defaults to undef)
 # [*checksum_type*]
 #   The type of file checksum. (defauts to undef)
+# [*ca_file_group*]
+#   The installed CA certificate's POSIX group permissions. This uses
+#   the same syntax as Puppet's native file resource's "group" parameter.
+#   (defaults to 'root' with the exeption of AIX which defaults to 'system')
 # [*ca_file_mode*]
 #   The installed CA certificate's POSIX filesystem permissions. This uses
 #   the same syntax as Puppet's native file resource's "mode" parameter.
@@ -34,7 +38,6 @@
 # ca_cert::ca { 'globalsign_org_intermediate':
 #   source => 'http://secure.globalsign.com/cacert/gsorganizationvalsha2g2r1.crt',
 # }
-
 define ca_cert::ca (
   Optional[String] $ca_text      = undef,
   String $source                 = 'text',
@@ -45,10 +48,9 @@ define ca_cert::ca (
   Optional[String] $ca_file_group = undef,
   Optional[String] $ca_file_mode = undef,
 ) {
-
-  include ::ca_cert::params
-  include ::ca_cert::update
-  require ::ca_cert::enable
+  include ca_cert::params
+  include ca_cert::update
+  require ca_cert::enable
 
   if $ca_file_group == undef {
     $file_group = $ca_cert::params::ca_file_group
@@ -106,18 +108,18 @@ define ca_cert::ca (
       case $protocol_type {
         'puppet': {
           file { $resource_name:
-            ensure => present,
+            ensure => 'file',
             source => $source,
             path   => $ca_cert,
             owner  => 'root',
             group  => $file_group,
             mode   => $file_mode,
-            notify => Class['::ca_cert::update'],
+            notify => Class['ca_cert::update'],
           }
         }
         'ftp', 'https', 'http': {
           archive { $ca_cert:
-            ensure         => present,
+            ensure         => 'present',
             source         => $source,
             checksum       => $checksum,
             checksum_type  => $checksum_type,
@@ -128,24 +130,24 @@ define ca_cert::ca (
         'file': {
           $source_path = $source_array[1]
           file { $resource_name:
-            ensure => present,
+            ensure => 'file',
             source => $source_path,
             path   => $ca_cert,
             owner  => 'root',
             group  => $file_group,
             mode   => $file_mode,
-            notify => Class['::ca_cert::update'],
+            notify => Class['ca_cert::update'],
           }
         }
         'text': {
           file { $resource_name:
-            ensure  => present,
+            ensure  => 'file',
             content => $ca_text,
             path    => $ca_cert,
             owner   => 'root',
             group   => $file_group,
             mode    => $file_mode,
-            notify  => Class['::ca_cert::update'],
+            notify  => Class['ca_cert::update'],
           }
         }
         default: {
@@ -156,12 +158,11 @@ define ca_cert::ca (
     'absent': {
       file { $ca_cert:
         ensure => absent,
-        notify => Class['::ca_cert::update'],
+        notify => Class['ca_cert::update'],
       }
     }
     default: {
       fail("Ca_cert::Ca[${name}] - ensure must be set to present, trusted, distrusted, or absent.")
     }
   }
-
 }

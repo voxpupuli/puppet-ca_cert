@@ -43,16 +43,15 @@
 # lint:ignore:variable_is_lowercase
 class ca_cert (
   Boolean $always_update_certs = false,
-  Boolean $purge_unmanaged_CAs = false,
+  Boolean $purge_unmanaged_CAs = false, # lint:ignore:variable_contains_upcase
   Boolean $install_package     = true,
   Boolean $force_enable        = false,
   Hash    $ca_certs            = {},
   String  $package_ensure      = 'installed',
   String  $package_name        = $ca_cert::params::package_name,
 ) inherits ca_cert::params {
-
-  include ::ca_cert::params
-  include ::ca_cert::update
+  include ca_cert::params
+  include ca_cert::update
 
   if $always_update_certs == true {
     Exec <| title=='ca_cert_update' |> {
@@ -70,8 +69,8 @@ class ca_cert (
     owner   => 'root',
     group   => $cert_dir_group,
     mode    => $cert_dir_mode,
-    purge   => $purge_unmanaged_CAs,
-    recurse => $purge_unmanaged_CAs,
+    purge   => $purge_unmanaged_CAs, # lint:ignore:variable_contains_upcase
+    recurse => $purge_unmanaged_CAs, # lint:ignore:variable_contains_upcase
     notify  => Exec['ca_cert_update'],
   }
 

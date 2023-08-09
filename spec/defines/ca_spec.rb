@@ -1,5 +1,4 @@
 require 'spec_helper'
-# rubocop:disable RSpec/VoidExpect
 
 describe 'ca_cert::ca', type: :define do
   HTTP_URL = 'http://secure.globalsign.com/cacert/gsorganizationvalsha2g2r1.crt'.freeze
@@ -155,7 +154,7 @@ K1pp74P1S8SqtCr4fKGxhZSM9AyHDPSsQPhZSZg=
 
         it {
           is_expected.to contain_file('Globalsign_Org_Intermediate.crt').with(
-            'ensure'  => 'present',
+            'ensure'  => 'file',
             'content' => GLOBALSIGN_ORG_CA,
             'path'    => DEBIAN_CA_FILE,
           )
@@ -216,7 +215,7 @@ K1pp74P1S8SqtCr4fKGxhZSM9AyHDPSsQPhZSZg=
 
         it {
           is_expected.to contain_file('Globalsign_Org_Intermediate.crt').with(
-            'ensure'  => 'present',
+            'ensure'  => 'file',
             'content' => GLOBALSIGN_ORG_CA,
             'path'    => REDHAT_CA_FILE,
           )
@@ -287,7 +286,7 @@ K1pp74P1S8SqtCr4fKGxhZSM9AyHDPSsQPhZSZg=
 
         it {
           is_expected.to contain_file('Globalsign_Org_Intermediate.pem').with(
-            'ensure'  => 'present',
+            'ensure'  => 'file',
             'content' => GLOBALSIGN_ORG_CA,
             'path'    => SUSE_11_CA_FILE,
           )
@@ -361,7 +360,7 @@ K1pp74P1S8SqtCr4fKGxhZSM9AyHDPSsQPhZSZg=
 
         it {
           is_expected.to contain_file('Globalsign_Org_Intermediate.crt').with(
-            'ensure'  => 'present',
+            'ensure'  => 'file',
             'content' => GLOBALSIGN_ORG_CA,
             'path'    => SUSE_12_CA_FILE,
           )
