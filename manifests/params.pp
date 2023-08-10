@@ -44,7 +44,7 @@ class ca_cert::params {
       $package_name        = 'ca-certificates'
     }
     'Suse': {
-      if $facts['os']['release']['major'] =~ /(10|11)/  {
+      if $facts['os']['release']['major'] =~ /(10|11)/ {
         $trusted_cert_dir  = '/etc/ssl/certs'
         $update_cmd        = 'c_rehash'
         $ca_file_extension = 'pem'
@@ -73,7 +73,7 @@ class ca_cert::params {
       $package_name        = 'ca-certificates'
     }
     'Solaris': {
-      if versioncmp($facts['os']['release']['major'], '11') >= 0  {
+      if versioncmp($facts['os']['release']['major'], '11') >= 0 {
         $trusted_cert_dir    = '/etc/certs/CA/'
         $update_cmd          = '/usr/sbin/svcadm restart /system/ca-certificates'
         $cert_dir_group      = 'sys'

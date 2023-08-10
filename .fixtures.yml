@@ -1,7 +1,10 @@
 fixtures:
   repositories:
     stdlib: "https://github.com/puppetlabs/puppetlabs-stdlib.git"
-    remote_file: "https://github.com/lwf/puppet-remote_file.git"
     puppet_archive: "https://github.com/voxpupuli/puppet-archive.git"
+    # needed for Litmus acceptance testing:
+    facts: https://github.com/puppetlabs/puppetlabs-facts.git
+    provision: https://github.com/puppetlabs/provision.git
+    puppet_agent: https://github.com/puppetlabs/puppetlabs-puppet_agent.git
   symlinks:
     ca_cert: "#{source_dir}"

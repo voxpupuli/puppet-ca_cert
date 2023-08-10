@@ -1,6 +1,5 @@
 # Private class
 class ca_cert::enable {
-
   include ca_cert
 
   if ($facts['os']['family'] == 'RedHat' and versioncmp($facts['os']['release']['full'], '7') < 0) {
@@ -21,5 +20,4 @@ class ca_cert::enable {
       }
     }
   }
-
 }

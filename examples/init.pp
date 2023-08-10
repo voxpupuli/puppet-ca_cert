@@ -1,1 +1,1 @@
-class { '::ca_cert': }
+class { 'ca_cert': }

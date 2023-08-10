@@ -21,7 +21,7 @@ describe 'ca_cert::update', type: :class do
           )
         }
       when 'RedHat'
-        if facts[:os]['release']['major'] == '7'
+        if facts[:os]['release']['major'] >= '7'
           it { is_expected.not_to contain_exec('enable_ca_trust') }
         else
           context 'with force_enable set to true' do

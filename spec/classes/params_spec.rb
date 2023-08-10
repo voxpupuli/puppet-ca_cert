@@ -52,7 +52,7 @@ describe 'ca_cert::params', type: :class do
     let :facts do
       {
         'os' => {
-          'family' => 'Solaris',
+          'family' => 'WeirdOS',
         },
       }
     end

@@ -180,11 +180,11 @@ describe 'ca_cert', type: :class do
       }
     end
   end
-  context 'on a Solaris based OS' do
+  context 'on an unsupported operating system' do
     let :facts do
       {
         'os' => {
-          'family' => 'Solaris',
+          'family' => 'WeirdOS',
         },
       }
     end

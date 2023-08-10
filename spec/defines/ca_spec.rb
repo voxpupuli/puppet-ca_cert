@@ -1,5 +1,4 @@
 require 'spec_helper'
-# rubocop:disable RSpec/VoidExpect
 
 describe 'ca_cert::ca', type: :define do
   HTTP_URL = 'http://secure.globalsign.com/cacert/gsorganizationvalsha2g2r1.crt'.freeze
@@ -139,7 +138,7 @@ K1pp74P1S8SqtCr4fKGxhZSM9AyHDPSsQPhZSZg=
         end
 
         it {
-          is_expected.to contain_remote_file(DEBIAN_CA_FILE).with(
+          is_expected.to contain_archive(DEBIAN_CA_FILE).with(
             'ensure' => 'present',
             'source' => HTTP_URL,
           )
@@ -155,7 +154,7 @@ K1pp74P1S8SqtCr4fKGxhZSM9AyHDPSsQPhZSZg=
 
         it {
           is_expected.to contain_file('Globalsign_Org_Intermediate.crt').with(
-            'ensure'  => 'present',
+            'ensure'  => 'file',
             'content' => GLOBALSIGN_ORG_CA,
             'path'    => DEBIAN_CA_FILE,
           )
@@ -200,7 +199,7 @@ K1pp74P1S8SqtCr4fKGxhZSM9AyHDPSsQPhZSZg=
         end
 
         it {
-          is_expected.to contain_remote_file(REDHAT_CA_FILE).with(
+          is_expected.to contain_archive(REDHAT_CA_FILE).with(
             'ensure' => 'present',
             'source' => HTTP_URL,
           )
@@ -216,7 +215,7 @@ K1pp74P1S8SqtCr4fKGxhZSM9AyHDPSsQPhZSZg=
 
         it {
           is_expected.to contain_file('Globalsign_Org_Intermediate.crt').with(
-            'ensure'  => 'present',
+            'ensure'  => 'file',
             'content' => GLOBALSIGN_ORG_CA,
             'path'    => REDHAT_CA_FILE,
           )
@@ -244,7 +243,7 @@ K1pp74P1S8SqtCr4fKGxhZSM9AyHDPSsQPhZSZg=
         end
 
         it {
-          is_expected.to contain_remote_file(DISTRUSTED_REDHAT_CA_FILE).with(
+          is_expected.to contain_archive(DISTRUSTED_REDHAT_CA_FILE).with(
             'ensure' => 'present',
             'source' => HTTP_URL,
           )
@@ -271,7 +270,7 @@ K1pp74P1S8SqtCr4fKGxhZSM9AyHDPSsQPhZSZg=
         end
 
         it {
-          is_expected.to contain_remote_file(SUSE_11_CA_FILE).with(
+          is_expected.to contain_archive(SUSE_11_CA_FILE).with(
             'ensure' => 'present',
             'source' => SUSE_11_HTTP_URL,
           )
@@ -287,7 +286,7 @@ K1pp74P1S8SqtCr4fKGxhZSM9AyHDPSsQPhZSZg=
 
         it {
           is_expected.to contain_file('Globalsign_Org_Intermediate.pem').with(
-            'ensure'  => 'present',
+            'ensure'  => 'file',
             'content' => GLOBALSIGN_ORG_CA,
             'path'    => SUSE_11_CA_FILE,
           )
@@ -345,7 +344,7 @@ K1pp74P1S8SqtCr4fKGxhZSM9AyHDPSsQPhZSZg=
         end
 
         it {
-          is_expected.to contain_remote_file(SUSE_12_CA_FILE).with(
+          is_expected.to contain_archive(SUSE_12_CA_FILE).with(
             'ensure' => 'present',
             'source' => HTTP_URL,
           )
@@ -361,7 +360,7 @@ K1pp74P1S8SqtCr4fKGxhZSM9AyHDPSsQPhZSZg=
 
         it {
           is_expected.to contain_file('Globalsign_Org_Intermediate.crt').with(
-            'ensure'  => 'present',
+            'ensure'  => 'file',
             'content' => GLOBALSIGN_ORG_CA,
             'path'    => SUSE_12_CA_FILE,
           )
@@ -391,7 +390,7 @@ K1pp74P1S8SqtCr4fKGxhZSM9AyHDPSsQPhZSZg=
         end
 
         it {
-          is_expected.to contain_remote_file(DISTRUSTED_SUSE_12_CA_FILE).with(
+          is_expected.to contain_archive(DISTRUSTED_SUSE_12_CA_FILE).with(
             'ensure' => 'present',
             'source' => HTTP_URL,
           )
