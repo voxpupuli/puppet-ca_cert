@@ -1,62 +1,24 @@
 require 'spec_helper'
 
 describe 'ca_cert::params', type: :class do
-  shared_examples 'compiles and includes params class' do
-    it { is_expected.to compile }
-    it { is_expected.to contain_class('ca_cert::params') }
-  end
+  on_supported_os.sort.each do |os, facts|
+    context "on #{os}" do
+      let(:facts) { facts }
 
-  [
-    'Debian',
-    'RedHat',
-  ].each do |osfamily|
-    let :facts do
-      {
-        'os' => {
-          'family' => osfamily,
-        },
-      }
-    end
-
-    context "with osfamily #{osfamily}" do
-      it_behaves_like 'compiles and includes params class' do
-      end
-      it 'does not contain any resources' do
-        is_expected.to have_resource_count(0)
-      end
-    end
-  end
-
-  ['10', '11', '12'].each do |osmajrel|
-    context "On a Suse #{osmajrel} Operating System" do
-      let :facts do
-        {
-          'os' => {
-            'family'  => 'Suse',
-            'release' => {
-              'major' => osmajrel.to_s,
-            },
-          },
-        }
-      end
-
-      it_behaves_like 'compiles and includes params class' do
-      end
-      it 'does not contain any resources' do
-        is_expected.to have_resource_count(0)
-      end
+      it { is_expected.to compile }
+      it { is_expected.to have_resource_count(0) }
     end
   end
 
   context 'on an unsupported operating system' do
-    let :facts do
-      {
-        'os' => {
-          'family' => 'WeirdOS',
-        },
-      }
-    end
+    let(:facts) { { 'os' => { 'family' => 'WeirdOS' } } }
 
-    it { expect { catalogue }.to raise_error Puppet::Error, %r{Unsupported osfamily} }
+    it { expect { is_expected.to contain_class(:subject) }.to raise_error(Puppet::Error, %r{Unsupported osfamily}) }
+  end
+
+  context 'on an unsupported Solaris system' do
+    let(:facts) { { 'os' => { 'family' => 'Solaris', 'release' => { 'major' => '10' } } } }
+
+    it { expect { is_expected.to contain_class(:subject) }.to raise_error(Puppet::Error, %r{Unsupported OS Major release}) }
   end
 end

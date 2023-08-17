@@ -1,400 +1,362 @@
 require 'spec_helper'
 
 describe 'ca_cert::ca', type: :define do
-  HTTP_URL = 'http://secure.globalsign.com/cacert/gsorganizationvalsha2g2r1.crt'.freeze
-  DEBIAN_CA_FILE = '/usr/local/share/ca-certificates/Globalsign_Org_Intermediate.crt'.freeze
-  REDHAT_CA_FILE = '/etc/pki/ca-trust/source/anchors/Globalsign_Org_Intermediate.crt'.freeze
-  SUSE_11_HTTP_URL = 'http://secure.globalsign.com/cacert/gsorganizationvalsha2g2r1.pem'.freeze
-  SUSE_11_CA_FILE = '/etc/ssl/certs/Globalsign_Org_Intermediate.pem'.freeze
-  SUSE_12_CA_FILE = '/etc/pki/trust/anchors/Globalsign_Org_Intermediate.crt'.freeze
-  DISTRUSTED_SUSE_12_CA_FILE = '/etc/pki/trust/blacklist/Globalsign_Org_Intermediate.crt'.freeze
-  DISTRUSTED_REDHAT_CA_FILE = '/etc/pki/ca-trust/source/blacklist/Globalsign_Org_Intermediate.crt'.freeze
-  GLOBALSIGN_ORG_CA = '-----BEGIN CERTIFICATE-----
-MIIEaTCCA1GgAwIBAgILBAAAAAABRE7wQkcwDQYJKoZIhvcNAQELBQAwVzELMAkG
-A1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYtc2ExEDAOBgNVBAsTB1Jv
-b3QgQ0ExGzAZBgNVBAMTEkdsb2JhbFNpZ24gUm9vdCBDQTAeFw0xNDAyMjAxMDAw
-MDBaFw0yNDAyMjAxMDAwMDBaMGYxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9i
-YWxTaWduIG52LXNhMTwwOgYDVQQDEzNHbG9iYWxTaWduIE9yZ2FuaXphdGlvbiBW
-YWxpZGF0aW9uIENBIC0gU0hBMjU2IC0gRzIwggEiMA0GCSqGSIb3DQEBAQUAA4IB
-DwAwggEKAoIBAQDHDmw/I5N/zHClnSDDDlM/fsBOwphJykfVI+8DNIV0yKMCLkZc
-C33JiJ1Pi/D4nGyMVTXbv/Kz6vvjVudKRtkTIso21ZvBqOOWQ5PyDLzm+ebomchj
-SHh/VzZpGhkdWtHUfcKc1H/hgBKueuqI6lfYygoKOhJJomIZeg0k9zfrtHOSewUj
-mxK1zusp36QUArkBpdSmnENkiN74fv7j9R7l/tyjqORmMdlMJekYuYlZCa7pnRxt
-Nw9KHjUgKOKv1CGLAcRFrW4rY6uSa2EKTSDtc7p8zv4WtdufgPDWi2zZCHlKT3hl
-2pK8vjX5s8T5J4BO/5ZS5gIg4Qdz6V0rvbLxAgMBAAGjggElMIIBITAOBgNVHQ8B
-Af8EBAMCAQYwEgYDVR0TAQH/BAgwBgEB/wIBADAdBgNVHQ4EFgQUlt5h8b0cFilT
-HMDMfTuDAEDmGnwwRwYDVR0gBEAwPjA8BgRVHSAAMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMDMGA1UdHwQsMCow
-KKAmoCSGImh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5uZXQvcm9vdC5jcmwwPQYIKwYB
-BQUHAQEEMTAvMC0GCCsGAQUFBzABhiFodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNv
-bS9yb290cjEwHwYDVR0jBBgwFoAUYHtmGkUNl8qJUC99BM00qP/8/UswDQYJKoZI
-hvcNAQELBQADggEBAEYq7l69rgFgNzERhnF0tkZJyBAW/i9iIxerH4f4gu3K3w4s
-32R1juUYcqeMOovJrKV3UPfvnqTgoI8UV6MqX+x+bRDmuo2wCId2Dkyy2VG7EQLy
-XN0cvfNVlg/UBsD84iOKJHDTu/B5GqdhcIOKrwbFINihY9Bsrk8y1658GEV1BSl3
-30JAZGSGvip2CTFvHST0mdCF/vIhCPnG9vHQWe3WVjwIKANnuvD58ZAWR65n5ryA
-SOlCdjSXVWkkDoPWoC209fN5ikkodBpBocLTJIg1MGCUF7ThBCIxPTsvFwayuJ2G
-K1pp74P1S8SqtCr4fKGxhZSM9AyHDPSsQPhZSZg=
------END CERTIFICATE-----'.freeze
+  let(:title) { 'Globalsign_Org_Intermediate' }
+  let(:pre_condition) { 'class {"ca_cert": }' }
 
-  let :pre_condition do
-    'class {"ca_cert": }'
-  end
-
-  let :title do
-    'Globalsign_Org_Intermediate'
-  end
-
-  let :debian_facts do
-    {
-      os: {
-        family: 'Debian',
-        name: 'Ubuntu',
-      },
-    }
-  end
-
-  let :redhat_facts do
-    {
-      os: {
-        family: 'RedHat',
-        name: 'RedHat',
-        release: {
-          full: '7.0',
-        },
-      },
-    }
-  end
-
-  let :suse_11_facts do
-    {
-      os: {
-        family: 'Suse',
-        name: 'Suse',
-        release: {
-          major: '11',
-        },
-      },
-    }
-  end
-
-  let :suse_12_facts do
-    {
-      os: {
-        family: 'Suse',
-        name: 'Suse',
-        release: {
-          major: '12',
-        },
-      },
-    }
-  end
-
-  shared_examples 'compiles and includes main and params classes' do
-    it { is_expected.to compile }
-    it { is_expected.to contain_class('ca_cert') }
-    it { is_expected.to contain_class('ca_cert::params') }
-  end
-
-  describe 'failure conditions' do
-    let(:facts) { debian_facts }
-
-    context 'with no certificate text' do
-      let :params do
-        {
-          source: 'text',
-        }
+  on_supported_os.sort.each do |os, facts|
+    # define os specific defaults
+    case facts[:os]['family']
+    when 'Debian'
+      ca_file_mode        = '0444'
+      trusted_cert_dir    = '/usr/local/share/ca-certificates'
+      if facts[:os]['name'] == 'Debian'
       end
-
-      it { expect { is_expected.to raise_error(Puppet::Error, %r{ca_text is required if source is set to text}) } }
+    when 'RedHat'
+      trusted_cert_dir    = '/etc/pki/ca-trust/source/anchors'
+      distrusted_cert_dir = '/etc/pki/ca-trust/source/blacklist'
+    when 'Archlinux'
+      trusted_cert_dir    = '/etc/ca-certificates/trust-source/anchors/'
+      distrusted_cert_dir = '/etc/ca-certificates/trust-source/blacklist'
+    when 'Suse'
+      if %r{(10|11)}.match?(facts[:os]['release']['major'])
+        ca_file_extension = 'pem'
+        trusted_cert_dir  = '/etc/ssl/certs'
+      else
+        trusted_cert_dir    = '/etc/pki/trust/anchors'
+        distrusted_cert_dir = '/etc/pki/trust/blacklist'
+      end
+    when 'AIX'
+      ca_file_group    = 'system'
+      trusted_cert_dir = '/var/ssl/certs'
+    when 'Solaris'
+      ca_file_extension = 'pem'
+      ca_file_mode      = '0444'
+      trusted_cert_dir  = '/etc/certs/CA/'
     end
 
-    context 'with an invalid source' do
-      let :params do
-        {
-          source: 'rsync://certificate.crt',
-        }
+    ca_file_extension   = 'crt' if ca_file_extension.nil?
+    ca_file_group       = 'root' if ca_file_group.nil?
+    ca_file_mode        = '0644' if ca_file_mode.nil?
+    distrusted_cert_dir = '' if distrusted_cert_dir.nil?
+
+    describe "on #{os}" do
+      let(:facts) { facts }
+
+      context 'with default values for parameters' do
+        it { expect { is_expected.to contain_class(:subject) }.to raise_error(Puppet::Error, %r{ca_text is required if source is set to text}) }
       end
 
-      it { expect { is_expected.to raise_error(Puppet::Error, %r{Protocol must be puppet, file, http, https, ftp, or text}) } }
-    end
-  end
+      context 'with ca_text set to valid value' do
+        let(:params) { { ca_text: 'testing' } }
 
-  describe 'os-dependent items' do
-    context 'On Debian based systems' do
-      let(:facts) { debian_facts }
-      let(:params) do
-        {
-          source: HTTP_URL,
-        }
-      end
+        it { is_expected.to compile }
+        it { is_expected.to contain_class('ca_cert::params') }
+        it { is_expected.to contain_class('ca_cert::update') }
+        it { is_expected.to contain_class('ca_cert::enable') }
 
-      it_behaves_like 'compiles and includes main and params classes' do
-      end
-      describe 'with a remote certificate' do
-        let :params do
-          {
-            source: HTTP_URL,
-          }
+        # only here to reach 100% resource coverage
+        it { is_expected.to contain_ca_cert__ca('ca1') }
+        it { is_expected.to contain_ca_cert__ca('ca2') }
+        it { is_expected.to contain_exec('ca_cert_update') }
+        it { is_expected.to contain_file('trusted_certs') }
+        if facts[:os]['family'] == 'Suse' && facts[:os]['release']['major'] =~ %r{(10|11)} || facts[:os]['family'] == 'Solaris'
+          it { is_expected.to contain_file('ca1.pem') }
+          it { is_expected.to contain_file('ca2.pem') }
+        else
+          it { is_expected.to contain_file('ca1.crt') }
+          it { is_expected.to contain_file('ca2.crt') }
         end
-
-        it {
-          is_expected.to contain_archive(DEBIAN_CA_FILE).with(
-            'ensure' => 'present',
-            'source' => HTTP_URL,
-          )
-        }
-      end
-      describe 'with the certificate delivered as a string' do
-        let :params do
-          {
-            source: 'text',
-            ca_text: GLOBALSIGN_ORG_CA,
-          }
+        if facts[:os]['family'] == 'Suse' && facts[:os]['release']['major'] =~ %r{(10|11)}
+          it { is_expected.to contain_package('openssl-certs') }
+        else
+          it { is_expected.to contain_package('ca-certificates') }
         end
+        if facts[:os]['family'] == 'RedHat' && facts[:os]['release']['major'] =~ %r{(5|6)}
+          it { is_expected.to contain_exec('enable_ca_trust') }
+        end
+        # /only here to reach 100% resource coverage
 
-        it {
-          is_expected.to contain_file('Globalsign_Org_Intermediate.crt').with(
-            'ensure'  => 'file',
-            'content' => GLOBALSIGN_ORG_CA,
-            'path'    => DEBIAN_CA_FILE,
-          )
-        }
-      end
-      describe 'when removing the CA cert' do
-        ['absent', 'distrusted'].each do |deb_ensure|
-          let :params do
+        it do
+          is_expected.to contain_file('Globalsign_Org_Intermediate.' + ca_file_extension).only_with(
             {
-              ensure: deb_ensure,
-              source: HTTP_URL,
-            }
-          end
-
-          context "with ensure set to #{deb_ensure}" do
-            it {
-              is_expected.to contain_file(DEBIAN_CA_FILE).with(
-                'ensure' => 'absent',
-              )
-            }
-          end
-        end
-      end
-    end
-
-    context 'On RedHat based systems' do
-      let(:facts) { redhat_facts }
-      let(:params) do
-        {
-          source: HTTP_URL,
-        }
-      end
-
-      it_behaves_like 'compiles and includes main and params classes' do
-      end
-
-      describe 'with a remote certificate' do
-        let :params do
-          {
-            source: HTTP_URL,
-          }
-        end
-
-        it {
-          is_expected.to contain_archive(REDHAT_CA_FILE).with(
-            'ensure' => 'present',
-            'source' => HTTP_URL,
+              'ensure'  => 'file',
+              'content' => 'testing',
+              'path'    => trusted_cert_dir + '/Globalsign_Org_Intermediate.' + ca_file_extension,
+              'owner'   => 'root',
+              'group'   => ca_file_group,
+              'mode'    => ca_file_mode,
+              'notify'  => 'Class[Ca_cert::Update]',
+            },
           )
-        }
-      end
-      describe 'with the certificate delivered as a string' do
-        let :params do
-          {
-            source: 'text',
-            ca_text: GLOBALSIGN_ORG_CA,
-          }
-        end
-
-        it {
-          is_expected.to contain_file('Globalsign_Org_Intermediate.crt').with(
-            'ensure'  => 'file',
-            'content' => GLOBALSIGN_ORG_CA,
-            'path'    => REDHAT_CA_FILE,
-          )
-        }
-      end
-      describe 'when removing the CA cert' do
-        let :params do
-          {
-            ensure: 'absent',
-          }
-        end
-
-        it {
-          is_expected.to contain_file(REDHAT_CA_FILE).with(
-            'ensure' => 'absent',
-          )
-        }
-      end
-      describe 'when explicitly distrusting a certificate' do
-        let :params do
-          {
-            source: HTTP_URL,
-            ensure: 'distrusted',
-          }
-        end
-
-        it {
-          is_expected.to contain_archive(DISTRUSTED_REDHAT_CA_FILE).with(
-            'ensure' => 'present',
-            'source' => HTTP_URL,
-          )
-        }
-      end
-    end
-
-    context 'On Suse 11 based systems' do
-      let(:facts) { suse_11_facts }
-      let(:params) do
-        {
-          source: SUSE_11_HTTP_URL,
-        }
-      end
-
-      it_behaves_like 'compiles and includes main and params classes' do
-      end
-
-      describe 'with a remote certificate' do
-        let :params do
-          {
-            source: SUSE_11_HTTP_URL,
-          }
-        end
-
-        it {
-          is_expected.to contain_archive(SUSE_11_CA_FILE).with(
-            'ensure' => 'present',
-            'source' => SUSE_11_HTTP_URL,
-          )
-        }
-      end
-      describe 'with the certificate delivered as a string' do
-        let :params do
-          {
-            source: 'text',
-            ca_text: GLOBALSIGN_ORG_CA,
-          }
-        end
-
-        it {
-          is_expected.to contain_file('Globalsign_Org_Intermediate.pem').with(
-            'ensure'  => 'file',
-            'content' => GLOBALSIGN_ORG_CA,
-            'path'    => SUSE_11_CA_FILE,
-          )
-        }
-      end
-      describe 'when removing the CA cert' do
-        let :params do
-          {
-            ensure: 'absent',
-          }
-        end
-
-        it {
-          is_expected.to contain_file(SUSE_11_CA_FILE).with(
-            'ensure' => 'absent',
-          )
-        }
-      end
-      describe 'when removing the CA cert' do
-        ['absent', 'distrusted'].each do |suse_ensure|
-          let :params do
-            {
-              ensure: suse_ensure,
-              source: SUSE_11_HTTP_URL,
-            }
-          end
-
-          context "with ensure set to #{suse_ensure}" do
-            it {
-              is_expected.to contain_file(SUSE_11_CA_FILE).with(
-                'ensure' => 'absent',
-              )
-            }
-          end
         end
       end
-    end
 
-    context 'On Suse 12 based systems' do
-      let(:facts) { suse_12_facts }
-      let(:params) do
-        {
-          source: HTTP_URL,
-        }
-      end
+      context 'with source set to valid string "puppet:///testing.crt"' do
+        let(:params) { { source: 'puppet:///testing.crt' } }
 
-      it_behaves_like 'compiles and includes main and params classes' do
-      end
-
-      describe 'with a remote certificate' do
-        let :params do
-          {
-            source: HTTP_URL,
-          }
-        end
-
-        it {
-          is_expected.to contain_archive(SUSE_12_CA_FILE).with(
-            'ensure' => 'present',
-            'source' => HTTP_URL,
-          )
-        }
-      end
-      describe 'with the certificate delivered as a string' do
-        let :params do
-          {
-            source: 'text',
-            ca_text: GLOBALSIGN_ORG_CA,
-          }
-        end
-
-        it {
-          is_expected.to contain_file('Globalsign_Org_Intermediate.crt').with(
-            'ensure'  => 'file',
-            'content' => GLOBALSIGN_ORG_CA,
-            'path'    => SUSE_12_CA_FILE,
-          )
-        }
-      end
-      describe 'when removing the CA cert' do
-        let :params do
-          {
-            ensure: 'absent',
-          }
-        end
-
-        context 'with ensure set to absent' do
-          it {
-            is_expected.to contain_file(SUSE_12_CA_FILE).with(
-              'ensure' => 'absent',
+        if facts[:os]['family'] == 'Suse' && facts[:os]['release']['major'] =~ %r{(10|11)}
+          it { expect { is_expected.to contain_class(:subject) }.to raise_error(Puppet::Error, %r{not proper format - SLES 10/11 CA Files must be in .pem format}) }
+        else
+          it do
+            is_expected.to contain_file('Globalsign_Org_Intermediate.' + ca_file_extension).only_with(
+              {
+                'ensure'  => 'file',
+                'source'  => 'puppet:///testing.crt',
+                'path'    => trusted_cert_dir + '/Globalsign_Org_Intermediate.' + ca_file_extension,
+                'owner'   => 'root',
+                'group'   => ca_file_group,
+                'mode'    => ca_file_mode,
+                'notify'  => 'Class[Ca_cert::Update]',
+              },
             )
-          }
+          end
         end
       end
-      describe 'when explicitly distrusting a certificate' do
-        let :params do
-          {
-            source: HTTP_URL,
-            ensure: 'distrusted',
-          }
+
+      context 'with source set to valid string "puppet:///testing.pem"' do
+        let(:params) { { source: 'puppet:///testing.pem' } }
+
+        it do
+          is_expected.to contain_file('Globalsign_Org_Intermediate.' + ca_file_extension).only_with(
+            {
+              'ensure'  => 'file',
+              'source'  => 'puppet:///testing.pem',
+              'path'    => trusted_cert_dir + '/Globalsign_Org_Intermediate.' + ca_file_extension,
+              'owner'   => 'root',
+              'group'   => ca_file_group,
+              'mode'    => ca_file_mode,
+              'notify'  => 'Class[Ca_cert::Update]',
+            },
+          )
+        end
+      end
+
+      ['ftp', 'https', 'http'].each do |protocol|
+        context "with source set to valid string \"#{protocol}://testing.crt\"" do
+          let(:params) { { source: protocol + '://testing.crt' } }
+
+          if facts[:os]['family'] == 'Suse' && facts[:os]['release']['major'] =~ %r{(10|11)}
+            it { expect { is_expected.to contain_class(:subject) }.to raise_error(Puppet::Error, %r{not proper format - SLES 10/11 CA Files must be in .pem format}) }
+          else
+            it do
+              is_expected.to contain_archive(trusted_cert_dir + '/Globalsign_Org_Intermediate.' + ca_file_extension).only_with(
+                {
+                  'ensure'         => 'present',
+                  'source'         => protocol + '://testing.crt',
+                  'checksum'       => nil,
+                  'checksum_type'  => nil,
+                  'allow_insecure' => false,
+                  'notify'         => 'Class[Ca_cert::Update]',
+                },
+              )
+            end
+          end
         end
 
-        it {
-          is_expected.to contain_archive(DISTRUSTED_SUSE_12_CA_FILE).with(
-            'ensure' => 'present',
-            'source' => HTTP_URL,
+        context "with source set to valid string \"#{protocol}://testing.pem\"" do
+          let(:params) { { source: protocol + '://testing.pem' } }
+
+          it do
+            is_expected.to contain_archive(trusted_cert_dir + '/Globalsign_Org_Intermediate.' + ca_file_extension).only_with(
+              {
+                'ensure'         => 'present',
+                'source'         => protocol + '://testing.pem',
+                'checksum'       => nil,
+                'checksum_type'  => nil,
+                'allow_insecure' => false,
+                'notify'         => 'Class[Ca_cert::Update]',
+              },
+            )
+          end
+        end
+      end
+
+      context 'with source set to valid string "file:/testing.crt"' do
+        let(:params) { { source: 'file:/testing.crt' } }
+
+        if facts[:os]['family'] == 'Suse' && facts[:os]['release']['major'] =~ %r{(10|11)}
+          it { expect { is_expected.to contain_class(:subject) }.to raise_error(Puppet::Error, %r{not proper format - SLES 10/11 CA Files must be in .pem format}) }
+        else
+          it do
+            is_expected.to contain_file('Globalsign_Org_Intermediate.' + ca_file_extension).only_with(
+              {
+                'ensure'  => 'file',
+                'source'  => '/testing.crt',
+                'path'    => trusted_cert_dir + '/Globalsign_Org_Intermediate.' + ca_file_extension,
+                'owner'   => 'root',
+                'group'   => ca_file_group,
+                'mode'    => ca_file_mode,
+                'notify'  => 'Class[Ca_cert::Update]',
+              },
+            )
+          end
+        end
+      end
+
+      context 'with source set to valid string "file:/testing.pem"' do
+        let(:params) { { source: 'file:/testing.pem' } }
+
+        it do
+          is_expected.to contain_file('Globalsign_Org_Intermediate.' + ca_file_extension).only_with(
+            {
+              'ensure'  => 'file',
+              'source'  => '/testing.pem',
+              'path'    => trusted_cert_dir + '/Globalsign_Org_Intermediate.' + ca_file_extension,
+              'owner'   => 'root',
+              'group'   => ca_file_group,
+              'mode'    => ca_file_mode,
+              'notify'  => 'Class[Ca_cert::Update]',
+            },
           )
-        }
+        end
+      end
+
+      context 'with ensure set to valid string "present"' do
+        let(:params) { { ensure: 'present' } }
+
+        it do
+          is_expected.to contain_file('Globalsign_Org_Intermediate.' + ca_file_extension).only_with(
+            {
+              'ensure'  => 'file',
+              'content' => nil,
+              'path'    => trusted_cert_dir + '/Globalsign_Org_Intermediate.' + ca_file_extension,
+              'owner'   => 'root',
+              'group'   => ca_file_group,
+              'mode'    => ca_file_mode,
+              'notify'  => 'Class[Ca_cert::Update]',
+            },
+          )
+        end
+      end
+
+      context 'with ensure set to valid string "distrusted"' do
+        let(:params) { { ensure: 'distrusted' } }
+
+        it { expect { is_expected.to contain_class(:subject) }.to raise_error(Puppet::Error, %r{ca_text is required if source is set to text}) }
+      end
+
+      context 'with ensure set to valid string "distrusted" when source is "file:/dummy.pem"' do
+        let(:params) { { ensure: 'distrusted', source: 'file:/dummy.pem' } }
+
+        if facts[:os]['family'] == 'Suse' && facts[:os]['release']['major'] =~ %r{(10|11)} || facts[:os]['family'] == 'Debian'
+          it do
+            is_expected.to contain_file(trusted_cert_dir + '/Globalsign_Org_Intermediate.' + ca_file_extension).only_with(
+              {
+                'ensure'  => 'absent',
+                'notify'  => 'Class[Ca_cert::Update]',
+              },
+            )
+          end
+        elsif facts[:os]['family'] == 'Solaris' || facts[:os]['family'] == 'AIX'
+          # fails on Solaris and AIX because ca_cert::params::distrusted_cert_dir is not defined
+        else
+          it do
+            is_expected.to contain_file('Globalsign_Org_Intermediate.' + ca_file_extension).only_with(
+              {
+                'ensure'  => 'file',
+                'source'  => '/dummy.pem',
+                'path'    => distrusted_cert_dir + '/Globalsign_Org_Intermediate.' + ca_file_extension,
+                'owner'   => 'root',
+                'group'   => ca_file_group,
+                'mode'    => ca_file_mode,
+                'notify'  => 'Class[Ca_cert::Update]',
+              },
+            )
+          end
+        end
+      end
+
+      context 'with ensure set to valid string "distrusted" when ca_text is "testing"' do
+        let(:params) { { ensure: 'distrusted', ca_text: 'testing' } }
+
+        if facts[:os]['family'] == 'Suse' && facts[:os]['release']['major'] =~ %r{(10|11)} || facts[:os]['family'] == 'Debian'
+          it do
+            is_expected.to contain_file(trusted_cert_dir + '/Globalsign_Org_Intermediate.' + ca_file_extension).only_with(
+              {
+                'ensure'  => 'absent',
+                'notify'  => 'Class[Ca_cert::Update]',
+              },
+            )
+          end
+        elsif facts[:os]['family'] == 'Solaris' || facts[:os]['family'] == 'AIX'
+          # fails on Solaris and AIX because ca_cert::params::distrusted_cert_dir is not defined
+        else
+          it do
+            is_expected.to contain_file('Globalsign_Org_Intermediate.' + ca_file_extension).only_with(
+              {
+                'ensure'  => 'file',
+                'content' => 'testing',
+                'path'    => distrusted_cert_dir + '/Globalsign_Org_Intermediate.' + ca_file_extension,
+                'owner'   => 'root',
+                'group'   => ca_file_group,
+                'mode'    => ca_file_mode,
+                'notify'  => 'Class[Ca_cert::Update]',
+              },
+            )
+          end
+        end
+      end
+
+      context 'with ensure set to valid string "absent"' do
+        let(:params) { { ensure: 'absent' } }
+
+        it do
+          is_expected.to contain_file(trusted_cert_dir + '/Globalsign_Org_Intermediate.' + ca_file_extension).only_with(
+            {
+              'ensure'  => 'absent',
+              'notify'  => 'Class[Ca_cert::Update]',
+            },
+          )
+        end
+      end
+
+      ['ftp', 'https', 'http'].each do |protocol|
+        context "with verify_https_cert set to valid false when source set to valid string \"#{protocol}://testing.pem\"" do
+          let(:params) { { verify_https_cert: false, source: protocol + '://testing.pem' } }
+
+          it { is_expected.to contain_archive(trusted_cert_dir + '/Globalsign_Org_Intermediate.' + ca_file_extension).with_allow_insecure(true) }
+        end
+
+        context "with checksum set to valid value when source set to valid string \"#{protocol}://testing.pem\"" do
+          let(:params) { { checksum: 'testing', source: protocol + '://testing.pem' } }
+
+          it { is_expected.to contain_archive(trusted_cert_dir + '/Globalsign_Org_Intermediate.' + ca_file_extension).with_checksum('testing') }
+        end
+
+        context "with checksum_type set to valid value when source set to valid string \"#{protocol}://testing.pem\"" do
+          let(:params) { { checksum_type: 'testing', source: protocol + '://testing.pem' } }
+
+          it { is_expected.to contain_archive(trusted_cert_dir + '/Globalsign_Org_Intermediate.' + ca_file_extension).with_checksum_type('testing') }
+        end
+      end
+
+      context 'with ca_file_group set to valid value when ca_text set to valid value' do
+        let(:params) { { ca_file_group: 'testing', ca_text: 'dummy' } }
+
+        it { is_expected.to contain_file('Globalsign_Org_Intermediate.' + ca_file_extension).with_group('testing') }
+      end
+
+      ['puppet:///', 'file:/'].each do |protocol|
+        context "with ca_file_group set to valid value when source set to valid string \"#{protocol}dummy.pem\"" do
+          let(:params) { { ca_file_group: 'testing', source: protocol + 'dummy.pem' } }
+
+          it { is_expected.to contain_file('Globalsign_Org_Intermediate.' + ca_file_extension).with_group('testing') }
+        end
+      end
+
+      context 'with ca_file_mode set to valid value when ca_text set to valid value' do
+        let(:params) { { ca_file_mode: 'testing', ca_text: 'dummy' } }
+
+        it { is_expected.to contain_file('Globalsign_Org_Intermediate.' + ca_file_extension).with_mode('testing') }
+      end
+
+      ['puppet:///', 'file:/'].each do |protocol|
+        context "with ca_file_mode set to valid value when source set to valid string \"#{protocol}dummy.pem\"" do
+          let(:params) { { ca_file_mode: 'testing', source: protocol + 'dummy.pem' } }
+
+          it { is_expected.to contain_file('Globalsign_Org_Intermediate.' + ca_file_extension).with_mode('testing') }
+        end
       end
     end
   end
