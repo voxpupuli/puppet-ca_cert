@@ -45,24 +45,12 @@ define ca_cert::ca (
   Boolean $verify_https_cert     = true,
   Optional[String] $checksum     = undef,
   Optional[String[1]] $checksum_type = undef,
-  Optional[String] $ca_file_group = undef,
-  Optional[String] $ca_file_mode = undef,
+  Optional[String] $ca_file_group    = $ca_cert::params::ca_file_group,
+  Optional[String] $ca_file_mode     = $ca_cert::params::ca_file_mode,
 ) {
   include ca_cert::params
   include ca_cert::update
   require ca_cert::enable
-
-  if $ca_file_group == undef {
-    $file_group = $ca_cert::params::ca_file_group
-  } else {
-    $file_group = $ca_file_group
-  }
-
-  if $ca_file_mode == undef {
-    $file_mode = $ca_cert::params::ca_file_mode
-  } else {
-    $file_mode = $ca_file_mode
-  }
 
   if ($ensure == 'trusted' or $ensure == 'distrusted') and $source == 'text' and !$ca_text {
     fail('ca_text is required if source is set to text')
@@ -112,8 +100,8 @@ define ca_cert::ca (
             source => $source,
             path   => $ca_cert,
             owner  => 'root',
-            group  => $file_group,
-            mode   => $file_mode,
+            group  => $ca_file_group,
+            mode   => $ca_file_mode,
             notify => Class['ca_cert::update'],
           }
         }
@@ -134,8 +122,8 @@ define ca_cert::ca (
             source => $source_path,
             path   => $ca_cert,
             owner  => 'root',
-            group  => $file_group,
-            mode   => $file_mode,
+            group  => $ca_file_group,
+            mode   => $ca_file_mode,
             notify => Class['ca_cert::update'],
           }
         }
@@ -145,8 +133,8 @@ define ca_cert::ca (
             content => $ca_text,
             path    => $ca_cert,
             owner   => 'root',
-            group   => $file_group,
-            mode    => $file_mode,
+            group   => $ca_file_group,
+            mode    => $ca_file_mode,
             notify  => Class['ca_cert::update'],
           }
         }
