@@ -51,7 +51,6 @@ describe 'ca_cert::ca', type: :define do
         let(:params) { { ca_text: 'testing' } }
 
         it { is_expected.to compile }
-        it { is_expected.to contain_class('ca_cert::params') }
         it { is_expected.to contain_class('ca_cert::update') }
         it { is_expected.to contain_class('ca_cert::enable') }
 

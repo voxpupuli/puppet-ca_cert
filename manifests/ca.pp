@@ -32,6 +32,8 @@
 #   The installed CA certificate's POSIX filesystem permissions. This uses
 #   the same syntax as Puppet's native file resource's "mode" parameter.
 #   (defaults to '0444', i.e. world-readable)
+# [*ca_file_extension*]
+#   TODO: add description
 #
 # === Examples
 #
@@ -45,10 +47,10 @@ define ca_cert::ca (
   Boolean $verify_https_cert     = true,
   Optional[String] $checksum     = undef,
   Optional[String[1]] $checksum_type = undef,
-  Optional[String] $ca_file_group    = $ca_cert::params::ca_file_group,
-  Optional[String] $ca_file_mode     = $ca_cert::params::ca_file_mode,
+  String[1] $ca_file_group           = lookup('ca_cert::ca::ca_file_group'),
+  String[1] $ca_file_mode            = lookup('ca_cert::ca::ca_file_mode'),
+  String[1] $ca_file_extension       = lookup('ca_cert::ca::ca_file_extension'),
 ) {
-  include ca_cert::params
   include ca_cert::update
   require ca_cert::enable
 
@@ -82,11 +84,11 @@ define ca_cert::ca (
   }
 
   # Determine Full Resource Name
-  $resource_name = "${name}.${ca_cert::params::ca_file_extension}"
+  $resource_name = "${name}.${ca_file_extension}"
 
   $ca_cert = $adjusted_ensure ? {
-    'distrusted' => "${ca_cert::params::distrusted_cert_dir}/${resource_name}",
-    default      => "${ca_cert::params::trusted_cert_dir}/${resource_name}",
+    'distrusted' => "${ca_cert::distrusted_cert_dir}/${resource_name}",
+    default      => "${ca_cert::trusted_cert_dir}/${resource_name}",
   }
 
   case $adjusted_ensure {

@@ -1,0 +1,10 @@
+---
+ca_cert::supported:             true
+ca_cert::trusted_cert_dir:      '/usr/local/share/ca-certificates'
+ca_cert::update_cmd:            'update-ca-certificates'
+ca_cert::cert_dir_group:        'staff'
+ca_cert::cert_dir_mode:         '2665'
+ca_cert::package_name:          'ca-certificates'
+ca_cert::ca::ca_file_group:     'root'
+ca_cert::ca::ca_file_mode:      '0444'
+ca_cert::ca::ca_file_extension: 'crt'

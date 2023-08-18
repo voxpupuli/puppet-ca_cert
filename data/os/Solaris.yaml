@@ -1,0 +1,9 @@
+---
+ca_cert::trusted_cert_dir:      '/etc/certs/CA/'
+ca_cert::update_cmd:            '/usr/sbin/svcadm restart /system/ca-certificates'
+ca_cert::cert_dir_group:        'sys'
+ca_cert::cert_dir_mode:         '0755'
+ca_cert::package_name:          'ca-certificates'
+ca_cert::ca::ca_file_group:     'root'
+ca_cert::ca::ca_file_mode:      '0444'
+ca_cert::ca::ca_file_extension: 'pem'

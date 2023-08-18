@@ -37,7 +37,6 @@ describe 'ca_cert', type: :class do
       let(:facts) { facts }
 
       it { is_expected.to compile }
-      it { is_expected.to contain_class('ca_cert::params') }
       it { is_expected.to contain_class('ca_cert::update') }
       it { is_expected.to contain_class('ca_cert::enable') } # only here to reach 100% resource coverage, sourced by ca_cert::update
 
@@ -76,6 +75,18 @@ describe 'ca_cert', type: :class do
         it { is_expected.to contain_file('ca2.crt') } # only here to reach 100% resource coverage
       end
     end
+  end
+
+  context 'on an unsupported operating system' do
+    let(:facts) { { 'os' => { 'family' => 'WeirdOS', 'release' => { 'major' => '242' } } } }
+
+    it { expect { is_expected.to contain_class(:subject) }.to raise_error(Puppet::Error, %r{Unsupported osfamily \(WeirdOS\) or unsupported version \(242\)}) }
+  end
+
+  context 'on an unsupported Solaris system' do
+    let(:facts) { { 'os' => { 'family' => 'Solaris', 'release' => { 'major' => '10' } } } }
+
+    it { expect { is_expected.to contain_class(:subject) }.to raise_error(Puppet::Error, %r{Unsupported osfamily \(Solaris\) or unsupported version \(10\)}) }
   end
 
   describe 'parameters on supported OS' do

@@ -27,6 +27,18 @@
 #   The ensure parameter to pass to the package resource
 # [*package_name*]
 #   The name of the package(s) to be installed
+# [*trusted_cert_dir*]
+#   TODO: add description
+# [*distrusted_cert_dir*]
+#   TODO: add description
+# [*update_cmd*]
+#   TODO: add description
+# [*cert_dir_group*]
+#   TODO: add description
+# [*cert_dir_mode*]
+#   TODO: add description
+# [*supported*]
+#   Boolean to ensure module runs only on supported OS families and versions.
 #
 # === Examples
 #
@@ -48,20 +60,25 @@ class ca_cert (
   Boolean $force_enable        = false,
   Hash    $ca_certs            = {},
   String  $package_ensure      = 'installed',
-  String  $package_name        = $ca_cert::params::package_name,
-) inherits ca_cert::params {
-  include ca_cert::params
+  String[1] $package_name                  = 'ca-certificates',
+  String[1] $trusted_cert_dir              = '/etc/pki/ca-trust/source/anchors',
+  Optional[String[1]] $distrusted_cert_dir = undef,
+  String[1] $update_cmd                    = 'update-ca-trust extract',
+  String[1] $cert_dir_group                = 'root',
+  String[1] $cert_dir_mode                 = '0755',
+  Boolean $supported                       = false,
+) {
   include ca_cert::update
+
+  if $supported == false {
+    fail("Unsupported osfamily (${facts['os']['family']}) or unsupported version (${facts['os']['release']['major']})")
+  }
 
   if $always_update_certs == true {
     Exec <| title=='ca_cert_update' |> {
       refreshonly => false,
     }
   }
-
-  $trusted_cert_dir = $ca_cert::params::trusted_cert_dir
-  $cert_dir_group   = $ca_cert::params::cert_dir_group
-  $cert_dir_mode    = $ca_cert::params::cert_dir_mode
 
   file { 'trusted_certs':
     ensure  => directory,

@@ -32,7 +32,6 @@ describe 'ca_cert::update', type: :class do
       # only here to reach 100% resource coverage
       it { is_expected.to contain_ca_cert__ca('ca1') }
       it { is_expected.to contain_ca_cert__ca('ca2') }
-      it { is_expected.to contain_class('ca_cert::params') }
       it { is_expected.to contain_file('trusted_certs') }
       if facts[:os]['family'] == 'RedHat' && facts[:os]['release']['major'].to_i < 7
         it { is_expected.to contain_exec('enable_ca_trust') }
