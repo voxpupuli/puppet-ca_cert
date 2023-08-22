@@ -41,11 +41,11 @@
 #   source => 'http://secure.globalsign.com/cacert/gsorganizationvalsha2g2r1.crt',
 # }
 define ca_cert::ca (
-  Optional[String] $ca_text      = undef,
-  String $source                 = 'text',
-  String $ensure                 = 'trusted',
-  Boolean $verify_https_cert     = true,
-  Optional[String] $checksum     = undef,
+  Optional[String] $ca_text          = undef,
+  String $source                     = 'text',
+  String $ensure                     = 'trusted',
+  Boolean $verify_https_cert         = true,
+  Optional[String] $checksum         = undef,
   Optional[String[1]] $checksum_type = undef,
   String[1] $ca_file_group           = lookup('ca_cert::ca::ca_file_group'),
   String[1] $ca_file_mode            = lookup('ca_cert::ca::ca_file_mode'),

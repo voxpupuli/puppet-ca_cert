@@ -52,14 +52,13 @@
 #
 # Phil Fenstermacher <phillip.fenstermacher@gmail.com>
 #
-# lint:ignore:variable_is_lowercase
 class ca_cert (
-  Boolean $always_update_certs = false,
-  Boolean $purge_unmanaged_CAs = false, # lint:ignore:variable_contains_upcase
-  Boolean $install_package     = true,
-  Boolean $force_enable        = false,
-  Hash    $ca_certs            = {},
-  String  $package_ensure      = 'installed',
+  Boolean $always_update_certs             = false,
+  Boolean $purge_unmanaged_CAs             = false, # lint:ignore:variable_is_lowercase lint:ignore:variable_contains_upcase
+  Boolean $install_package                 = true,
+  Boolean $force_enable                    = false,
+  Hash    $ca_certs                        = {},
+  String  $package_ensure                  = 'installed',
   String[1] $package_name                  = 'ca-certificates',
   String[1] $trusted_cert_dir              = '/etc/pki/ca-trust/source/anchors',
   Optional[String[1]] $distrusted_cert_dir = undef,
@@ -72,20 +71,14 @@ class ca_cert (
     fail("Unsupported osfamily (${facts['os']['family']}) or unsupported version (${facts['os']['release']['major']})")
   }
 
-  if $always_update_certs == true {
-    Exec <| title=='ca_cert_update' |> {
-      refreshonly => false,
-    }
-  }
-
   file { 'trusted_certs':
     ensure  => directory,
     path    => $trusted_cert_dir,
     owner   => 'root',
     group   => $cert_dir_group,
     mode    => $cert_dir_mode,
-    purge   => $purge_unmanaged_CAs, # lint:ignore:variable_contains_upcase
-    recurse => $purge_unmanaged_CAs, # lint:ignore:variable_contains_upcase
+    purge   => $purge_unmanaged_CAs, # lint:ignore:variable_is_lowercase lint:ignore:variable_contains_upcase
+    recurse => $purge_unmanaged_CAs, # lint:ignore:variable_is_lowercase lint:ignore:variable_contains_upcase
     notify  => Exec['ca_cert_update'],
   }
 
@@ -97,34 +90,26 @@ class ca_cert (
     }
   }
 
-  if !empty($ca_certs) {
-    create_resources('ca_cert::ca', $ca_certs)
-  }
+  create_resources('ca_cert::ca', $ca_certs)
 
   if ($facts['os']['family'] == 'RedHat' and versioncmp($facts['os']['release']['full'], '7') < 0) {
-    if $force_enable {
-      exec { 'enable_ca_trust':
-        command   => 'update-ca-trust force-enable',
-        logoutput => 'on_failure',
-        path      => ['/usr/sbin', '/usr/bin', '/bin'],
-        onlyif    => 'update-ca-trust check | grep DISABLED',
-      }
+    $_enable_command = $force_enable ? {
+      true    => 'update-ca-trust force-enable',
+      default => 'update-ca-trust enable',
     }
-    else {
-      exec { 'enable_ca_trust':
-        command   => 'update-ca-trust enable',
-        logoutput => 'on_failure',
-        path      => ['/usr/sbin', '/usr/bin', '/bin'],
-        onlyif    => 'update-ca-trust check | grep DISABLED',
-      }
+
+    exec { 'enable_ca_trust':
+      command   => $_enable_command,
+      logoutput => 'on_failure',
+      path      => ['/usr/sbin', '/usr/bin', '/bin'],
+      onlyif    => 'update-ca-trust check | grep DISABLED',
     }
   }
 
   exec { 'ca_cert_update':
     command     => $update_cmd,
     logoutput   => 'on_failure',
-    refreshonly => true,
+    refreshonly => !$always_update_certs,
     path        => ['/usr/sbin', '/usr/bin', '/bin'],
   }
 }
-# lint:endignore:variable_is_lowercase
