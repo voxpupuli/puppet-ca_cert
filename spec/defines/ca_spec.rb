@@ -51,7 +51,6 @@ describe 'ca_cert::ca', type: :define do
         let(:params) { { ca_text: 'testing' } }
 
         it { is_expected.to compile }
-        it { is_expected.to contain_class('ca_cert::update') }
 
         # only here to reach 100% resource coverage
         it { is_expected.to contain_ca_cert__ca('ca1') }
@@ -84,7 +83,7 @@ describe 'ca_cert::ca', type: :define do
               'owner'   => 'root',
               'group'   => ca_file_group,
               'mode'    => ca_file_mode,
-              'notify'  => 'Class[Ca_cert::Update]',
+              'notify'  => 'Exec[ca_cert_update]',
             },
           )
         end
@@ -105,7 +104,7 @@ describe 'ca_cert::ca', type: :define do
                 'owner'   => 'root',
                 'group'   => ca_file_group,
                 'mode'    => ca_file_mode,
-                'notify'  => 'Class[Ca_cert::Update]',
+                'notify'  => 'Exec[ca_cert_update]',
               },
             )
           end
@@ -124,7 +123,7 @@ describe 'ca_cert::ca', type: :define do
               'owner'   => 'root',
               'group'   => ca_file_group,
               'mode'    => ca_file_mode,
-              'notify'  => 'Class[Ca_cert::Update]',
+              'notify'  => 'Exec[ca_cert_update]',
             },
           )
         end
@@ -145,7 +144,7 @@ describe 'ca_cert::ca', type: :define do
                   'checksum'       => nil,
                   'checksum_type'  => nil,
                   'allow_insecure' => false,
-                  'notify'         => 'Class[Ca_cert::Update]',
+                  'notify'         => 'Exec[ca_cert_update]',
                 },
               )
             end
@@ -163,7 +162,7 @@ describe 'ca_cert::ca', type: :define do
                 'checksum'       => nil,
                 'checksum_type'  => nil,
                 'allow_insecure' => false,
-                'notify'         => 'Class[Ca_cert::Update]',
+                'notify'         => 'Exec[ca_cert_update]',
               },
             )
           end
@@ -185,7 +184,7 @@ describe 'ca_cert::ca', type: :define do
                 'owner'   => 'root',
                 'group'   => ca_file_group,
                 'mode'    => ca_file_mode,
-                'notify'  => 'Class[Ca_cert::Update]',
+                'notify'  => 'Exec[ca_cert_update]',
               },
             )
           end
@@ -204,7 +203,7 @@ describe 'ca_cert::ca', type: :define do
               'owner'   => 'root',
               'group'   => ca_file_group,
               'mode'    => ca_file_mode,
-              'notify'  => 'Class[Ca_cert::Update]',
+              'notify'  => 'Exec[ca_cert_update]',
             },
           )
         end
@@ -222,7 +221,7 @@ describe 'ca_cert::ca', type: :define do
               'owner'   => 'root',
               'group'   => ca_file_group,
               'mode'    => ca_file_mode,
-              'notify'  => 'Class[Ca_cert::Update]',
+              'notify'  => 'Exec[ca_cert_update]',
             },
           )
         end
@@ -242,7 +241,7 @@ describe 'ca_cert::ca', type: :define do
             is_expected.to contain_file(trusted_cert_dir + '/Globalsign_Org_Intermediate.' + ca_file_extension).only_with(
               {
                 'ensure'  => 'absent',
-                'notify'  => 'Class[Ca_cert::Update]',
+                'notify'  => 'Exec[ca_cert_update]',
               },
             )
           end
@@ -258,7 +257,7 @@ describe 'ca_cert::ca', type: :define do
                 'owner'   => 'root',
                 'group'   => ca_file_group,
                 'mode'    => ca_file_mode,
-                'notify'  => 'Class[Ca_cert::Update]',
+                'notify'  => 'Exec[ca_cert_update]',
               },
             )
           end
@@ -273,7 +272,7 @@ describe 'ca_cert::ca', type: :define do
             is_expected.to contain_file(trusted_cert_dir + '/Globalsign_Org_Intermediate.' + ca_file_extension).only_with(
               {
                 'ensure'  => 'absent',
-                'notify'  => 'Class[Ca_cert::Update]',
+                'notify'  => 'Exec[ca_cert_update]',
               },
             )
           end
@@ -289,7 +288,7 @@ describe 'ca_cert::ca', type: :define do
                 'owner'   => 'root',
                 'group'   => ca_file_group,
                 'mode'    => ca_file_mode,
-                'notify'  => 'Class[Ca_cert::Update]',
+                'notify'  => 'Exec[ca_cert_update]',
               },
             )
           end
@@ -303,7 +302,7 @@ describe 'ca_cert::ca', type: :define do
           is_expected.to contain_file(trusted_cert_dir + '/Globalsign_Org_Intermediate.' + ca_file_extension).only_with(
             {
               'ensure'  => 'absent',
-              'notify'  => 'Class[Ca_cert::Update]',
+              'notify'  => 'Exec[ca_cert_update]',
             },
           )
         end

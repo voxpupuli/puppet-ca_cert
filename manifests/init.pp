@@ -68,8 +68,6 @@ class ca_cert (
   String[1] $cert_dir_mode                 = '0755',
   Boolean $supported                       = false,
 ) {
-  include ca_cert::update
-
   if $supported == false {
     fail("Unsupported osfamily (${facts['os']['family']}) or unsupported version (${facts['os']['release']['major']})")
   }
@@ -101,6 +99,32 @@ class ca_cert (
 
   if !empty($ca_certs) {
     create_resources('ca_cert::ca', $ca_certs)
+  }
+
+  if ($facts['os']['family'] == 'RedHat' and versioncmp($facts['os']['release']['full'], '7') < 0) {
+    if $force_enable {
+      exec { 'enable_ca_trust':
+        command   => 'update-ca-trust force-enable',
+        logoutput => 'on_failure',
+        path      => ['/usr/sbin', '/usr/bin', '/bin'],
+        onlyif    => 'update-ca-trust check | grep DISABLED',
+      }
+    }
+    else {
+      exec { 'enable_ca_trust':
+        command   => 'update-ca-trust enable',
+        logoutput => 'on_failure',
+        path      => ['/usr/sbin', '/usr/bin', '/bin'],
+        onlyif    => 'update-ca-trust check | grep DISABLED',
+      }
+    }
+  }
+
+  exec { 'ca_cert_update':
+    command     => $update_cmd,
+    logoutput   => 'on_failure',
+    refreshonly => true,
+    path        => ['/usr/sbin', '/usr/bin', '/bin'],
   }
 }
 # lint:endignore:variable_is_lowercase

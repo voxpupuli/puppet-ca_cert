@@ -51,8 +51,6 @@ define ca_cert::ca (
   String[1] $ca_file_mode            = lookup('ca_cert::ca::ca_file_mode'),
   String[1] $ca_file_extension       = lookup('ca_cert::ca::ca_file_extension'),
 ) {
-  include ca_cert::update
-
   if ($ensure == 'trusted' or $ensure == 'distrusted') and $source == 'text' and !$ca_text {
     fail('ca_text is required if source is set to text')
   }
@@ -103,7 +101,7 @@ define ca_cert::ca (
             owner  => 'root',
             group  => $ca_file_group,
             mode   => $ca_file_mode,
-            notify => Class['ca_cert::update'],
+            notify => Exec['ca_cert_update'],
           }
         }
         'ftp', 'https', 'http': {
@@ -113,7 +111,7 @@ define ca_cert::ca (
             checksum       => $checksum,
             checksum_type  => $checksum_type,
             allow_insecure => !$verify_https_cert,
-            notify         => Class['ca_cert::update'],
+            notify         => Exec['ca_cert_update'],
           }
         }
         'file': {
@@ -125,7 +123,7 @@ define ca_cert::ca (
             owner  => 'root',
             group  => $ca_file_group,
             mode   => $ca_file_mode,
-            notify => Class['ca_cert::update'],
+            notify => Exec['ca_cert_update'],
           }
         }
         'text': {
@@ -136,7 +134,7 @@ define ca_cert::ca (
             owner   => 'root',
             group   => $ca_file_group,
             mode    => $ca_file_mode,
-            notify  => Class['ca_cert::update'],
+            notify  => Exec['ca_cert_update'],
           }
         }
         default: {
@@ -147,7 +145,7 @@ define ca_cert::ca (
     'absent': {
       file { $ca_cert:
         ensure => absent,
-        notify => Class['ca_cert::update'],
+        notify => Exec['ca_cert_update'],
       }
     }
     default: {

@@ -12,32 +12,38 @@ describe 'ca_cert', type: :class do
       end
     when 'RedHat'
       trusted_cert_dir = '/etc/pki/ca-trust/source/anchors'
+      update_cmd       = 'update-ca-trust extract'
     when 'Archlinux'
       trusted_cert_dir = '/etc/ca-certificates/trust-source/anchors/'
+      update_cmd       = 'trust extract-compat'
     when 'Suse'
       if %r{(10|11)}.match?(facts[:os]['release']['major'])
         trusted_cert_dir = '/etc/ssl/certs'
+        update_cmd       = 'c_rehash'
         package_name     = 'openssl-certs'
       else
         trusted_cert_dir = '/etc/pki/trust/anchors'
+        update_cmd       = 'update-ca-certificates'
       end
     when 'AIX'
       trusted_cert_dir = '/var/ssl/certs'
+      update_cmd       = '/usr/bin/c_rehash'
       cert_dir_group   = 'system'
     when 'Solaris'
       trusted_cert_dir = '/etc/certs/CA/'
+      update_cmd       = '/usr/sbin/svcadm restart /system/ca-certificates'
       cert_dir_group   = 'sys'
     end
 
     cert_dir_group = 'root' if cert_dir_group.nil?
     cert_dir_mode  = '0755' if cert_dir_mode.nil?
+    update_cmd     = 'update-ca-certificates' if update_cmd.nil?
     package_name   = 'ca-certificates' if package_name.nil?
 
     context "on #{os}" do
       let(:facts) { facts }
 
       it { is_expected.to compile }
-      it { is_expected.to contain_class('ca_cert::update') }
 
       it do
         is_expected.to contain_file('trusted_certs').only_with(
@@ -73,6 +79,30 @@ describe 'ca_cert', type: :class do
         it { is_expected.to contain_file('ca1.crt') } # only here to reach 100% resource coverage
         it { is_expected.to contain_file('ca2.crt') } # only here to reach 100% resource coverage
       end
+
+      if facts[:os]['family'] == 'RedHat' && facts[:os]['release']['major'].to_i < 7
+        it do
+          is_expected.to contain_exec('enable_ca_trust').only_with(
+            {
+              'command'   => 'update-ca-trust enable',
+              'logoutput' => 'on_failure',
+              'path'      => ['/usr/sbin', '/usr/bin', '/bin'],
+              'onlyif'    => 'update-ca-trust check | grep DISABLED',
+            },
+          )
+        end
+      end
+
+      it do
+        is_expected.to contain_exec('ca_cert_update').only_with(
+          {
+            'command'     => update_cmd,
+            'logoutput'   => 'on_failure',
+            'refreshonly' => true,
+            'path'        => ['/usr/sbin', '/usr/bin', '/bin'],
+          },
+        )
+      end
     end
   end
 
@@ -106,7 +136,7 @@ describe 'ca_cert', type: :class do
       context 'with always_update_certs set to valid true' do
         let(:params) { { always_update_certs: true } }
 
-        it { is_expected.to contain_exec('ca_cert_update').with_refreshonly(false) } # from ca_cert::update
+        it { is_expected.to contain_exec('ca_cert_update').with_refreshonly(false) }
       end
 
       context 'with purge_unmanaged_CAs set to valid true' do
@@ -114,6 +144,25 @@ describe 'ca_cert', type: :class do
 
         it { is_expected.to contain_file('trusted_certs').with_purge(true) }
         it { is_expected.to contain_file('trusted_certs').with_recurse(true) }
+      end
+
+      context 'with force_enable set to valid true' do
+        let(:params) { { force_enable: true } }
+
+        if facts[:os]['family'] == 'RedHat' && facts[:os]['release']['major'].to_i < 7
+          it do
+            is_expected.to contain_exec('enable_ca_trust').only_with(
+              {
+                'command'   => 'update-ca-trust force-enable',
+                'logoutput' => 'on_failure',
+                'path'      => ['/usr/sbin', '/usr/bin', '/bin'],
+                'onlyif'    => 'update-ca-trust check | grep DISABLED',
+              },
+            )
+          end
+        else
+          it { is_expected.not_to contain_exec('enable_ca_trust') }
+        end
       end
 
       context 'with install_package set to valid false' do
@@ -126,7 +175,7 @@ describe 'ca_cert', type: :class do
       context 'with force_enable set to valid true' do
         let(:params) { { force_enable: true } }
 
-        it { is_expected.to contain_exec('enable_ca_trust').with_command('update-ca-trust force-enable') } # from ca_cert::update
+        it { is_expected.to contain_exec('enable_ca_trust').with_command('update-ca-trust force-enable') }
       end
 
       context 'with ca_certs set to valid hash' do
