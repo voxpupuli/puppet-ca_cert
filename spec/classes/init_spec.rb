@@ -38,7 +38,6 @@ describe 'ca_cert', type: :class do
 
       it { is_expected.to compile }
       it { is_expected.to contain_class('ca_cert::update') }
-      it { is_expected.to contain_class('ca_cert::enable') } # only here to reach 100% resource coverage, sourced by ca_cert::update
 
       it do
         is_expected.to contain_file('trusted_certs').only_with(
@@ -127,7 +126,7 @@ describe 'ca_cert', type: :class do
       context 'with force_enable set to valid true' do
         let(:params) { { force_enable: true } }
 
-        it { is_expected.to contain_exec('enable_ca_trust').with_command('update-ca-trust force-enable') } # from ca_cert::enable
+        it { is_expected.to contain_exec('enable_ca_trust').with_command('update-ca-trust force-enable') } # from ca_cert::update
       end
 
       context 'with ca_certs set to valid hash' do

@@ -27,7 +27,6 @@ describe 'ca_cert::update', type: :class do
 
       it { is_expected.to compile }
       it { is_expected.to contain_class('ca_cert') }
-      it { is_expected.to contain_class('ca_cert::enable') }
 
       # only here to reach 100% resource coverage
       it { is_expected.to contain_ca_cert__ca('ca1') }
@@ -50,6 +49,19 @@ describe 'ca_cert::update', type: :class do
       end
       # /only here to reach 100% resource coverage
 
+      if facts[:os]['family'] == 'RedHat' && facts[:os]['release']['major'].to_i < 7
+        it do
+          is_expected.to contain_exec('enable_ca_trust').only_with(
+            {
+              'command'   => 'update-ca-trust enable',
+              'logoutput' => 'on_failure',
+              'path'      => ['/usr/sbin', '/usr/bin', '/bin'],
+              'onlyif'    => 'update-ca-trust check | grep DISABLED',
+            },
+          )
+        end
+      end
+
       it do
         is_expected.to contain_exec('ca_cert_update').only_with(
           {
@@ -59,6 +71,24 @@ describe 'ca_cert::update', type: :class do
             'path'        => ['/usr/sbin', '/usr/bin', '/bin'],
           },
         )
+      end
+    end
+
+    context "on #{os} when ca_cert::force_enable is true" do
+      let(:facts) { facts }
+      let(:pre_condition) { 'class { ca_cert: force_enable => true }' }
+
+      if facts[:os]['family'] == 'RedHat' && facts[:os]['release']['major'].to_i < 7
+        it do
+          is_expected.to contain_exec('enable_ca_trust').only_with(
+            {
+              'command'   => 'update-ca-trust force-enable',
+              'logoutput' => 'on_failure',
+              'path'      => ['/usr/sbin', '/usr/bin', '/bin'],
+              'onlyif'    => 'update-ca-trust check | grep DISABLED',
+            },
+          )
+        end
       end
     end
   end

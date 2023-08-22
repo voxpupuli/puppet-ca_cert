@@ -52,7 +52,6 @@ define ca_cert::ca (
   String[1] $ca_file_extension       = lookup('ca_cert::ca::ca_file_extension'),
 ) {
   include ca_cert::update
-  require ca_cert::enable
 
   if ($ensure == 'trusted' or $ensure == 'distrusted') and $source == 'text' and !$ca_text {
     fail('ca_text is required if source is set to text')

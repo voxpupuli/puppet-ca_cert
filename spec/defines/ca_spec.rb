@@ -52,7 +52,6 @@ describe 'ca_cert::ca', type: :define do
 
         it { is_expected.to compile }
         it { is_expected.to contain_class('ca_cert::update') }
-        it { is_expected.to contain_class('ca_cert::enable') }
 
         # only here to reach 100% resource coverage
         it { is_expected.to contain_ca_cert__ca('ca1') }
