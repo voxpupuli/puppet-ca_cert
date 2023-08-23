@@ -33,7 +33,7 @@
 #   the same syntax as Puppet's native file resource's "mode" parameter.
 #   (defaults to '0444', i.e. world-readable)
 # [*ca_file_extension*]
-#   TODO: add description
+#   File extenstion for the certificate.
 #
 # === Examples
 #

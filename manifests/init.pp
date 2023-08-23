@@ -28,15 +28,19 @@
 # [*package_name*]
 #   The name of the package(s) to be installed
 # [*trusted_cert_dir*]
-#   TODO: add description
+#   Absolute directory path to the folder containing trusted certificates.
 # [*distrusted_cert_dir*]
-#   TODO: add description
+#   Absolute directory path to the folder containing distrusted certificates.
 # [*update_cmd*]
-#   TODO: add description
+#   Command to be used to update CA certificates.
 # [*cert_dir_group*]
-#   TODO: add description
+#   The installed trusted certificate's POSIX group permissions. This uses
+#   the same syntax as Puppet's native file resource's "group" parameter.
+#   (defaults to 'root' with the exeption of AIX which defaults to 'system').
 # [*cert_dir_mode*]
-#   TODO: add description
+#   The installed  trusted certificate's POSIX filesystem permissions. This uses
+#   the same syntax as Puppet's native file resource's "mode" parameter.
+#   (defaults to '0444', i.e. world-readable).
 # [*supported*]
 #   Boolean to ensure module runs only on supported OS families and versions.
 #
