@@ -1,0 +1,5 @@
+---
+ca_cert::trusted_cert_dir:      '/etc/ssl/certs'
+ca_cert::update_cmd:            'c_rehash'
+ca_cert::package_name:          'openssl-certs'
+ca_cert::ca::ca_file_extension: 'pem'

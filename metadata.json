@@ -19,6 +19,26 @@
   ],
   "operatingsystem_support": [
     {
+      "operatingsystem": "Archlinux"
+    },
+    {
+      "operatingsystem": "AIX",
+      "operatingsystemrelease": [
+        "7.1",
+        "7.2"
+      ]
+    },
+    {
+      "operatingsystem": "Debian"
+    },
+    {
+      "operatingsystem": "OpenSuSE",
+      "operatingsystemrelease": [
+        "13",
+        "42"
+      ]
+    },
+    {
       "operatingsystem": "RedHat",
       "operatingsystemrelease": [
         "5",
@@ -36,10 +56,9 @@
       ]
     },
     {
-      "operatingsystem": "OpenSuSE",
+      "operatingsystem": "Solaris",
       "operatingsystemrelease": [
-        "13",
-        "42"
+        "11"
       ]
     },
     {
@@ -51,9 +70,6 @@
         "20.04",
         "22.04"
       ]
-    },
-    {
-      "operatingsystem": "Archlinux"
     }
   ],
   "requirements": [

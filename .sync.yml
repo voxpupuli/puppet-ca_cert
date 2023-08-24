@@ -1,3 +1,5 @@
 ---
 spec/spec_helper.rb:
   hiera_config: spec/fixtures/hiera.yaml
+  coverage_report: true
+  minimum_code_coverage_percentage: 100

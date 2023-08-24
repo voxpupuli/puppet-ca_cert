@@ -1,0 +1,10 @@
+---
+ca_cert::supported:             true
+ca_cert::trusted_cert_dir:      '/var/ssl/certs'
+ca_cert::update_cmd:            '/usr/bin/c_rehash'
+ca_cert::cert_dir_group:        'system'
+ca_cert::cert_dir_mode:         '0755'
+ca_cert::package_name:          'ca-certificates'
+ca_cert::ca::ca_file_group:     'system'
+ca_cert::ca::ca_file_mode:      '0644'
+ca_cert::ca::ca_file_extension: 'crt'

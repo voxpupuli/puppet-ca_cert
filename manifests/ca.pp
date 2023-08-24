@@ -1,69 +1,64 @@
-# ca.pp
+# @summary
+#   Manage a CA Certificate on a system. This cannot manage pre-installed
+#   operating system CAs.
 #
-# Manage a CA Certificate on a system. This cannot manage pre-installed
-# operating system CAs.
+# @example
+#   ca_cert::ca { 'globalsign_org_intermediate':
+#     source => 'http://secure.globalsign.com/cacert/gsorganizationvalsha2g2r1.crt',
+#   }
 #
-# === Parameters
+# @author
+#   Phil Fenstermacher <phillip.fenstermacher@gmail.com>
 #
-# [*ca_text*]
+# @param ca_text
 #   The text of the CA certificate to install. Required if text is the source
 #   (default). If a different source is specified this parameter is ignored.
-# [*source*]
+#
+# @param source
 #   Where the CA certificate should be retrieved from. text, http, https, ftp,
 #   file, and puppet protocols/sources are supported. If text, then the ca_text parameter
 #   is also required. Defaults to text.
-# [*ensure*]
+#
+# @param ensure
 #   Whether or not the CA certificate should be on a system or not. Valid
 #   values are trusted, present, distrusted, and absent. Note: untrusted is
 #   not supported on Debian based systems - using it will log a warning
-#   and treat it the same as absent. (defaults to trusted)
-# [*verify_https_cert*]
+#   and treat it the same as absent. (defaults to trusted).
+#
+# @param verify_https_cert
 #   When retrieving a certificate whether or not to validate the CA of the
 #   source. (defaults to true)
-# [*checksum*]
+#
+# @param checksum
 #   The checksum of the file. (defaults to undef)
-# [*checksum_type*]
+#
+# @param checksum_type
 #   The type of file checksum. (defauts to undef)
-# [*ca_file_group*]
+#
+# @param ca_file_group
 #   The installed CA certificate's POSIX group permissions. This uses
 #   the same syntax as Puppet's native file resource's "group" parameter.
 #   (defaults to 'root' with the exeption of AIX which defaults to 'system')
-# [*ca_file_mode*]
+#
+# @param ca_file_mode
 #   The installed CA certificate's POSIX filesystem permissions. This uses
 #   the same syntax as Puppet's native file resource's "mode" parameter.
 #   (defaults to '0444', i.e. world-readable)
 #
-# === Examples
+# @param ca_file_extension
+#   File extenstion for the certificate.
 #
-# ca_cert::ca { 'globalsign_org_intermediate':
-#   source => 'http://secure.globalsign.com/cacert/gsorganizationvalsha2g2r1.crt',
-# }
 define ca_cert::ca (
-  Optional[String] $ca_text      = undef,
-  String $source                 = 'text',
-  String $ensure                 = 'trusted',
-  Boolean $verify_https_cert     = true,
-  Optional[String] $checksum     = undef,
+  Optional[String] $ca_text          = undef,
+  String $source                     = 'text',
+  String $ensure                     = 'trusted',
+  Boolean $verify_https_cert         = true,
+  Optional[String] $checksum         = undef,
   Optional[String[1]] $checksum_type = undef,
-  Optional[String] $ca_file_group = undef,
-  Optional[String] $ca_file_mode = undef,
+  String[1] $ca_file_group           = lookup('ca_cert::ca::ca_file_group'),
+  String[1] $ca_file_mode            = lookup('ca_cert::ca::ca_file_mode'),
+  String[1] $ca_file_extension       = lookup('ca_cert::ca::ca_file_extension'),
 ) {
-  include ca_cert::params
-  include ca_cert::update
-  require ca_cert::enable
-
-  if $ca_file_group == undef {
-    $file_group = $ca_cert::params::ca_file_group
-  } else {
-    $file_group = $ca_file_group
-  }
-
-  if $ca_file_mode == undef {
-    $file_mode = $ca_cert::params::ca_file_mode
-  } else {
-    $file_mode = $ca_file_mode
-  }
-
   if ($ensure == 'trusted' or $ensure == 'distrusted') and $source == 'text' and !$ca_text {
     fail('ca_text is required if source is set to text')
   }
@@ -94,11 +89,11 @@ define ca_cert::ca (
   }
 
   # Determine Full Resource Name
-  $resource_name = "${name}.${ca_cert::params::ca_file_extension}"
+  $resource_name = "${name}.${ca_file_extension}"
 
   $ca_cert = $adjusted_ensure ? {
-    'distrusted' => "${ca_cert::params::distrusted_cert_dir}/${resource_name}",
-    default      => "${ca_cert::params::trusted_cert_dir}/${resource_name}",
+    'distrusted' => "${ca_cert::distrusted_cert_dir}/${resource_name}",
+    default      => "${ca_cert::trusted_cert_dir}/${resource_name}",
   }
 
   case $adjusted_ensure {
@@ -112,9 +107,9 @@ define ca_cert::ca (
             source => $source,
             path   => $ca_cert,
             owner  => 'root',
-            group  => $file_group,
-            mode   => $file_mode,
-            notify => Class['ca_cert::update'],
+            group  => $ca_file_group,
+            mode   => $ca_file_mode,
+            notify => Exec['ca_cert_update'],
           }
         }
         'ftp', 'https', 'http': {
@@ -124,7 +119,7 @@ define ca_cert::ca (
             checksum       => $checksum,
             checksum_type  => $checksum_type,
             allow_insecure => !$verify_https_cert,
-            notify         => Class['ca_cert::update'],
+            notify         => Exec['ca_cert_update'],
           }
         }
         'file': {
@@ -134,9 +129,9 @@ define ca_cert::ca (
             source => $source_path,
             path   => $ca_cert,
             owner  => 'root',
-            group  => $file_group,
-            mode   => $file_mode,
-            notify => Class['ca_cert::update'],
+            group  => $ca_file_group,
+            mode   => $ca_file_mode,
+            notify => Exec['ca_cert_update'],
           }
         }
         'text': {
@@ -145,9 +140,9 @@ define ca_cert::ca (
             content => $ca_text,
             path    => $ca_cert,
             owner   => 'root',
-            group   => $file_group,
-            mode    => $file_mode,
-            notify  => Class['ca_cert::update'],
+            group   => $ca_file_group,
+            mode    => $ca_file_mode,
+            notify  => Exec['ca_cert_update'],
           }
         }
         default: {
@@ -158,7 +153,7 @@ define ca_cert::ca (
     'absent': {
       file { $ca_cert:
         ensure => absent,
-        notify => Class['ca_cert::update'],
+        notify => Exec['ca_cert_update'],
       }
     }
     default: {
