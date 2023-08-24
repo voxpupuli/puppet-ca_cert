@@ -1,45 +1,53 @@
-# ca.pp
+# @summary
+#   Manage a CA Certificate on a system. This cannot manage pre-installed
+#   operating system CAs.
 #
-# Manage a CA Certificate on a system. This cannot manage pre-installed
-# operating system CAs.
+# @example
+#   ca_cert::ca { 'globalsign_org_intermediate':
+#     source => 'http://secure.globalsign.com/cacert/gsorganizationvalsha2g2r1.crt',
+#   }
 #
-# === Parameters
+# @author
+#   Phil Fenstermacher <phillip.fenstermacher@gmail.com>
 #
-# [*ca_text*]
+# @param ca_text
 #   The text of the CA certificate to install. Required if text is the source
 #   (default). If a different source is specified this parameter is ignored.
-# [*source*]
+#
+# @param source
 #   Where the CA certificate should be retrieved from. text, http, https, ftp,
 #   file, and puppet protocols/sources are supported. If text, then the ca_text parameter
 #   is also required. Defaults to text.
-# [*ensure*]
+#
+# @param ensure
 #   Whether or not the CA certificate should be on a system or not. Valid
 #   values are trusted, present, distrusted, and absent. Note: untrusted is
 #   not supported on Debian based systems - using it will log a warning
-#   and treat it the same as absent. (defaults to trusted)
-# [*verify_https_cert*]
+#   and treat it the same as absent. (defaults to trusted).
+#
+# @param verify_https_cert
 #   When retrieving a certificate whether or not to validate the CA of the
 #   source. (defaults to true)
-# [*checksum*]
+#
+# @param checksum
 #   The checksum of the file. (defaults to undef)
-# [*checksum_type*]
+#
+# @param checksum_type
 #   The type of file checksum. (defauts to undef)
-# [*ca_file_group*]
+#
+# @param ca_file_group
 #   The installed CA certificate's POSIX group permissions. This uses
 #   the same syntax as Puppet's native file resource's "group" parameter.
 #   (defaults to 'root' with the exeption of AIX which defaults to 'system')
-# [*ca_file_mode*]
+#
+# @param ca_file_mode
 #   The installed CA certificate's POSIX filesystem permissions. This uses
 #   the same syntax as Puppet's native file resource's "mode" parameter.
 #   (defaults to '0444', i.e. world-readable)
-# [*ca_file_extension*]
+#
+# @param ca_file_extension
 #   File extenstion for the certificate.
 #
-# === Examples
-#
-# ca_cert::ca { 'globalsign_org_intermediate':
-#   source => 'http://secure.globalsign.com/cacert/gsorganizationvalsha2g2r1.crt',
-# }
 define ca_cert::ca (
   Optional[String] $ca_text          = undef,
   String $source                     = 'text',
