@@ -96,7 +96,7 @@ class ca_cert (
 
   create_resources('ca_cert::ca', $ca_certs)
 
-  if ($facts['os']['family'] == 'RedHat' and versioncmp($facts['os']['release']['full'], '7') < 0) {
+  if $facts['os']['family'] == 'RedHat' and versioncmp($facts['os']['release']['full'], '7') < 0 {
     $_enable_command = $force_enable ? {
       true    => 'update-ca-trust force-enable',
       default => 'update-ca-trust enable',
