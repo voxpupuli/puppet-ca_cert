@@ -13,7 +13,7 @@ class ca_cert::params {
         'Ubuntu': {
           $cert_dir_mode     = '0755'
         }
-        'Debian': {
+        /(Debian|Kali)/: {
           $cert_dir_mode     = '2665'
         }
         default: {
