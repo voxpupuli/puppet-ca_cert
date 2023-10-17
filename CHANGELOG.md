@@ -2,8 +2,14 @@ Changelog
 =========
 
 ## Unreleased
-[Full Changelog](https://github.com/pcfens/puppet-ca_cert/compare/v2.4.0...HEAD)
+[Full Changelog](https://github.com/pcfens/puppet-ca_cert/compare/v2.5.0...HEAD)
 
+## [v2.5.0](https://github.com/pcfens/puppet-ca_cert/tree/v2.5.0)
+[Full Changelog](https://github.com/pcfens/puppet-ca_cert/compare/v2.4.0...v2.5.0)
+
+- Add support for Kali Linux [\#82](https://github.com/pcfens/puppet-ca_cert/pull/82)
+- Switch to namespaced functions for stdlib [\#83](https://github.com/pcfens/puppet-ca_cert/pull/83)
+- Improve testing capabilities [\#79](https://github.com/pcfens/puppet-ca_cert/pull/79), [\#84](https://github.com/pcfens/puppet-ca_cert/pull/84)
 
 ## [v2.4.0](https://github.com/pcfens/puppet-ca_cert/tree/v2.4.0)
 [Full Changelog](https://github.com/pcfens/puppet-ca_cert/compare/v2.3.2...v2.4.0)
