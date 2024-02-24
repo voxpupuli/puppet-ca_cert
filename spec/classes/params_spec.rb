@@ -6,9 +6,9 @@ describe 'ca_cert::params', type: :class do
     it { is_expected.to contain_class('ca_cert::params') }
   end
 
-  [
-    'Debian',
-    'RedHat',
+  %w[
+    Debian
+    RedHat
   ].each do |osfamily|
     let :facts do
       {
@@ -27,7 +27,7 @@ describe 'ca_cert::params', type: :class do
     end
   end
 
-  ['10', '11', '12'].each do |osmajrel|
+  %w[10 11 12].each do |osmajrel|
     context "On a Suse #{osmajrel} Operating System" do
       let :facts do
         {

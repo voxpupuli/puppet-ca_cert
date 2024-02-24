@@ -14,10 +14,11 @@ describe 'ca_cert::update', type: :class do
       case facts[:os]['family']
       when 'Debian'
         it { is_expected.not_to contain_exec('enable_ca_trust') }
+
         it {
           is_expected.to contain_exec('ca_cert_update').with(
             command: 'update-ca-certificates',
-            refreshonly: true,
+            refreshonly: true
           )
         }
       when 'RedHat'
@@ -39,24 +40,25 @@ describe 'ca_cert::update', type: :class do
         it {
           is_expected.to contain_exec('ca_cert_update').with(
             command: 'update-ca-trust extract',
-            refreshonly: true,
+            refreshonly: true
           )
         }
       when 'Suse'
         it { is_expected.not_to contain_exec('enable_ca_trust') }
+
         case facts[:os]['release']['major']
         when '10', '11'
           it {
             is_expected.to contain_exec('ca_cert_update').with(
               command: 'c_rehash',
-              refreshonly: true,
+              refreshonly: true
             )
           }
         when '12', '13', '42'
           it {
             is_expected.to contain_exec('ca_cert_update').with(
               command: 'update-ca-certificates',
-              refreshonly: true,
+              refreshonly: true
             )
           }
         end
