@@ -140,10 +140,11 @@ K1pp74P1S8SqtCr4fKGxhZSM9AyHDPSsQPhZSZg=
         it {
           is_expected.to contain_archive(DEBIAN_CA_FILE).with(
             'ensure' => 'present',
-            'source' => HTTP_URL,
+            'source' => HTTP_URL
           )
         }
       end
+
       describe 'with the certificate delivered as a string' do
         let :params do
           {
@@ -156,12 +157,13 @@ K1pp74P1S8SqtCr4fKGxhZSM9AyHDPSsQPhZSZg=
           is_expected.to contain_file('Globalsign_Org_Intermediate.crt').with(
             'ensure'  => 'file',
             'content' => GLOBALSIGN_ORG_CA,
-            'path'    => DEBIAN_CA_FILE,
+            'path'    => DEBIAN_CA_FILE
           )
         }
       end
+
       describe 'when removing the CA cert' do
-        ['absent', 'distrusted'].each do |deb_ensure|
+        %w[absent distrusted].each do |deb_ensure|
           let :params do
             {
               ensure: deb_ensure,
@@ -172,7 +174,7 @@ K1pp74P1S8SqtCr4fKGxhZSM9AyHDPSsQPhZSZg=
           context "with ensure set to #{deb_ensure}" do
             it {
               is_expected.to contain_file(DEBIAN_CA_FILE).with(
-                'ensure' => 'absent',
+                'ensure' => 'absent'
               )
             }
           end
@@ -201,10 +203,11 @@ K1pp74P1S8SqtCr4fKGxhZSM9AyHDPSsQPhZSZg=
         it {
           is_expected.to contain_archive(REDHAT_CA_FILE).with(
             'ensure' => 'present',
-            'source' => HTTP_URL,
+            'source' => HTTP_URL
           )
         }
       end
+
       describe 'with the certificate delivered as a string' do
         let :params do
           {
@@ -217,10 +220,11 @@ K1pp74P1S8SqtCr4fKGxhZSM9AyHDPSsQPhZSZg=
           is_expected.to contain_file('Globalsign_Org_Intermediate.crt').with(
             'ensure'  => 'file',
             'content' => GLOBALSIGN_ORG_CA,
-            'path'    => REDHAT_CA_FILE,
+            'path'    => REDHAT_CA_FILE
           )
         }
       end
+
       describe 'when removing the CA cert' do
         let :params do
           {
@@ -230,10 +234,11 @@ K1pp74P1S8SqtCr4fKGxhZSM9AyHDPSsQPhZSZg=
 
         it {
           is_expected.to contain_file(REDHAT_CA_FILE).with(
-            'ensure' => 'absent',
+            'ensure' => 'absent'
           )
         }
       end
+
       describe 'when explicitly distrusting a certificate' do
         let :params do
           {
@@ -245,7 +250,7 @@ K1pp74P1S8SqtCr4fKGxhZSM9AyHDPSsQPhZSZg=
         it {
           is_expected.to contain_archive(DISTRUSTED_REDHAT_CA_FILE).with(
             'ensure' => 'present',
-            'source' => HTTP_URL,
+            'source' => HTTP_URL
           )
         }
       end
@@ -272,10 +277,11 @@ K1pp74P1S8SqtCr4fKGxhZSM9AyHDPSsQPhZSZg=
         it {
           is_expected.to contain_archive(SUSE_11_CA_FILE).with(
             'ensure' => 'present',
-            'source' => SUSE_11_HTTP_URL,
+            'source' => SUSE_11_HTTP_URL
           )
         }
       end
+
       describe 'with the certificate delivered as a string' do
         let :params do
           {
@@ -288,10 +294,11 @@ K1pp74P1S8SqtCr4fKGxhZSM9AyHDPSsQPhZSZg=
           is_expected.to contain_file('Globalsign_Org_Intermediate.pem').with(
             'ensure'  => 'file',
             'content' => GLOBALSIGN_ORG_CA,
-            'path'    => SUSE_11_CA_FILE,
+            'path'    => SUSE_11_CA_FILE
           )
         }
       end
+
       describe 'when removing the CA cert' do
         let :params do
           {
@@ -301,12 +308,13 @@ K1pp74P1S8SqtCr4fKGxhZSM9AyHDPSsQPhZSZg=
 
         it {
           is_expected.to contain_file(SUSE_11_CA_FILE).with(
-            'ensure' => 'absent',
+            'ensure' => 'absent'
           )
         }
       end
+
       describe 'when removing the CA cert' do
-        ['absent', 'distrusted'].each do |suse_ensure|
+        %w[absent distrusted].each do |suse_ensure|
           let :params do
             {
               ensure: suse_ensure,
@@ -317,7 +325,7 @@ K1pp74P1S8SqtCr4fKGxhZSM9AyHDPSsQPhZSZg=
           context "with ensure set to #{suse_ensure}" do
             it {
               is_expected.to contain_file(SUSE_11_CA_FILE).with(
-                'ensure' => 'absent',
+                'ensure' => 'absent'
               )
             }
           end
@@ -346,10 +354,11 @@ K1pp74P1S8SqtCr4fKGxhZSM9AyHDPSsQPhZSZg=
         it {
           is_expected.to contain_archive(SUSE_12_CA_FILE).with(
             'ensure' => 'present',
-            'source' => HTTP_URL,
+            'source' => HTTP_URL
           )
         }
       end
+
       describe 'with the certificate delivered as a string' do
         let :params do
           {
@@ -362,10 +371,11 @@ K1pp74P1S8SqtCr4fKGxhZSM9AyHDPSsQPhZSZg=
           is_expected.to contain_file('Globalsign_Org_Intermediate.crt').with(
             'ensure'  => 'file',
             'content' => GLOBALSIGN_ORG_CA,
-            'path'    => SUSE_12_CA_FILE,
+            'path'    => SUSE_12_CA_FILE
           )
         }
       end
+
       describe 'when removing the CA cert' do
         let :params do
           {
@@ -376,11 +386,12 @@ K1pp74P1S8SqtCr4fKGxhZSM9AyHDPSsQPhZSZg=
         context 'with ensure set to absent' do
           it {
             is_expected.to contain_file(SUSE_12_CA_FILE).with(
-              'ensure' => 'absent',
+              'ensure' => 'absent'
             )
           }
         end
       end
+
       describe 'when explicitly distrusting a certificate' do
         let :params do
           {
@@ -392,7 +403,7 @@ K1pp74P1S8SqtCr4fKGxhZSM9AyHDPSsQPhZSZg=
         it {
           is_expected.to contain_archive(DISTRUSTED_SUSE_12_CA_FILE).with(
             'ensure' => 'present',
-            'source' => HTTP_URL,
+            'source' => HTTP_URL
           )
         }
       end

@@ -27,7 +27,7 @@ describe 'ca_cert', type: :class do
         'ensure' => 'directory',
         'path'   => '/usr/local/share/ca-certificates',
         'group'  => 'staff',
-        'purge'  => 'false',
+        'purge'  => 'false'
       )
     }
 
@@ -43,11 +43,12 @@ describe 'ca_cert', type: :class do
           'ensure' => 'directory',
           'path'   => '/usr/local/share/ca-certificates',
           'group'  => 'staff',
-          'purge'  => 'true',
+          'purge'  => 'true'
         )
       }
     end
   end
+
   context 'on a RedHat based OS' do
     let :facts do
       {
@@ -71,7 +72,7 @@ describe 'ca_cert', type: :class do
         'ensure' => 'directory',
         'path'   => '/etc/pki/ca-trust/source/anchors',
         'group'  => 'root',
-        'purge'  => 'false',
+        'purge'  => 'false'
       )
     }
 
@@ -87,13 +88,13 @@ describe 'ca_cert', type: :class do
           'ensure' => 'directory',
           'path'   => '/etc/pki/ca-trust/source/anchors',
           'group'  => 'root',
-          'purge'  => 'true',
+          'purge'  => 'true'
         )
       }
     end
   end
 
-  ['10', '11'].each do |osmajrel|
+  %w[10 11].each do |osmajrel|
     context "on a Suse #{osmajrel} based OS" do
       let :facts do
         {
@@ -115,7 +116,7 @@ describe 'ca_cert', type: :class do
           'ensure' => 'directory',
           'path'   => '/etc/ssl/certs',
           'group'  => 'root',
-          'purge'  => 'false',
+          'purge'  => 'false'
         )
       }
 
@@ -131,7 +132,7 @@ describe 'ca_cert', type: :class do
             'ensure' => 'directory',
             'path'   => '/etc/ssl/certs',
             'group'  => 'root',
-            'purge'  => 'true',
+            'purge'  => 'true'
           )
         }
       end
@@ -159,7 +160,7 @@ describe 'ca_cert', type: :class do
         'ensure' => 'directory',
         'path'   => '/etc/pki/trust/anchors',
         'group'  => 'root',
-        'purge'  => 'false',
+        'purge'  => 'false'
       )
     }
 
@@ -175,11 +176,12 @@ describe 'ca_cert', type: :class do
           'ensure' => 'directory',
           'path'   => '/etc/pki/trust/anchors',
           'group'  => 'root',
-          'purge'  => 'true',
+          'purge'  => 'true'
         )
       }
     end
   end
+
   context 'on an unsupported operating system' do
     let :facts do
       {
