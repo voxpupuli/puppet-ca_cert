@@ -17,7 +17,7 @@ end
 
 describe 'ca_cert::ca' do
   context 'with some normal usage' do
-    let(:pp) do
+    let(:manifest) do
       <<~EOS
                 include ::ca_cert
 
