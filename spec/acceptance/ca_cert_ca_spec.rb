@@ -9,11 +9,15 @@ when 'RedHat'
   trusted_ca_file_remote = '/etc/pki/ca-trust/source/anchors/Globalsign_Org_Intermediate.crt'
   untrusted_ca_file_remote = '/etc/pki/ca-trust/source/blacklist/CACert.crt'
   trusted_ca_file_text = '/etc/pki/ca-trust/source/anchors/InCommon.crt'
+when 'Archlinux'
+  trusted_ca_file_remote = '/etc/ca-certificates/trust-source/anchors/Globalsign_Org_Intermediate.crt'
+  untrusted_ca_file_remote = '/etc/ca-certificates/trust-source/blacklist/CACert.crt'
+  trusted_ca_file_text = '/etc/ca-certificates/trust-source/anchors/InCommon.crt'
 end
 
 describe 'ca_cert::ca' do
   context 'with some normal usage' do
-    let(:pp) do
+    let(:manifest) do
       <<~EOS
                 include ::ca_cert
 
@@ -74,7 +78,7 @@ describe 'ca_cert::ca' do
       describe file(absent_ca_file_remote) do
         it { is_expected.not_to be_file }
       end
-    when 'RedHat'
+    else
       describe file(untrusted_ca_file_remote) do
         it { is_expected.to be_file }
       end
