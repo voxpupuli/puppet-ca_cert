@@ -50,7 +50,6 @@ define ca_cert::ca (
 ) {
   include ca_cert::params
   include ca_cert::update
-  require ca_cert::enable
 
   if $ca_file_group == undef {
     $file_group = $ca_cert::params::ca_file_group

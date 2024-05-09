@@ -18,8 +18,6 @@
 #   The package contains the system default (typically Mozilla) CA
 #   certificates, as well as the tools required for managing other installed
 #   CA certificates.
-# [*force_enable*]
-#   Use the force-enable option on RH 7 and earlier (and derivatives)
 # [*ca_certs*]
 #   A hash of CA certificates that should be installed as part of the class
 #   declaration
@@ -45,7 +43,6 @@ class ca_cert (
   Boolean $always_update_certs = false,
   Boolean $purge_unmanaged_CAs = false, # lint:ignore:variable_contains_upcase
   Boolean $install_package     = true,
-  Boolean $force_enable        = false,
   Hash    $ca_certs            = {},
   String  $package_ensure      = 'installed',
   String  $package_name        = $ca_cert::params::package_name,

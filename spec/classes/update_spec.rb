@@ -22,21 +22,6 @@ describe 'ca_cert::update', type: :class do
           )
         }
       when 'RedHat'
-        if facts[:os]['release']['major'] >= '7'
-          it { is_expected.not_to contain_exec('enable_ca_trust') }
-        else
-          context 'with force_enable set to true' do
-            let :pre_condition do
-              'class { "ca_cert": force_enable => true }'
-            end
-
-            it { is_expected.to contain_exec('enable_ca_trust').with_command('update-ca-trust force-enable') }
-          end
-
-          context 'with force_enable set to false' do
-            it { is_expected.to contain_exec('enable_ca_trust').with_command('update-ca-trust enable') }
-          end
-        end
         it {
           is_expected.to contain_exec('ca_cert_update').with(
             command: 'update-ca-trust extract',
