@@ -47,15 +47,6 @@ class ca_cert (
   String  $package_ensure      = 'installed',
   String  $package_name        = $ca_cert::params::package_name,
 ) inherits ca_cert::params {
-  include ca_cert::params
-  include ca_cert::update
-
-  if $always_update_certs == true {
-    Exec <| title=='ca_cert_update' |> {
-      refreshonly => false,
-    }
-  }
-
   $trusted_cert_dir = $ca_cert::params::trusted_cert_dir
   $cert_dir_group   = $ca_cert::params::cert_dir_group
   $cert_dir_mode    = $ca_cert::params::cert_dir_mode
@@ -81,6 +72,13 @@ class ca_cert (
 
   if !empty($ca_certs) {
     create_resources('ca_cert::ca', $ca_certs)
+  }
+
+  exec { 'ca_cert_update':
+    command     => $ca_cert::params::update_cmd,
+    logoutput   => 'on_failure',
+    refreshonly => !$always_update_certs,
+    path        => ['/usr/sbin', '/usr/bin', '/bin'],
   }
 }
 # lint:endignore:variable_is_lowercase

@@ -48,8 +48,8 @@ define ca_cert::ca (
   Optional[String] $ca_file_group = undef,
   Optional[String] $ca_file_mode = undef,
 ) {
+  include ca_cert
   include ca_cert::params
-  include ca_cert::update
 
   if $ca_file_group == undef {
     $file_group = $ca_cert::params::ca_file_group
@@ -113,7 +113,7 @@ define ca_cert::ca (
             owner  => 'root',
             group  => $file_group,
             mode   => $file_mode,
-            notify => Class['ca_cert::update'],
+            notify => Exec['ca_cert_update'],
           }
         }
         'ftp', 'https', 'http': {
@@ -123,7 +123,7 @@ define ca_cert::ca (
             checksum       => $checksum,
             checksum_type  => $checksum_type,
             allow_insecure => !$verify_https_cert,
-            notify         => Class['ca_cert::update'],
+            notify         => Exec['ca_cert_update'],
           }
         }
         'file': {
@@ -135,7 +135,7 @@ define ca_cert::ca (
             owner  => 'root',
             group  => $file_group,
             mode   => $file_mode,
-            notify => Class['ca_cert::update'],
+            notify => Exec['ca_cert_update'],
           }
         }
         'text': {
@@ -146,7 +146,7 @@ define ca_cert::ca (
             owner   => 'root',
             group   => $file_group,
             mode    => $file_mode,
-            notify  => Class['ca_cert::update'],
+            notify  => Exec['ca_cert_update'],
           }
         }
         default: {
@@ -157,7 +157,7 @@ define ca_cert::ca (
     'absent': {
       file { $ca_cert:
         ensure => absent,
-        notify => Class['ca_cert::update'],
+        notify => Exec['ca_cert_update'],
       }
     }
     default: {
