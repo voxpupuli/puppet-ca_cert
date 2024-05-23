@@ -3,6 +3,7 @@ class ca_cert::params {
   case $facts['os']['family'] {
     'Debian': {
       $trusted_cert_dir  = '/usr/local/share/ca-certificates'
+      $distrusted_cert_dir = undef
       $update_cmd        = 'update-ca-certificates'
       $cert_dir_group    = 'staff'
       $ca_file_group     = 'root'
@@ -45,10 +46,11 @@ class ca_cert::params {
     }
     'Suse': {
       if $facts['os']['release']['major'] =~ /(10|11)/ {
-        $trusted_cert_dir  = '/etc/ssl/certs'
-        $update_cmd        = 'c_rehash'
-        $ca_file_extension = 'pem'
-        $package_name      = 'openssl-certs'
+        $trusted_cert_dir    = '/etc/ssl/certs'
+        $distrusted_cert_dir = undef
+        $update_cmd          = 'c_rehash'
+        $ca_file_extension   = 'pem'
+        $package_name        = 'openssl-certs'
       }
       elsif versioncmp($facts['os']['release']['major'], '12') >= 0 {
         $trusted_cert_dir    = '/etc/pki/trust/anchors'
@@ -64,6 +66,7 @@ class ca_cert::params {
     }
     'AIX': {
       $trusted_cert_dir    = '/var/ssl/certs'
+      $distrusted_cert_dir = undef
       $update_cmd          = '/usr/bin/c_rehash'
       $cert_dir_group      = 'system'
       $cert_dir_mode       = '0755'
@@ -75,6 +78,7 @@ class ca_cert::params {
     'Solaris': {
       if versioncmp($facts['os']['release']['major'], '11') >= 0 {
         $trusted_cert_dir    = '/etc/certs/CA/'
+        $distrusted_cert_dir = undef
         $update_cmd          = '/usr/sbin/svcadm restart /system/ca-certificates'
         $cert_dir_group      = 'sys'
         $cert_dir_mode       = '0755'
