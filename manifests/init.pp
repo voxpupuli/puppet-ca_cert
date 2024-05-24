@@ -25,8 +25,6 @@
 # @param cert_dir_group
 #   The installed trusted certificate's POSIX group permissions. This uses
 #   the same syntax as Puppet's native file resource's "group" parameter.
-#   It defaults to 'system' on AIX, to 'sys' on Solaris, to 'staff' on
-#   Ubuntu/Debian, and to 'root' in other cases.
 #
 # @param cert_dir_mode
 #   The installed  trusted certificate's POSIX filesystem permissions. This uses
@@ -36,7 +34,6 @@
 # @param ca_file_group
 #   The installed CA certificate's POSIX group permissions. This uses
 #   the same syntax as Puppet's native file resource's "group" parameter.
-#   (defaults to 'root' with the exeption of AIX which defaults to 'system')
 #
 # @param ca_file_mode
 #   The installed CA certificate's POSIX filesystem permissions. This uses

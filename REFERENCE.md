@@ -98,8 +98,6 @@ Data type: `String[1]`
 
 The installed trusted certificate's POSIX group permissions. This uses
 the same syntax as Puppet's native file resource's "group" parameter.
-It defaults to 'system' on AIX, to 'sys' on Solaris, to 'staff' on
-Ubuntu/Debian, and to 'root' in other cases.
 
 Default value: `$ca_cert::params::cert_dir_group`
 
@@ -119,7 +117,6 @@ Data type: `String[1]`
 
 The installed CA certificate's POSIX group permissions. This uses
 the same syntax as Puppet's native file resource's "group" parameter.
-(defaults to 'root' with the exeption of AIX which defaults to 'system')
 
 Default value: `$ca_cert::params::ca_file_group`
 

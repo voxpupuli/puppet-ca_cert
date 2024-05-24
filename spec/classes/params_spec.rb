@@ -47,16 +47,4 @@ describe 'ca_cert::params', type: :class do
       end
     end
   end
-
-  context 'on an unsupported operating system' do
-    let :facts do
-      {
-        'os' => {
-          'family' => 'WeirdOS',
-        },
-      }
-    end
-
-    it { expect { catalogue }.to raise_error Puppet::Error, %r{Unsupported osfamily} }
-  end
 end
