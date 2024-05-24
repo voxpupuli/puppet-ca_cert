@@ -1,80 +1,72 @@
-# == Class: ca_cert
+# @summary
+#   This module manages the user defined certificate authority (CA)
+#   certificates on the server. On OSes that support a distrusted
+#   folder the module also manages distrusting system default CA certificates.
 #
-# This module manages the user installed certificate authority (CA)
-# certificates installed on the server. It does not manage operating
-# system defaults CA certificates.
+# @example Basic usage
+#   class { 'ca_cert': }
 #
-# === Parameters
+#   class { 'ca_cert':
+#     manage_all_user_CAs => true,
+#   }
 #
-# [*package_name*]
-#   The name of the package(s) to be installed
+# @param package_name
+#   The name of the package(s) to be installed.
 #
-# [*update_cmd*]
+# @param update_cmd
 #   Command to be used to update CA certificates.
 #
-# [*trusted_cert_dir*]
+# @param trusted_cert_dir
 #   Absolute directory path to the folder containing trusted certificates.
 #
-# [*distrusted_cert_dir*]
-#   Absolute directory path to the folder containing distrusted certificates (OS dependent).
+# @param distrusted_cert_dir
+#   Absolute directory path to the folder containing distrusted certificates.
 #
-# [*cert_dir_group*]
+# @param cert_dir_group
 #   The installed trusted certificate's POSIX group permissions. This uses
 #   the same syntax as Puppet's native file resource's "group" parameter.
 #   It defaults to 'system' on AIX, to 'sys' on Solaris, to 'staff' on
 #   Ubuntu/Debian, and to 'root' in other cases.
 #
-# [*cert_dir_mode*]
+# @param cert_dir_mode
 #   The installed  trusted certificate's POSIX filesystem permissions. This uses
 #   the same syntax as Puppet's native file resource's "mode" parameter.
 #   It defaults to '2665' on Debian, and to '0755' on other cases.
 #
-# [*ca_file_group*]
+# @param ca_file_group
 #   The installed CA certificate's POSIX group permissions. This uses
 #   the same syntax as Puppet's native file resource's "group" parameter.
 #   (defaults to 'root' with the exeption of AIX which defaults to 'system')
 #
-# [*ca_file_mode*]
+# @param ca_file_mode
 #   The installed CA certificate's POSIX filesystem permissions. This uses
 #   the same syntax as Puppet's native file resource's "mode" parameter.
 #   (defaults to '0444', i.e. world-readable)
 #
-# [*ca_file_extension*]
+# @param ca_file_extension
 #   File extenstion for the certificate.
 #
-# [*package_ensure*]
-#   The ensure parameter to pass to the package resource
+# @param package_ensure
+#   The ensure parameter to pass to the package resource.
 #
-# [*always_update_certs*]
+# @param always_update_certs
 #   Run the appropriate update CA certificates command for your operating
 #   system on every Puppet run whether it is needed or not.
 #
-# [*purge_unmanaged_CAs*]
+# @param purge_unmanaged_CAs
 #   When set to true (default: false), user installed CA
 #   certificates (in the appropriate directories) not managed by this
 #   module will be purged.
 #
-# [*install_package*]
+# @param install_package
 #   Whether or not this module should install the ca_certificates package.
 #   The package contains the system default (typically Mozilla) CA
 #   certificates, as well as the tools required for managing other installed
 #   CA certificates.
 #
-# [*ca_certs*]
+# @param ca_certs
 #   A hash of CA certificates that should be installed as part of the class
-#   declaration
-#
-# === Examples
-#
-# class { 'ca_cert': }
-#
-# class { 'ca_cert':
-#   manage_all_user_CAs => true,
-# }
-#
-# === Authors
-#
-# Phil Fenstermacher <phillip.fenstermacher@gmail.com>
+#   declaration.
 #
 class ca_cert (
   String[1] $package_name = $ca_cert::params::package_name,

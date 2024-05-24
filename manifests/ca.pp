@@ -1,40 +1,42 @@
-# ca.pp
+# @summary
+#   Manage a user defined CA Certificate on a system.
+#   On OSes that support distrusting pre-installed CAs this can be managed as well.
 #
-# Manage a CA Certificate on a system. This cannot manage pre-installed
-# operating system CAs.
+# @example
+#   ca_cert::ca { 'globalsign_org_intermediate':
+#     source => 'http://secure.globalsign.com/cacert/gsorganizationvalsha2g2r1.crt',
+#   }
 #
-# === Parameters
-#
-# [*ca_text*]
+# @param ca_text
 #   The text of the CA certificate to install. Required if text is the source
 #   (default). If a different source is specified this parameter is ignored.
-# [*source*]
+#
+# @param source
 #   Where the CA certificate should be retrieved from. text, http, https, ftp,
 #   file, and puppet protocols/sources are supported. If text, then the ca_text parameter
 #   is also required. Defaults to text.
-# [*ensure*]
+#
+# @param ensure
 #   Whether or not the CA certificate should be on a system or not. Valid
 #   values are trusted, present, distrusted, and absent. Note: untrusted is
 #   not supported on Debian based systems - using it will log a warning
 #   and treat it the same as absent. (defaults to trusted)
-# [*verify_https_cert*]
+#
+# @param verify_https_cert
 #   When retrieving a certificate whether or not to validate the CA of the
 #   source. (defaults to true)
-# [*checksum*]
+#
+# @param checksum
 #   The checksum of the file. (defaults to undef)
-# [*checksum_type*]
+#
+# @param checksum_type
 #   The type of file checksum. (defauts to undef)
 #
-# === Examples
-#
-# ca_cert::ca { 'globalsign_org_intermediate':
-#   source => 'http://secure.globalsign.com/cacert/gsorganizationvalsha2g2r1.crt',
-# }
 define ca_cert::ca (
-  Optional[String] $ca_text      = undef,
-  String $source                 = 'text',
   String $ensure                 = 'trusted',
+  String $source                 = 'text',
   Boolean $verify_https_cert     = true,
+  Optional[String] $ca_text      = undef,
   Optional[String] $checksum     = undef,
   Optional[String[1]] $checksum_type = undef,
 ) {

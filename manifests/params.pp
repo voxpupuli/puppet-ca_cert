@@ -1,4 +1,8 @@
-# Private class
+# @summary
+#   OS dependent parameter defaults
+#
+# @api private
+#
 class ca_cert::params {
   case $facts['os']['family'] {
     'Debian': {
