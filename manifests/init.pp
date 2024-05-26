@@ -6,8 +6,20 @@
 # @example Basic usage
 #   class { 'ca_cert': }
 #
+# @example Purge unmanaged user CAs
 #   class { 'ca_cert':
-#     manage_all_user_CAs => true,
+#     purge_unmanaged_CAs => true,
+#   }
+#
+# @example Custom certificates handling
+#   class { 'ca_cert':
+#     update_cmd        => '/usr/bin/c_rehash',
+#     trusted_cert_dir  => '/var/ssl/certs,
+#     cert_dir_group    => 'system',
+#     cert_dir_mode     => '0755',
+#     ca_file_group     => 'system',
+#     ca_file_mode      => '0644',
+#     ca_file_extension => 'pem',
 #   }
 #
 # @param package_name
