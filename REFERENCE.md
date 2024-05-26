@@ -35,9 +35,27 @@ folder the module also manages distrusting system default CA certificates.
 
 ```puppet
 class { 'ca_cert': }
+```
 
+##### Purge unmanaged user CAs
+
+```puppet
 class { 'ca_cert':
-  manage_all_user_CAs => true,
+  purge_unmanaged_CAs => true,
+}
+```
+
+##### Custom certificates handling
+
+```puppet
+class { 'ca_cert':
+  update_cmd        => '/usr/bin/c_rehash',
+  trusted_cert_dir  => '/var/ssl/certs,
+  cert_dir_group    => 'system',
+  cert_dir_mode     => '0755',
+  ca_file_group     => 'system',
+  ca_file_mode      => '0644',
+  ca_file_extension => 'pem',
 }
 ```
 
@@ -78,7 +96,7 @@ Default value: `$ca_cert::params::update_cmd`
 
 ##### <a name="-ca_cert--trusted_cert_dir"></a>`trusted_cert_dir`
 
-Data type: `String[1]`
+Data type: `Stdlib::Absolutepath`
 
 Absolute directory path to the folder containing trusted certificates.
 
@@ -86,7 +104,7 @@ Default value: `$ca_cert::params::trusted_cert_dir`
 
 ##### <a name="-ca_cert--distrusted_cert_dir"></a>`distrusted_cert_dir`
 
-Data type: `Optional[String[1]]`
+Data type: `Optional[Stdlib::Absolutepath]`
 
 Absolute directory path to the folder containing distrusted certificates.
 
@@ -103,7 +121,7 @@ Default value: `$ca_cert::params::cert_dir_group`
 
 ##### <a name="-ca_cert--cert_dir_mode"></a>`cert_dir_mode`
 
-Data type: `String[1]`
+Data type: `Stdlib::Filemode`
 
 The installed  trusted certificate's POSIX filesystem permissions. This uses
 the same syntax as Puppet's native file resource's "mode" parameter.
@@ -122,7 +140,7 @@ Default value: `$ca_cert::params::ca_file_group`
 
 ##### <a name="-ca_cert--ca_file_mode"></a>`ca_file_mode`
 
-Data type: `String[1]`
+Data type: `Stdlib::Filemode`
 
 The installed CA certificate's POSIX filesystem permissions. This uses
 the same syntax as Puppet's native file resource's "mode" parameter.
@@ -140,7 +158,7 @@ Default value: `$ca_cert::params::ca_file_extension`
 
 ##### <a name="-ca_cert--package_ensure"></a>`package_ensure`
 
-Data type: `String[1]`
+Data type: `Stdlib::Ensure::Package`
 
 The ensure parameter to pass to the package resource.
 
@@ -234,7 +252,7 @@ Default value: `'text'`
 
 ##### <a name="-ca_cert--ca--ensure"></a>`ensure`
 
-Data type: `String`
+Data type: `Enum['present', 'trusted', 'distrusted', 'absent']`
 
 Whether or not the CA certificate should be on a system or not. Valid
 values are trusted, present, distrusted, and absent. Note: untrusted is
