@@ -9,22 +9,12 @@ class ca_cert::params {
       $trusted_cert_dir  = '/usr/local/share/ca-certificates'
       $distrusted_cert_dir = undef
       $update_cmd        = 'update-ca-certificates'
-      $cert_dir_group    = 'staff'
+      $cert_dir_group    = 'root'
+      $cert_dir_mode     = '0755'
       $ca_file_group     = 'root'
-      $ca_file_mode      = '0444'
+      $ca_file_mode      = '0644'
       $ca_file_extension = 'crt'
       $package_name      = 'ca-certificates'
-      case $facts['os']['name'] {
-        'Ubuntu': {
-          $cert_dir_mode     = '0755'
-        }
-        /(Debian|Kali)/: {
-          $cert_dir_mode     = '2665'
-        }
-        default: {
-          $cert_dir_mode     = '0755'
-        }
-      }
     }
     'RedHat': {
       $trusted_cert_dir    = '/etc/pki/ca-trust/source/anchors'
