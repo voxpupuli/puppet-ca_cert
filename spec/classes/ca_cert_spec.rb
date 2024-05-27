@@ -5,8 +5,6 @@ describe 'ca_cert', type: :class do
     case facts[:os]['family']
     when 'Debian'
       trusted_cert_dir = '/usr/local/share/ca-certificates'
-      cert_dir_group   = 'staff'
-      cert_dir_mode = '2665' if facts[:os]['name'] == 'Debian'
     when 'RedHat'
       trusted_cert_dir = '/etc/pki/ca-trust/source/anchors'
       update_cmd       = 'update-ca-trust extract'
