@@ -78,7 +78,6 @@ K1pp74P1S8SqtCr4fKGxhZSM9AyHDPSsQPhZSZg=
   shared_examples 'compiles and includes main and params classes' do
     it { is_expected.to compile }
     it { is_expected.to contain_class('ca_cert') }
-    it { is_expected.to contain_class('ca_cert::params') }
   end
 
   describe 'failure conditions' do

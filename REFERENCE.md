@@ -6,15 +6,9 @@
 
 ### Classes
 
-#### Public Classes
-
 * [`ca_cert`](#ca_cert): This module manages the user defined certificate authority (CA)
 certificates on the server. On OSes that support a distrusted
 folder the module also manages distrusting system default CA certificates.
-
-#### Private Classes
-
-* `ca_cert::params`: OS dependent parameter defaults
 
 ### Defined types
 
@@ -63,98 +57,54 @@ class { 'ca_cert':
 
 The following parameters are available in the `ca_cert` class:
 
-* [`package_name`](#-ca_cert--package_name)
 * [`update_cmd`](#-ca_cert--update_cmd)
 * [`trusted_cert_dir`](#-ca_cert--trusted_cert_dir)
 * [`distrusted_cert_dir`](#-ca_cert--distrusted_cert_dir)
+* [`install_package`](#-ca_cert--install_package)
+* [`package_ensure`](#-ca_cert--package_ensure)
+* [`package_name`](#-ca_cert--package_name)
 * [`cert_dir_group`](#-ca_cert--cert_dir_group)
 * [`cert_dir_mode`](#-ca_cert--cert_dir_mode)
 * [`ca_file_group`](#-ca_cert--ca_file_group)
 * [`ca_file_mode`](#-ca_cert--ca_file_mode)
 * [`ca_file_extension`](#-ca_cert--ca_file_extension)
-* [`package_ensure`](#-ca_cert--package_ensure)
 * [`always_update_certs`](#-ca_cert--always_update_certs)
 * [`purge_unmanaged_CAs`](#-ca_cert--purge_unmanaged_CAs)
-* [`install_package`](#-ca_cert--install_package)
 * [`ca_certs`](#-ca_cert--ca_certs)
-
-##### <a name="-ca_cert--package_name"></a>`package_name`
-
-Data type: `String[1]`
-
-The name of the package(s) to be installed.
-
-Default value: `$ca_cert::params::package_name`
 
 ##### <a name="-ca_cert--update_cmd"></a>`update_cmd`
 
 Data type: `String[1]`
 
 Command to be used to update CA certificates.
-
-Default value: `$ca_cert::params::update_cmd`
+Default provided by Hiera for supported Operating Systems.
 
 ##### <a name="-ca_cert--trusted_cert_dir"></a>`trusted_cert_dir`
 
 Data type: `Stdlib::Absolutepath`
 
 Absolute directory path to the folder containing trusted certificates.
-
-Default value: `$ca_cert::params::trusted_cert_dir`
+Default provided by Hiera for supported Operating Systems.
 
 ##### <a name="-ca_cert--distrusted_cert_dir"></a>`distrusted_cert_dir`
 
 Data type: `Optional[Stdlib::Absolutepath]`
 
 Absolute directory path to the folder containing distrusted certificates.
+Default provided by Hiera for supported Operating Systems.
 
-Default value: `$ca_cert::params::distrusted_cert_dir`
+Default value: `undef`
 
-##### <a name="-ca_cert--cert_dir_group"></a>`cert_dir_group`
+##### <a name="-ca_cert--install_package"></a>`install_package`
 
-Data type: `String[1]`
+Data type: `Boolean`
 
-The installed trusted certificate's POSIX group permissions. This uses
-the same syntax as Puppet's native file resource's "group" parameter.
+Whether or not this module should install the ca_certificates package.
+The package contains the system default (typically Mozilla) CA
+certificates, as well as the tools required for managing other installed
+CA certificates.
 
-Default value: `$ca_cert::params::cert_dir_group`
-
-##### <a name="-ca_cert--cert_dir_mode"></a>`cert_dir_mode`
-
-Data type: `Stdlib::Filemode`
-
-The installed  trusted certificate's POSIX filesystem permissions. This uses
-the same syntax as Puppet's native file resource's "mode" parameter.
-It defaults to '2665' on Debian, and to '0755' on other cases.
-
-Default value: `$ca_cert::params::cert_dir_mode`
-
-##### <a name="-ca_cert--ca_file_group"></a>`ca_file_group`
-
-Data type: `String[1]`
-
-The installed CA certificate's POSIX group permissions. This uses
-the same syntax as Puppet's native file resource's "group" parameter.
-
-Default value: `$ca_cert::params::ca_file_group`
-
-##### <a name="-ca_cert--ca_file_mode"></a>`ca_file_mode`
-
-Data type: `Stdlib::Filemode`
-
-The installed CA certificate's POSIX filesystem permissions. This uses
-the same syntax as Puppet's native file resource's "mode" parameter.
-(defaults to '0444', i.e. world-readable)
-
-Default value: `$ca_cert::params::ca_file_mode`
-
-##### <a name="-ca_cert--ca_file_extension"></a>`ca_file_extension`
-
-Data type: `String[1]`
-
-File extenstion for the certificate.
-
-Default value: `$ca_cert::params::ca_file_extension`
+Default value: `true`
 
 ##### <a name="-ca_cert--package_ensure"></a>`package_ensure`
 
@@ -163,6 +113,58 @@ Data type: `Stdlib::Ensure::Package`
 The ensure parameter to pass to the package resource.
 
 Default value: `'installed'`
+
+##### <a name="-ca_cert--package_name"></a>`package_name`
+
+Data type: `String[1]`
+
+The name of the package(s) to be installed.
+
+Default value: `'ca-certificates'`
+
+##### <a name="-ca_cert--cert_dir_group"></a>`cert_dir_group`
+
+Data type: `String[1]`
+
+The installed trusted certificate's POSIX group permissions. This uses
+the same syntax as Puppet's native file resource's "group" parameter.
+
+Default value: `'root'`
+
+##### <a name="-ca_cert--cert_dir_mode"></a>`cert_dir_mode`
+
+Data type: `Stdlib::Filemode`
+
+The installed  trusted certificate's POSIX filesystem permissions. This uses
+the same syntax as Puppet's native file resource's "mode" parameter.
+
+Default value: `'0755'`
+
+##### <a name="-ca_cert--ca_file_group"></a>`ca_file_group`
+
+Data type: `String[1]`
+
+The installed CA certificate's POSIX group permissions. This uses
+the same syntax as Puppet's native file resource's "group" parameter.
+
+Default value: `'root'`
+
+##### <a name="-ca_cert--ca_file_mode"></a>`ca_file_mode`
+
+Data type: `Stdlib::Filemode`
+
+The installed CA certificate's POSIX filesystem permissions. This uses
+the same syntax as Puppet's native file resource's "mode" parameter.
+
+Default value: `'0644'`
+
+##### <a name="-ca_cert--ca_file_extension"></a>`ca_file_extension`
+
+Data type: `String[1]`
+
+File extenstion for the certificate.
+
+Default value: `'crt'`
 
 ##### <a name="-ca_cert--always_update_certs"></a>`always_update_certs`
 
@@ -182,17 +184,6 @@ certificates (in the appropriate directories) not managed by this
 module will be purged.
 
 Default value: `false`
-
-##### <a name="-ca_cert--install_package"></a>`install_package`
-
-Data type: `Boolean`
-
-Whether or not this module should install the ca_certificates package.
-The package contains the system default (typically Mozilla) CA
-certificates, as well as the tools required for managing other installed
-CA certificates.
-
-Default value: `true`
 
 ##### <a name="-ca_cert--ca_certs"></a>`ca_certs`
 

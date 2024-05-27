@@ -25,7 +25,6 @@ describe 'ca_cert', type: :class do
       let(:facts) { facts }
 
       it { is_expected.to compile }
-      it { is_expected.to contain_class('ca_cert::params') }
 
       it do
         is_expected.to contain_file('trusted_certs').only_with(
