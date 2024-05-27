@@ -6,8 +6,20 @@
 # @example Basic usage
 #   class { 'ca_cert': }
 #
+# @example Purge unmanaged user CAs
 #   class { 'ca_cert':
-#     manage_all_user_CAs => true,
+#     purge_unmanaged_CAs => true,
+#   }
+#
+# @example Custom certificates handling
+#   class { 'ca_cert':
+#     update_cmd        => '/usr/bin/c_rehash',
+#     trusted_cert_dir  => '/var/ssl/certs,
+#     cert_dir_group    => 'system',
+#     cert_dir_mode     => '0755',
+#     ca_file_group     => 'system',
+#     ca_file_mode      => '0644',
+#     ca_file_extension => 'pem',
 #   }
 #
 # @param package_name
@@ -25,8 +37,6 @@
 # @param cert_dir_group
 #   The installed trusted certificate's POSIX group permissions. This uses
 #   the same syntax as Puppet's native file resource's "group" parameter.
-#   It defaults to 'system' on AIX, to 'sys' on Solaris, to 'staff' on
-#   Ubuntu/Debian, and to 'root' in other cases.
 #
 # @param cert_dir_mode
 #   The installed  trusted certificate's POSIX filesystem permissions. This uses
@@ -36,7 +46,6 @@
 # @param ca_file_group
 #   The installed CA certificate's POSIX group permissions. This uses
 #   the same syntax as Puppet's native file resource's "group" parameter.
-#   (defaults to 'root' with the exeption of AIX which defaults to 'system')
 #
 # @param ca_file_mode
 #   The installed CA certificate's POSIX filesystem permissions. This uses
@@ -71,14 +80,14 @@
 class ca_cert (
   String[1] $package_name = $ca_cert::params::package_name,
   String[1] $update_cmd = $ca_cert::params::update_cmd,
-  String[1] $trusted_cert_dir = $ca_cert::params::trusted_cert_dir,
-  Optional[String[1]] $distrusted_cert_dir = $ca_cert::params::distrusted_cert_dir,
+  Stdlib::Absolutepath $trusted_cert_dir = $ca_cert::params::trusted_cert_dir,
+  Optional[Stdlib::Absolutepath] $distrusted_cert_dir = $ca_cert::params::distrusted_cert_dir,
   String[1] $cert_dir_group = $ca_cert::params::cert_dir_group,
   String[1] $ca_file_group = $ca_cert::params::ca_file_group,
-  String[1] $cert_dir_mode = $ca_cert::params::cert_dir_mode,
-  String[1] $ca_file_mode = $ca_cert::params::ca_file_mode,
+  Stdlib::Filemode $cert_dir_mode = $ca_cert::params::cert_dir_mode,
+  Stdlib::Filemode $ca_file_mode = $ca_cert::params::ca_file_mode,
   String[1] $ca_file_extension = $ca_cert::params::ca_file_extension,
-  String[1] $package_ensure = 'installed',
+  Stdlib::Ensure::Package $package_ensure = 'installed',
   Boolean $always_update_certs = false,
   Boolean $purge_unmanaged_CAs = false, # lint:ignore:variable_contains_upcase lint:ignore:variable_is_lowercase
   Boolean $install_package = true,

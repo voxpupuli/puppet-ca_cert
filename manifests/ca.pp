@@ -33,11 +33,11 @@
 #   The type of file checksum. (defauts to undef)
 #
 define ca_cert::ca (
-  String $ensure                 = 'trusted',
-  String $source                 = 'text',
-  Boolean $verify_https_cert     = true,
-  Optional[String] $ca_text      = undef,
-  Optional[String] $checksum     = undef,
+  Enum['present', 'trusted', 'distrusted', 'absent'] $ensure = 'trusted',
+  String $source = 'text',
+  Boolean $verify_https_cert = true,
+  Optional[String] $ca_text = undef,
+  Optional[String] $checksum = undef,
   Optional[String[1]] $checksum_type = undef,
 ) {
   include ca_cert

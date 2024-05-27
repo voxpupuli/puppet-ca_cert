@@ -67,13 +67,6 @@
     },
     {
       "operatingsystem": "Archlinux"
-    },
-    {
-      "operatingsystem": "AIX",
-      "operatingsystemrelease": [
-        "7.2",
-        "7.3"
-      ]
     }
   ],
   "requirements": [

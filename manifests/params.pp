@@ -22,7 +22,7 @@ class ca_cert::params {
           $cert_dir_mode     = '2665'
         }
         default: {
-          fail("Unsupported operatingsystem (${facts['os']['name']})")
+          $cert_dir_mode     = '0755'
         }
       }
     }
@@ -68,35 +68,6 @@ class ca_cert::params {
       $ca_file_group         = 'root'
       $ca_file_mode          = '0644'
     }
-    'AIX': {
-      $trusted_cert_dir    = '/var/ssl/certs'
-      $distrusted_cert_dir = undef
-      $update_cmd          = '/usr/bin/c_rehash'
-      $cert_dir_group      = 'system'
-      $cert_dir_mode       = '0755'
-      $ca_file_group       = 'system'
-      $ca_file_mode        = '0644'
-      $ca_file_extension   = 'crt'
-      $package_name        = 'ca-certificates'
-    }
-    'Solaris': {
-      if versioncmp($facts['os']['release']['major'], '11') >= 0 {
-        $trusted_cert_dir    = '/etc/certs/CA/'
-        $distrusted_cert_dir = undef
-        $update_cmd          = '/usr/sbin/svcadm restart /system/ca-certificates'
-        $cert_dir_group      = 'sys'
-        $cert_dir_mode       = '0755'
-        $ca_file_group       = 'root'
-        $ca_file_mode        = '0444'
-        $ca_file_extension   = 'pem'
-        $package_name        = 'ca-certificates'
-      }
-      else {
-        fail("Unsupported OS Major release (${facts['os']['release']['major']})")
-      }
-    }
-    default: {
-      fail("Unsupported osfamily (${facts['os']['family']})")
-    }
+    default: {}
   }
 }
