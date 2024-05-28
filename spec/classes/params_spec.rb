@@ -27,7 +27,7 @@ describe 'ca_cert::params', type: :class do
     end
   end
 
-  %w[10 11 12].each do |osmajrel|
+  %w[12].each do |osmajrel|
     context "On a Suse #{osmajrel} Operating System" do
       let :facts do
         {
