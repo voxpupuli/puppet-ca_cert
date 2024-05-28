@@ -46,29 +46,14 @@ define ca_cert::ca (
     fail('ca_text is required if source is set to text')
   }
 
-  # Since Debian/Suse based OSes don't have explicit distrust directories
-  # Logic is Similar for Debian/SLES10/SLES11 - but breaking into if/elsif
-  # for clarity's sake as we need to change untrusted to absent and warn in the log
+  # Since Debian based OSes don't have explicit distrust directories
   if $facts['os']['family'] == 'Debian' and $ensure == 'distrusted' {
     warning("Cannot explicitly set CA distrust on ${facts['os']['name']}.")
     warning("Ensuring that ${name} CA is absent from the trusted list.")
     $adjusted_ensure = 'absent'
   }
-  elsif ($facts['os']['family'] == 'Suse' and $facts['os']['release']['major'] =~ /(10|11)/) and $ensure == 'distrusted' {
-    warning("Cannot explicitly set CA distrust on ${facts['os']['name']} ${facts['os']['release']['major']}.")
-    warning("Ensuring that ${name} CA is absent from the trusted list.")
-    $adjusted_ensure = 'absent'
-  }
   else {
     $adjusted_ensure = $ensure
-  }
-  # Determine Full Resource Name
-  # Sles 10/11 Only Supports .pem files
-  # Other supported OS variants default to .crt
-  if ($facts['os']['family'] == 'Suse') and ($facts['os']['release']['major'] =~ /(10|11)/) {
-    if $source != 'text' and $source !~ /^.*\.pem$/ {
-      fail("${source} not proper format - SLES 10/11 CA Files must be in .pem format")
-    }
   }
 
   # Determine Full Resource Name

@@ -39,20 +39,11 @@ class ca_cert::params {
       $package_name        = 'ca-certificates'
     }
     'Suse': {
-      if $facts['os']['release']['major'] =~ /(10|11)/ {
-        $trusted_cert_dir    = '/etc/ssl/certs'
-        $distrusted_cert_dir = undef
-        $update_cmd          = 'c_rehash'
-        $ca_file_extension   = 'pem'
-        $package_name        = 'openssl-certs'
-      }
-      elsif versioncmp($facts['os']['release']['major'], '12') >= 0 {
-        $trusted_cert_dir    = '/etc/pki/trust/anchors'
-        $distrusted_cert_dir = '/etc/pki/trust/blacklist'
-        $update_cmd          = 'update-ca-certificates'
-        $ca_file_extension   = 'crt'
-        $package_name        = 'ca-certificates'
-      }
+      $trusted_cert_dir    = '/etc/pki/trust/anchors'
+      $distrusted_cert_dir = '/etc/pki/trust/blacklist'
+      $update_cmd          = 'update-ca-certificates'
+      $ca_file_extension   = 'crt'
+      $package_name        = 'ca-certificates'
       $cert_dir_group        = 'root'
       $cert_dir_mode         = '0755'
       $ca_file_group         = 'root'

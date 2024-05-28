@@ -80,5 +80,4 @@ ca_cert::ca { 'GlobalSign-OrgSSL-Intermediate':
 
 Supported Platforms
 -------------------
-
-This module has been tested on Ubuntu 14.04, Ubuntu 12.04, CentOS 6, SLES 11, SLES 12, OpenSuSE 13.1, OpenSuSE 13.2 and OpenSuSE 42.1 Leap.
+This module has been tested on operating systems in [metadata.json](metadata.json)
