@@ -1,3 +1,4 @@
 ---
-ca_cert::update_cmd:          'update-ca-certificates'
-ca_cert::trusted_cert_dir:    '/usr/local/share/ca-certificates'
+ca_cert::update_cmd:           'update-ca-certificates'
+ca_cert::trusted_cert_dir:     '/usr/local/share/ca-certificates'
+ca_cert::ca_certificates_conf: '/etc/ca-certificates.conf'

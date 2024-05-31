@@ -1,4 +1,4 @@
 ---
 ca_cert::update_cmd:          'trust extract-compat'
-ca_cert::trusted_cert_dir:    '/etc/ca-certificates/trust-source/anchors/'
+ca_cert::trusted_cert_dir:    '/etc/ca-certificates/trust-source/anchors'
 ca_cert::distrusted_cert_dir: '/etc/ca-certificates/trust-source/blacklist'

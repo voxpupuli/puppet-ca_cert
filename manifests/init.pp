@@ -1,7 +1,5 @@
 # @summary
-#   This module manages the user defined certificate authority (CA)
-#   certificates on the server. On OSes that support a distrusted
-#   folder the module also manages distrusting system default CA certificates.
+#   This module manages the shared system-wide truststore.
 #
 # @example Basic usage
 #   class { 'ca_cert': }
@@ -32,6 +30,10 @@
 #
 # @param distrusted_cert_dir
 #   Absolute directory path to the folder containing distrusted certificates.
+#   Default provided by Hiera for supported Operating Systems.
+#
+# @param ca_certificates_conf
+#   Some distros use a configuration file to mark distrusted certificates.
 #   Default provided by Hiera for supported Operating Systems.
 #
 # @param install_package
@@ -82,6 +84,7 @@ class ca_cert (
   String[1] $update_cmd,
   Stdlib::Absolutepath $trusted_cert_dir,
   Optional[Stdlib::Absolutepath] $distrusted_cert_dir = undef,
+  Optional[Stdlib::Absolutepath] $ca_certificates_conf = undef,
   Boolean $install_package = true,
   Stdlib::Ensure::Package $package_ensure = 'installed',
   String[1] $package_name = 'ca-certificates',

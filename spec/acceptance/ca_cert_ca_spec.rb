@@ -2,31 +2,32 @@ require 'spec_helper_acceptance'
 
 case host_inventory['facter']['os']['family']
 when 'Debian'
-  trusted_ca_file_remote = '/usr/local/share/ca-certificates/Globalsign_Org_Intermediate.crt'
-  absent_ca_file_remote = '/etc/pki/ca-trust/source/blacklist/CACert.crt'
+  trusted_ca_file_remote = '/usr/local/share/ca-certificates/DigiCert_G5_TLS_ECC_SHA384_2021_CA1.crt'
   trusted_ca_file_text = '/usr/local/share/ca-certificates/InCommon.crt'
+  ca_certificates_conf = '/etc/ca-certificates.conf'
+  ca_certificates_bundle = '/etc/ssl/certs/ca-certificates.crt'
 when 'RedHat'
-  trusted_ca_file_remote = '/etc/pki/ca-trust/source/anchors/Globalsign_Org_Intermediate.crt'
-  untrusted_ca_file_remote = '/etc/pki/ca-trust/source/blacklist/CACert.crt'
+  trusted_ca_file_remote = '/etc/pki/ca-trust/source/anchors/DigiCert_G5_TLS_ECC_SHA384_2021_CA1.crt'
   trusted_ca_file_text = '/etc/pki/ca-trust/source/anchors/InCommon.crt'
+  untrusted_ca_file_remote = '/etc/pki/ca-trust/source/blacklist/DigiCert_Global_Root_G3.crt'
+  ca_certificates_bundle = '/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem'
 when 'Archlinux'
-  trusted_ca_file_remote = '/etc/ca-certificates/trust-source/anchors/Globalsign_Org_Intermediate.crt'
-  untrusted_ca_file_remote = '/etc/ca-certificates/trust-source/blacklist/CACert.crt'
+  trusted_ca_file_remote = '/etc/ca-certificates/trust-source/anchors/DigiCert_G5_TLS_ECC_SHA384_2021_CA1.crt'
   trusted_ca_file_text = '/etc/ca-certificates/trust-source/anchors/InCommon.crt'
+  untrusted_ca_file_remote = '/etc/ca-certificates/trust-source/blacklist/DigiCert_Global_Root_G3.crt'
+  ca_certificates_bundle = '/etc/ca-certificates/extracted/tls-ca-bundle.pem'
 end
 
 describe 'ca_cert::ca' do
-  context 'with some normal usage' do
+  context 'add local trusted ca certificates' do
     let(:manifest) do
       <<~EOS
-                include ::ca_cert
+        ca_cert::ca { 'DigiCert_G5_TLS_ECC_SHA384_2021_CA1':
+          source => 'https://cacerts.digicert.com/DigiCertG5TLSECCSHA3842021CA1-1.crt.pem',
+        }
 
-                ca_cert::ca { 'Globalsign_Org_Intermediate':
-                  source => 'http://secure.globalsign.com/cacert/gsorganizationvalsha2g2r1.crt',
-                }
-
-                ca_cert::ca { 'InCommon':
-                  ca_text => '-----BEGIN CERTIFICATE-----
+        ca_cert::ca { 'InCommon':
+          content => '-----BEGIN CERTIFICATE-----
         MIIEwzCCA6ugAwIBAgIQf3HB06ImsNKxE/PmgWdkPjANBgkqhkiG9w0BAQUFADBv
         MQswCQYDVQQGEwJTRTEUMBIGA1UEChMLQWRkVHJ1c3QgQUIxJjAkBgNVBAsTHUFk
         ZFRydXN0IEV4dGVybmFsIFRUUCBOZXR3b3JrMSIwIAYDVQQDExlBZGRUcnVzdCBF
@@ -54,12 +55,7 @@ describe 'ca_cert::ca' do
         kGGmSavOPN/mymTugmU5RZUWukEGAJi6DFZh5MbGhgHPZqkiKQLWPc/EKo2Z3vsJ
         FJ4O0dXG14HdrSSrrAcF4h1ow3BmX9M=
         -----END CERTIFICATE-----',
-                }
-
-                ca_cert::ca { 'CACert':
-                  source => 'http://www.cacert.org/certs/root.crt',
-                  ensure => 'distrusted',
-                }
+        }
       EOS
     end
 
@@ -73,14 +69,111 @@ describe 'ca_cert::ca' do
       it { is_expected.to be_file }
     end
 
+    describe file(ca_certificates_bundle) do
+      its(:content) do
+        # DigiCert_G5_TLS_ECC_SHA384_2021_CA1
+        is_expected.to match %r{IvZuhDckSAkMNGICMQD4lvGyMGMQirgiqAaMdybUTpcDTLtRQPKiGVZOoSaRtq8o}
+        # InCommon
+        is_expected.to match %r{kGGmSavOPN/mymTugmU5RZUWukEGAJi6DFZh5MbGhgHPZqkiKQLWPc/EKo2Z3vsJ}
+        # DigiCert_Global_Root_G3
+        is_expected.to match %r{oAIwOWZbwmSNuJ5Q3KjVSaLtx9zRSX8XAbjIho9OjIgrqJqpisXRAL34VOKa5Vt8}
+      end
+    end
+  end
+
+  context 'distrust a os provided ca certificate' do
+    let(:manifest) do
+      <<~EOS
+        ca_cert::ca { 'DigiCert_Global_Root_G3':
+          source => 'https://cacerts.digicert.com/DigiCertGlobalRootG3.crt.pem',
+          ensure => 'distrusted',
+        }
+      EOS
+    end
+
+    it_behaves_like 'an idempotent resource'
+
     case host_inventory['facter']['os']['family']
     when 'Debian'
-      describe file(absent_ca_file_remote) do
-        it { is_expected.not_to be_file }
+      describe file(ca_certificates_conf) do
+        its(:content) { is_expected.to match %r{^!.*DigiCert_Global_Root_G3.crt} }
       end
     else
       describe file(untrusted_ca_file_remote) do
         it { is_expected.to be_file }
+      end
+    end
+
+    describe file(ca_certificates_bundle) do
+      its(:content) do
+        # DigiCert_Global_Root_G3
+        is_expected.not_to match %r{oAIwOWZbwmSNuJ5Q3KjVSaLtx9zRSX8XAbjIho9OjIgrqJqpisXRAL34VOKa5Vt8}
+      end
+    end
+  end
+
+  context 'trust a os provided ca certificate' do
+    let(:manifest) do
+      <<~EOS
+        ca_cert::ca { 'DigiCert_Global_Root_G3':
+          source => 'https://cacerts.digicert.com/DigiCertGlobalRootG3.crt.pem',
+          ensure => 'trusted',
+        }
+      EOS
+    end
+
+    it_behaves_like 'an idempotent resource'
+
+    case host_inventory['facter']['os']['family']
+    when 'Debian'
+      describe file(ca_certificates_conf) do
+        its(:content) { is_expected.to match %r{^[^!].*DigiCert_Global_Root_G3.crt} }
+      end
+    else
+      describe file(untrusted_ca_file_remote) do
+        it { is_expected.not_to exist }
+      end
+    end
+
+    describe file(ca_certificates_bundle) do
+      its(:content) do
+        # DigiCert_Global_Root_G3
+        is_expected.to match %r{oAIwOWZbwmSNuJ5Q3KjVSaLtx9zRSX8XAbjIho9OjIgrqJqpisXRAL34VOKa5Vt8}
+      end
+    end
+  end
+
+  context 'remove local trusted ca certificates' do
+    let(:manifest) do
+      <<~EOS
+        ca_cert::ca { 'DigiCert_G5_TLS_ECC_SHA384_2021_CA1':
+          ensure => 'absent',
+        }
+
+        ca_cert::ca { 'InCommon':
+          ensure => 'absent',
+        }
+      EOS
+    end
+
+    it_behaves_like 'an idempotent resource'
+
+    describe file(trusted_ca_file_remote) do
+      it { is_expected.not_to exist }
+    end
+
+    describe file(trusted_ca_file_text) do
+      it { is_expected.not_to exist }
+    end
+
+    describe file(ca_certificates_bundle) do
+      its(:content) do
+        # DigiCert_G5_TLS_ECC_SHA384_2021_CA1
+        is_expected.not_to match %r{IvZuhDckSAkMNGICMQD4lvGyMGMQirgiqAaMdybUTpcDTLtRQPKiGVZOoSaRtq8o}
+        # InCommon
+        is_expected.not_to match %r{kGGmSavOPN/mymTugmU5RZUWukEGAJi6DFZh5MbGhgHPZqkiKQLWPc/EKo2Z3vsJ}
+        # DigiCert_Global_Root_G3
+        is_expected.to match %r{oAIwOWZbwmSNuJ5Q3KjVSaLtx9zRSX8XAbjIho9OjIgrqJqpisXRAL34VOKa5Vt8}
       end
     end
   end
