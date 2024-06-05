@@ -9,7 +9,11 @@ when 'Debian'
 when 'RedHat'
   trusted_ca_file_remote = '/etc/pki/ca-trust/source/anchors/DigiCert_G5_TLS_ECC_SHA384_2021_CA1.crt'
   trusted_ca_file_text = '/etc/pki/ca-trust/source/anchors/InCommon.crt'
-  untrusted_ca_file_remote = '/etc/pki/ca-trust/source/blacklist/DigiCert_Global_Root_G3.crt'
+  untrusted_ca_file_remote = if host_inventory['facter']['os']['release']['major'] < '9'
+                               '/etc/pki/ca-trust/source/blacklist/DigiCert_Global_Root_G3.crt'
+                             else
+                               '/etc/pki/ca-trust/source/blocklist/DigiCert_Global_Root_G3.crt'
+                             end
   ca_certificates_bundle = '/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem'
 when 'Archlinux'
   trusted_ca_file_remote = '/etc/ca-certificates/trust-source/anchors/DigiCert_G5_TLS_ECC_SHA384_2021_CA1.crt'

@@ -15,7 +15,11 @@ describe 'ca_cert::ca', type: :define do
       trusted_cert_dir    = '/usr/local/share/ca-certificates'
     when 'RedHat'
       trusted_cert_dir    = '/etc/pki/ca-trust/source/anchors'
-      distrusted_cert_dir = '/etc/pki/ca-trust/source/blacklist'
+      distrusted_cert_dir = if facts[:os]['release']['major'] < '9'
+                              '/etc/pki/ca-trust/source/blacklist'
+                            else
+                              '/etc/pki/ca-trust/source/blocklist'
+                            end
     when 'Archlinux'
       trusted_cert_dir    = '/etc/ca-certificates/trust-source/anchors'
       distrusted_cert_dir = '/etc/ca-certificates/trust-source/blacklist'
