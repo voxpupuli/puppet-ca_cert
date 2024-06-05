@@ -22,7 +22,7 @@ describe 'ca_cert::ca', type: :define do
                             end
     when 'Archlinux'
       trusted_cert_dir    = '/etc/ca-certificates/trust-source/anchors'
-      distrusted_cert_dir = '/etc/ca-certificates/trust-source/blacklist'
+      distrusted_cert_dir = '/etc/ca-certificates/trust-source/blocklist'
     when 'Suse'
       trusted_cert_dir    = '/etc/pki/trust/anchors'
       distrusted_cert_dir = '/etc/pki/trust/blacklist'

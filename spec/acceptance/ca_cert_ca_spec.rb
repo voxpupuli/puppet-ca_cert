@@ -18,7 +18,7 @@ when 'RedHat'
 when 'Archlinux'
   trusted_ca_file_remote = '/etc/ca-certificates/trust-source/anchors/DigiCert_G5_TLS_ECC_SHA384_2021_CA1.crt'
   trusted_ca_file_text = '/etc/ca-certificates/trust-source/anchors/InCommon.crt'
-  untrusted_ca_file_remote = '/etc/ca-certificates/trust-source/blacklist/DigiCert_Global_Root_G3.crt'
+  untrusted_ca_file_remote = '/etc/ca-certificates/trust-source/blocklist/DigiCert_Global_Root_G3.crt'
   ca_certificates_bundle = '/etc/ca-certificates/extracted/tls-ca-bundle.pem'
 end
 
