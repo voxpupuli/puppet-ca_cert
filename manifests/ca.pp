@@ -11,23 +11,29 @@
 #   - `present`/`absent` is used to manage local/none default CAs.
 #   - `trusted`/`distrusted` is used to manage system CAs.
 #
-# @param content
-#   PEM formatted certificate content
-#   This attribute is mutually exclusive with `source`
+# @param allow_insecure_source
+#   Whether to allow insecure download or not.
 #
 # @param source
 #   A source certificate, which will be copied into place on the local system.
 #   This attribute is mutually exclusive with `content`
 #   Uri support, see puppet-archive.
 #
-# @param allow_insecure_source
-#   Wether to allow insecure download or not.
+# @param content
+#   PEM formatted certificate content
+#   This attribute is mutually exclusive with `source`
 #
 # @param checksum
-#   The checksum of the file. (defaults to undef)
+#   The checksum of the file.
 #
 # @param checksum_type
-#   The type of file checksum. (defauts to undef)
+#   The type of file checksum.
+#
+# @param proxy_server
+#   Proxy address to use when accessing source
+#
+# @param proxy_type
+#   Proxy type ( See `archive::proxy_type )
 #
 define ca_cert::ca (
   Enum['present', 'absent', 'trusted', 'distrusted'] $ensure = 'present',
@@ -36,6 +42,8 @@ define ca_cert::ca (
   Optional[String[1]] $content = undef,
   Optional[String[1]] $checksum = undef,
   Optional[String[1]] $checksum_type = undef,
+  Optional[String[1]] $proxy_server = undef,
+  Optional[String[1]] $proxy_type = undef,
 ) {
   include ca_cert
 
@@ -80,6 +88,8 @@ define ca_cert::ca (
             checksum       => $checksum,
             checksum_type  => $checksum_type,
             allow_insecure => $allow_insecure_source,
+            proxy_server   => $proxy_server,
+            proxy_type     => $proxy_type,
             notify         => Exec['ca_cert_update'],
           }
           -> file { $ca_cert:

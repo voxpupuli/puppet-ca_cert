@@ -220,11 +220,13 @@ ca_cert::ca { 'globalsign_org_intermediate':
 The following parameters are available in the `ca_cert::ca` defined type:
 
 * [`ensure`](#-ca_cert--ca--ensure)
-* [`content`](#-ca_cert--ca--content)
-* [`source`](#-ca_cert--ca--source)
 * [`allow_insecure_source`](#-ca_cert--ca--allow_insecure_source)
+* [`source`](#-ca_cert--ca--source)
+* [`content`](#-ca_cert--ca--content)
 * [`checksum`](#-ca_cert--ca--checksum)
 * [`checksum_type`](#-ca_cert--ca--checksum_type)
+* [`proxy_server`](#-ca_cert--ca--proxy_server)
+* [`proxy_type`](#-ca_cert--ca--proxy_type)
 
 ##### <a name="-ca_cert--ca--ensure"></a>`ensure`
 
@@ -236,14 +238,13 @@ Whether or not the CA certificate should be on a system or not.
 
 Default value: `'present'`
 
-##### <a name="-ca_cert--ca--content"></a>`content`
+##### <a name="-ca_cert--ca--allow_insecure_source"></a>`allow_insecure_source`
 
-Data type: `Optional[String[1]]`
+Data type: `Boolean`
 
-PEM formatted certificate content
-This attribute is mutually exclusive with `source`
+Whether to allow insecure download or not.
 
-Default value: `undef`
+Default value: `false`
 
 ##### <a name="-ca_cert--ca--source"></a>`source`
 
@@ -255,19 +256,20 @@ Uri support, see puppet-archive.
 
 Default value: `undef`
 
-##### <a name="-ca_cert--ca--allow_insecure_source"></a>`allow_insecure_source`
+##### <a name="-ca_cert--ca--content"></a>`content`
 
-Data type: `Boolean`
+Data type: `Optional[String[1]]`
 
-Wether to allow insecure download or not.
+PEM formatted certificate content
+This attribute is mutually exclusive with `source`
 
-Default value: `false`
+Default value: `undef`
 
 ##### <a name="-ca_cert--ca--checksum"></a>`checksum`
 
 Data type: `Optional[String[1]]`
 
-The checksum of the file. (defaults to undef)
+The checksum of the file.
 
 Default value: `undef`
 
@@ -275,7 +277,23 @@ Default value: `undef`
 
 Data type: `Optional[String[1]]`
 
-The type of file checksum. (defauts to undef)
+The type of file checksum.
+
+Default value: `undef`
+
+##### <a name="-ca_cert--ca--proxy_server"></a>`proxy_server`
+
+Data type: `Optional[String[1]]`
+
+Proxy address to use when accessing source
+
+Default value: `undef`
+
+##### <a name="-ca_cert--ca--proxy_type"></a>`proxy_type`
+
+Data type: `Optional[String[1]]`
+
+Proxy type ( See `archive::proxy_type )
 
 Default value: `undef`
 
