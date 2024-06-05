@@ -9,7 +9,7 @@ describe 'ca_cert', type: :class do
       trusted_cert_dir = '/etc/pki/ca-trust/source/anchors'
       update_cmd       = 'update-ca-trust extract'
     when 'Archlinux'
-      trusted_cert_dir = '/etc/ca-certificates/trust-source/anchors/'
+      trusted_cert_dir = '/etc/ca-certificates/trust-source/anchors'
       update_cmd       = 'trust extract-compat'
     when 'Suse'
       trusted_cert_dir = '/etc/pki/trust/anchors'
@@ -63,8 +63,10 @@ describe 'ca_cert', type: :class do
 
       it { is_expected.to contain_ca_cert__ca('ca1') } # from ./spec/fixtures/hiera
       it { is_expected.to contain_ca_cert__ca('ca2') } # from ./spec/fixtures/hiera
-      it { is_expected.to contain_file('ca1.crt').with_source('puppet:///modules/ca_cert/ca1.pem') }
-      it { is_expected.to contain_file('ca2.crt').with_source('puppet:///modules/ca_cert/ca2.pem') }
+      it { is_expected.to contain_archive("#{trusted_cert_dir}/ca1.crt").with_source('puppet:///modules/ca_cert/ca1.pem') }
+      it { is_expected.to contain_archive("#{trusted_cert_dir}/ca2.crt").with_source('puppet:///modules/ca_cert/ca2.pem') }
+      it { is_expected.to contain_file("#{trusted_cert_dir}/ca1.crt").with_ensure('file') }
+      it { is_expected.to contain_file("#{trusted_cert_dir}/ca2.crt").with_ensure('file') }
 
       context 'with always_update_certs set to true' do
         let(:params) { { always_update_certs: true } }

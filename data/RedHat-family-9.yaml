@@ -1,0 +1,2 @@
+---
+ca_cert::distrusted_cert_dir: '/etc/pki/ca-trust/source/blocklist'

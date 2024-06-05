@@ -6,22 +6,17 @@
 
 ### Classes
 
-* [`ca_cert`](#ca_cert): This module manages the user defined certificate authority (CA)
-certificates on the server. On OSes that support a distrusted
-folder the module also manages distrusting system default CA certificates.
+* [`ca_cert`](#ca_cert): This module manages the shared system-wide truststore.
 
 ### Defined types
 
-* [`ca_cert::ca`](#ca_cert--ca): Manage a user defined CA Certificate on a system.
-On OSes that support distrusting pre-installed CAs this can be managed as well.
+* [`ca_cert::ca`](#ca_cert--ca): Manage a CA Certificate in the the shared system-wide truststore.
 
 ## Classes
 
 ### <a name="ca_cert"></a>`ca_cert`
 
-This module manages the user defined certificate authority (CA)
-certificates on the server. On OSes that support a distrusted
-folder the module also manages distrusting system default CA certificates.
+This module manages the shared system-wide truststore.
 
 #### Examples
 
@@ -60,6 +55,7 @@ The following parameters are available in the `ca_cert` class:
 * [`update_cmd`](#-ca_cert--update_cmd)
 * [`trusted_cert_dir`](#-ca_cert--trusted_cert_dir)
 * [`distrusted_cert_dir`](#-ca_cert--distrusted_cert_dir)
+* [`ca_certificates_conf`](#-ca_cert--ca_certificates_conf)
 * [`install_package`](#-ca_cert--install_package)
 * [`package_ensure`](#-ca_cert--package_ensure)
 * [`package_name`](#-ca_cert--package_name)
@@ -91,6 +87,15 @@ Default provided by Hiera for supported Operating Systems.
 Data type: `Optional[Stdlib::Absolutepath]`
 
 Absolute directory path to the folder containing distrusted certificates.
+Default provided by Hiera for supported Operating Systems.
+
+Default value: `undef`
+
+##### <a name="-ca_cert--ca_certificates_conf"></a>`ca_certificates_conf`
+
+Data type: `Optional[Stdlib::Absolutepath]`
+
+Some distros use a configuration file to mark distrusted certificates.
 Default provided by Hiera for supported Operating Systems.
 
 Default value: `undef`
@@ -198,8 +203,7 @@ Default value: `{}`
 
 ### <a name="ca_cert--ca"></a>`ca_cert::ca`
 
-Manage a user defined CA Certificate on a system.
-On OSes that support distrusting pre-installed CAs this can be managed as well.
+Manage a CA Certificate in the the shared system-wide truststore.
 
 #### Examples
 
@@ -215,55 +219,53 @@ ca_cert::ca { 'globalsign_org_intermediate':
 
 The following parameters are available in the `ca_cert::ca` defined type:
 
-* [`ca_text`](#-ca_cert--ca--ca_text)
-* [`source`](#-ca_cert--ca--source)
 * [`ensure`](#-ca_cert--ca--ensure)
-* [`verify_https_cert`](#-ca_cert--ca--verify_https_cert)
+* [`content`](#-ca_cert--ca--content)
+* [`source`](#-ca_cert--ca--source)
+* [`allow_insecure_source`](#-ca_cert--ca--allow_insecure_source)
 * [`checksum`](#-ca_cert--ca--checksum)
 * [`checksum_type`](#-ca_cert--ca--checksum_type)
 
-##### <a name="-ca_cert--ca--ca_text"></a>`ca_text`
+##### <a name="-ca_cert--ca--ensure"></a>`ensure`
 
-Data type: `Optional[String]`
+Data type: `Enum['present', 'absent', 'trusted', 'distrusted']`
 
-The text of the CA certificate to install. Required if text is the source
-(default). If a different source is specified this parameter is ignored.
+Whether or not the CA certificate should be on a system or not.
+- `present`/`absent` is used to manage local/none default CAs.
+- `trusted`/`distrusted` is used to manage system CAs.
+
+Default value: `'present'`
+
+##### <a name="-ca_cert--ca--content"></a>`content`
+
+Data type: `Optional[String[1]]`
+
+PEM formatted certificate content
+This attribute is mutually exclusive with `source`
 
 Default value: `undef`
 
 ##### <a name="-ca_cert--ca--source"></a>`source`
 
-Data type: `String`
+Data type: `Optional[String[1]]`
 
-Where the CA certificate should be retrieved from. text, http, https, ftp,
-file, and puppet protocols/sources are supported. If text, then the ca_text parameter
-is also required. Defaults to text.
+A source certificate, which will be copied into place on the local system.
+This attribute is mutually exclusive with `content`
+Uri support, see puppet-archive.
 
-Default value: `'text'`
+Default value: `undef`
 
-##### <a name="-ca_cert--ca--ensure"></a>`ensure`
-
-Data type: `Enum['present', 'trusted', 'distrusted', 'absent']`
-
-Whether or not the CA certificate should be on a system or not. Valid
-values are trusted, present, distrusted, and absent. Note: untrusted is
-not supported on Debian based systems - using it will log a warning
-and treat it the same as absent. (defaults to trusted)
-
-Default value: `'trusted'`
-
-##### <a name="-ca_cert--ca--verify_https_cert"></a>`verify_https_cert`
+##### <a name="-ca_cert--ca--allow_insecure_source"></a>`allow_insecure_source`
 
 Data type: `Boolean`
 
-When retrieving a certificate whether or not to validate the CA of the
-source. (defaults to true)
+Wether to allow insecure download or not.
 
-Default value: `true`
+Default value: `false`
 
 ##### <a name="-ca_cert--ca--checksum"></a>`checksum`
 
-Data type: `Optional[String]`
+Data type: `Optional[String[1]]`
 
 The checksum of the file. (defaults to undef)
 

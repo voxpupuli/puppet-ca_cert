@@ -1,30 +1,27 @@
 # @summary
-#   Manage a user defined CA Certificate on a system.
-#   On OSes that support distrusting pre-installed CAs this can be managed as well.
+#   Manage a CA Certificate in the the shared system-wide truststore.
 #
 # @example
 #   ca_cert::ca { 'globalsign_org_intermediate':
 #     source => 'http://secure.globalsign.com/cacert/gsorganizationvalsha2g2r1.crt',
 #   }
 #
-# @param ca_text
-#   The text of the CA certificate to install. Required if text is the source
-#   (default). If a different source is specified this parameter is ignored.
+# @param ensure
+#   Whether or not the CA certificate should be on a system or not.
+#   - `present`/`absent` is used to manage local/none default CAs.
+#   - `trusted`/`distrusted` is used to manage system CAs.
+#
+# @param content
+#   PEM formatted certificate content
+#   This attribute is mutually exclusive with `source`
 #
 # @param source
-#   Where the CA certificate should be retrieved from. text, http, https, ftp,
-#   file, and puppet protocols/sources are supported. If text, then the ca_text parameter
-#   is also required. Defaults to text.
+#   A source certificate, which will be copied into place on the local system.
+#   This attribute is mutually exclusive with `content`
+#   Uri support, see puppet-archive.
 #
-# @param ensure
-#   Whether or not the CA certificate should be on a system or not. Valid
-#   values are trusted, present, distrusted, and absent. Note: untrusted is
-#   not supported on Debian based systems - using it will log a warning
-#   and treat it the same as absent. (defaults to trusted)
-#
-# @param verify_https_cert
-#   When retrieving a certificate whether or not to validate the CA of the
-#   source. (defaults to true)
+# @param allow_insecure_source
+#   Wether to allow insecure download or not.
 #
 # @param checksum
 #   The checksum of the file. (defaults to undef)
@@ -33,99 +30,85 @@
 #   The type of file checksum. (defauts to undef)
 #
 define ca_cert::ca (
-  Enum['present', 'trusted', 'distrusted', 'absent'] $ensure = 'trusted',
-  String $source = 'text',
-  Boolean $verify_https_cert = true,
-  Optional[String] $ca_text = undef,
-  Optional[String] $checksum = undef,
+  Enum['present', 'absent', 'trusted', 'distrusted'] $ensure = 'present',
+  Boolean $allow_insecure_source = false,
+  Optional[String[1]] $source = undef,
+  Optional[String[1]] $content = undef,
+  Optional[String[1]] $checksum = undef,
   Optional[String[1]] $checksum_type = undef,
 ) {
   include ca_cert
 
-  if ($ensure == 'trusted' or $ensure == 'distrusted') and $source == 'text' and !$ca_text {
-    fail('ca_text is required if source is set to text')
-  }
-
-  # Since Debian based OSes don't have explicit distrust directories
-  if $facts['os']['family'] == 'Debian' and $ensure == 'distrusted' {
-    warning("Cannot explicitly set CA distrust on ${facts['os']['name']}.")
-    warning("Ensuring that ${name} CA is absent from the trusted list.")
-    $adjusted_ensure = 'absent'
-  }
-  else {
-    $adjusted_ensure = $ensure
-  }
-
   # Determine Full Resource Name
   $resource_name = "${name}.${ca_cert::ca_file_extension}"
 
-  $ca_cert = $adjusted_ensure ? {
-    'distrusted' => "${ca_cert::distrusted_cert_dir}/${resource_name}",
-    default      => "${ca_cert::trusted_cert_dir}/${resource_name}",
+  case $ensure {
+    'present', 'absent': {
+      $ca_cert = "${ca_cert::trusted_cert_dir}/${resource_name}"
+    }
+    'trusted', 'distrusted': {
+      $ca_cert = "${ca_cert::distrusted_cert_dir}/${resource_name}"
+    }
+    default: {}
   }
 
-  case $adjusted_ensure {
-    'present', 'trusted', 'distrusted': {
-      $source_array = split($source, ':')
-      $protocol_type = $source_array[0]
-      case $protocol_type {
-        'puppet': {
-          file { $resource_name:
-            ensure => 'file',
-            source => $source,
-            path   => $ca_cert,
-            owner  => 'root',
-            group  => $ca_cert::ca_file_group,
-            mode   => $ca_cert::ca_file_mode,
-            notify => Exec['ca_cert_update'],
-          }
-        }
-        'ftp', 'https', 'http': {
+  # On Debian we trust/distrust Os provided CAs in config
+  if $facts['os']['family'] == 'Debian' and member(['trusted', 'distrusted'], $ensure) {
+    if $ensure == 'trusted' {
+      exec { "trust ca ${resource_name}":
+        command => "sed -ri \'s|!(.*)${resource_name}|\\1${resource_name}|\' ${ca_cert::ca_certificates_conf}",
+        onlyif  => "grep -q ${resource_name} ${ca_cert::ca_certificates_conf} && grep -q \'^!.*${resource_name}\' ${ca_cert::ca_certificates_conf}",
+        path    => ['/bin','/usr/bin'],
+        notify  => Exec['ca_cert_update'],
+      }
+    } else {
+      exec { "distrust ca ${resource_name}":
+        command => "sed -ri \'s|(.*)${resource_name}|!\\1${resource_name}|\' ${ca_cert::ca_certificates_conf}",
+        onlyif  => "grep -q ${resource_name} ${ca_cert::ca_certificates_conf} && grep -q \'^[^!].*${resource_name}\' ${ca_cert::ca_certificates_conf}",
+        path    => ['/bin','/usr/bin'],
+        notify  => Exec['ca_cert_update'],
+      }
+    }
+  }
+  else {
+    case $ensure {
+      'present', 'distrusted': {
+        if $source {
           archive { $ca_cert:
             ensure         => 'present',
             source         => $source,
             checksum       => $checksum,
             checksum_type  => $checksum_type,
-            allow_insecure => !$verify_https_cert,
+            allow_insecure => $allow_insecure_source,
             notify         => Exec['ca_cert_update'],
           }
-        }
-        'file': {
-          $source_path = $source_array[1]
-          file { $resource_name:
+          -> file { $ca_cert:
             ensure => 'file',
-            source => $source_path,
-            path   => $ca_cert,
             owner  => 'root',
             group  => $ca_cert::ca_file_group,
             mode   => $ca_cert::ca_file_mode,
             notify => Exec['ca_cert_update'],
           }
-        }
-        'text': {
-          file { $resource_name:
+        } elsif $content {
+          file { $ca_cert:
             ensure  => 'file',
-            content => $ca_text,
-            path    => $ca_cert,
+            content => $content,
             owner   => 'root',
             group   => $ca_cert::ca_file_group,
             mode    => $ca_cert::ca_file_mode,
             notify  => Exec['ca_cert_update'],
           }
-        }
-        default: {
-          fail('Protocol must be puppet, file, http, https, ftp, or text.')
+        } else {
+          fail('Either `source` or `content` is required')
         }
       }
-    }
-    'absent': {
-      file { $ca_cert:
-        ensure => absent,
-        notify => Exec['ca_cert_update'],
+      'absent', 'trusted': {
+        file { $ca_cert:
+          ensure => absent,
+          notify => Exec['ca_cert_update'],
+        }
       }
-    }
-    default: {
-      fail("Ca_cert::Ca[${name}] - ensure must be set to present, trusted, distrusted, or absent.")
+      default: {}
     }
   }
 }
