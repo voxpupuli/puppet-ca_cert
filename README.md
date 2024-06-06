@@ -7,6 +7,7 @@
 [![Puppet Forge - endorsement](https://img.shields.io/puppetforge/e/puppet/ca_cert.svg)](https://forge.puppetlabs.com/puppet/ca_cert)
 [![Puppet Forge - scores](https://img.shields.io/puppetforge/f/puppet/ca_cert.svg)](https://forge.puppetlabs.com/puppet/ca_cert)
 [![License](https://img.shields.io/github/license/voxpupuli/puppet-ca_cert.svg)](https://github.com/voxpupuli/puppet-ca_cert/blob/master/LICENSE)
+[![Donated by Phil Fenstermacher](https://img.shields.io/badge/donated%20by-Phil%20Fenstermacher-fb7047.svg)](#transfer-notice)
 
 #### Table of Contents
 
@@ -92,3 +93,11 @@ welcomes new contributions to this module, especially those that include
 documentation and rspec tests. We are happy to provide guidance if necessary.
 
 Please see [CONTRIBUTING](.github/CONTRIBUTING.md) for more details.
+
+## Transfer Notice
+
+This module was originally authored by [Phil Fenstermacher](<https://github.com/pcfens>).
+The maintainer preferred that Puppet Community take ownership of the module for future improvement and maintenance.
+Existing pull requests and issues were transferred over, please fork and continue to contribute here instead.
+
+Previously: <https://github.com/pcfens/puppet-ca_cert>
