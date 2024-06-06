@@ -1,12 +1,12 @@
 {
-  "name": "pcfens-ca_cert",
-  "version": "2.5.0",
-  "author": "pcfens",
+  "name": "puppet-ca_cert",
+  "version": "2.5.1-rc0",
+  "author": "Vox Pupuli",
   "summary": "Manage system CA certificates",
   "license": "Apache-2.0",
-  "source": "https://github.com/pcfens/puppet-ca_cert",
-  "project_page": "https://github.com/pcfens/puppet-ca_cert",
-  "issues_url": "https://github.com/pcfens/puppet-ca_cert/issues",
+  "source": "https://github.com/voxpupuli/puppet-ca_cert",
+  "project_page": "https://github.com/voxpupuli/puppet-ca_cert",
+  "issues_url": "https://github.com/voxpupuli/puppet-ca_cert/issues",
   "dependencies": [
     {
       "name": "puppetlabs/stdlib",
