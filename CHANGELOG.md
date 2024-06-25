@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v3.1.0](https://github.com/voxpupuli/puppet-ca_cert/tree/v3.1.0) (2024-06-25)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-ca_cert/compare/v3.0.0...v3.1.0)
+
+**Implemented enhancements:**
+
+- replace create\_resources\(\) with iterator [\#115](https://github.com/voxpupuli/puppet-ca_cert/pull/115) ([bastelfreak](https://github.com/bastelfreak))
+
+**Merged pull requests:**
+
+- puppet-lint: validate parameter types&docs [\#114](https://github.com/voxpupuli/puppet-ca_cert/pull/114) ([bastelfreak](https://github.com/bastelfreak))
+- cleanup spec tests & facterdb\_string\_keys: switch to strings [\#113](https://github.com/voxpupuli/puppet-ca_cert/pull/113) ([bastelfreak](https://github.com/bastelfreak))
+
 ## [v3.0.0](https://github.com/voxpupuli/puppet-ca_cert/tree/v3.0.0) (2024-06-07)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-ca_cert/compare/v2.5.0...v3.0.0)
