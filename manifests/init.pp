@@ -116,8 +116,10 @@ class ca_cert (
     }
   }
 
-  if !empty($ca_certs) {
-    create_resources('ca_cert::ca', $ca_certs)
+  $ca_certs.each |$ca, $data| {
+    ca_cert::ca { $ca:
+      * => $data,
+    }
   }
 
   exec { 'ca_cert_update':
