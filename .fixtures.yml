@@ -2,4 +2,4 @@
 fixtures:
   repositories:
     stdlib: "https://github.com/puppetlabs/puppetlabs-stdlib.git"
-    puppet_archive: "https://github.com/voxpupuli/puppet-archive.git"
+    archive: "https://github.com/voxpupuli/puppet-archive.git"

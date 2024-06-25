@@ -1,10 +1,11 @@
 require 'spec_helper'
 
-describe 'ca_cert', type: :class do
-  on_supported_os.each do |os, facts|
-    case facts[:os]['family']
+describe 'ca_cert' do
+  on_supported_os.each do |os, os_facts|
+    case os_facts['os']['family']
     when 'Debian'
       trusted_cert_dir = '/usr/local/share/ca-certificates'
+      update_cmd       = 'update-ca-certificates'
     when 'RedHat'
       trusted_cert_dir = '/etc/pki/ca-trust/source/anchors'
       update_cmd       = 'update-ca-trust extract'
@@ -16,15 +17,12 @@ describe 'ca_cert', type: :class do
       update_cmd       = 'update-ca-certificates'
     end
 
-    cert_dir_group = 'root' if cert_dir_group.nil?
-    cert_dir_mode  = '0755' if cert_dir_mode.nil?
-    update_cmd     = 'update-ca-certificates' if update_cmd.nil?
-    package_name   = 'ca-certificates' if package_name.nil?
+    package_name = 'ca-certificates'
 
     context "on #{os}" do
-      let(:facts) { facts }
+      let(:facts) { os_facts }
 
-      it { is_expected.to compile }
+      it { is_expected.to compile.with_all_deps }
 
       it do
         is_expected.to contain_file('trusted_certs').only_with(
@@ -32,8 +30,8 @@ describe 'ca_cert', type: :class do
             'ensure'  => 'directory',
             'path'    => trusted_cert_dir,
             'owner'   => 'root',
-            'group'   => cert_dir_group,
-            'mode'    => cert_dir_mode,
+            'group'   => 'root',
+            'mode'    => '0755',
             'purge'   => false,
             'recurse' => false,
             'notify'  => 'Exec[ca_cert_update]',

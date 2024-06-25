@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'ca_cert::ca', type: :define do
+describe 'ca_cert::ca' do
   let(:title) { 'Globalsign_Org_Intermediate' }
   let(:pre_condition) do
     'class {"ca_cert":
@@ -8,14 +8,14 @@ describe 'ca_cert::ca', type: :define do
     }'
   end
 
-  on_supported_os.sort.each do |os, facts|
+  on_supported_os.sort.each do |os, os_facts|
     # define os specific defaults
-    case facts[:os]['family']
+    case os_facts['os']['family']
     when 'Debian'
       trusted_cert_dir    = '/usr/local/share/ca-certificates'
     when 'RedHat'
       trusted_cert_dir    = '/etc/pki/ca-trust/source/anchors'
-      distrusted_cert_dir = if facts[:os]['release']['major'] < '9'
+      distrusted_cert_dir = if os_facts['os']['release']['major'] < '9'
                               '/etc/pki/ca-trust/source/blacklist'
                             else
                               '/etc/pki/ca-trust/source/blocklist'
@@ -26,15 +26,16 @@ describe 'ca_cert::ca', type: :define do
     when 'Suse'
       trusted_cert_dir    = '/etc/pki/trust/anchors'
       distrusted_cert_dir = '/etc/pki/trust/blacklist'
+    else
+      distrusted_cert_dir = ''
     end
 
-    ca_file_extension   = 'crt' if ca_file_extension.nil?
-    ca_file_group       = 'root' if ca_file_group.nil?
-    ca_file_mode        = '0644' if ca_file_mode.nil?
-    distrusted_cert_dir = '' if distrusted_cert_dir.nil?
+    ca_file_extension   = 'crt'
+    ca_file_group       = 'root'
+    ca_file_mode        = '0644'
 
     describe "on #{os}" do
-      let(:facts) { facts }
+      let(:facts) { os_facts }
 
       context 'with default values for parameters' do
         it { is_expected.to compile.and_raise_error(%r{Either `source` or `content` is required}) }
@@ -100,7 +101,7 @@ describe 'ca_cert::ca', type: :define do
 
         it { is_expected.not_to contain_archive("#{distrusted_cert_dir}/#{title}.#{ca_file_extension}") }
 
-        case facts[:os]['family']
+        case os_facts['os']['family']
         when 'Debian'
           it { is_expected.to contain_exec("trust ca #{title}.#{ca_file_extension}") }
           it { is_expected.not_to contain_file("#{distrusted_cert_dir}/#{title}.#{ca_file_extension}") }
@@ -121,7 +122,7 @@ describe 'ca_cert::ca', type: :define do
       context 'with ensure set to "distrusted" and no source or content' do
         let(:params) { { ensure: 'distrusted' } }
 
-        case facts[:os]['family']
+        case os_facts['os']['family']
         when 'Debian'
           it { is_expected.to contain_exec("distrust ca #{title}.#{ca_file_extension}") }
           it { is_expected.not_to contain_archive("#{distrusted_cert_dir}/#{title}.#{ca_file_extension}") }
@@ -134,7 +135,7 @@ describe 'ca_cert::ca', type: :define do
       context 'with ensure set to "distrusted" and valid source' do
         let(:params) { { ensure: 'distrusted', source: 'puppet:///testing.crt' } }
 
-        case facts[:os]['family']
+        case os_facts['os']['family']
         when 'Debian'
           it { is_expected.to contain_exec("distrust ca #{title}.#{ca_file_extension}") }
           it { is_expected.not_to contain_archive("#{distrusted_cert_dir}/#{title}.#{ca_file_extension}") }
