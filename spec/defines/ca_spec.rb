@@ -10,12 +10,12 @@ describe 'ca_cert::ca' do
 
   on_supported_os.sort.each do |os, os_facts|
     # define os specific defaults
-    case os_facts[:os]['family']
+    case os_facts['os']['family']
     when 'Debian'
       trusted_cert_dir    = '/usr/local/share/ca-certificates'
     when 'RedHat'
       trusted_cert_dir    = '/etc/pki/ca-trust/source/anchors'
-      distrusted_cert_dir = if os_facts[:os]['release']['major'] < '9'
+      distrusted_cert_dir = if os_facts['os']['release']['major'] < '9'
                               '/etc/pki/ca-trust/source/blacklist'
                             else
                               '/etc/pki/ca-trust/source/blocklist'
@@ -101,7 +101,7 @@ describe 'ca_cert::ca' do
 
         it { is_expected.not_to contain_archive("#{distrusted_cert_dir}/#{title}.#{ca_file_extension}") }
 
-        case os_facts[:os]['family']
+        case os_facts['os']['family']
         when 'Debian'
           it { is_expected.to contain_exec("trust ca #{title}.#{ca_file_extension}") }
           it { is_expected.not_to contain_file("#{distrusted_cert_dir}/#{title}.#{ca_file_extension}") }
@@ -122,7 +122,7 @@ describe 'ca_cert::ca' do
       context 'with ensure set to "distrusted" and no source or content' do
         let(:params) { { ensure: 'distrusted' } }
 
-        case os_facts[:os]['family']
+        case os_facts['os']['family']
         when 'Debian'
           it { is_expected.to contain_exec("distrust ca #{title}.#{ca_file_extension}") }
           it { is_expected.not_to contain_archive("#{distrusted_cert_dir}/#{title}.#{ca_file_extension}") }
@@ -135,7 +135,7 @@ describe 'ca_cert::ca' do
       context 'with ensure set to "distrusted" and valid source' do
         let(:params) { { ensure: 'distrusted', source: 'puppet:///testing.crt' } }
 
-        case os_facts[:os]['family']
+        case os_facts['os']['family']
         when 'Debian'
           it { is_expected.to contain_exec("distrust ca #{title}.#{ca_file_extension}") }
           it { is_expected.not_to contain_archive("#{distrusted_cert_dir}/#{title}.#{ca_file_extension}") }

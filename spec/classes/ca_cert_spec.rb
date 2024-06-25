@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe 'ca_cert' do
   on_supported_os.each do |os, os_facts|
-    case os_facts[:os]['family']
+    case os_facts['os']['family']
     when 'Debian'
       trusted_cert_dir = '/usr/local/share/ca-certificates'
       update_cmd       = 'update-ca-certificates'
