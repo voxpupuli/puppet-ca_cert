@@ -80,7 +80,7 @@ define ca_cert::ca (
   }
   else {
     case $ensure {
-      'present', 'distrusted': {
+      'present', 'trusted': {
         if $source {
           archive { $ca_cert:
             ensure         => 'present',
@@ -112,7 +112,7 @@ define ca_cert::ca (
           fail('Either `source` or `content` is required')
         }
       }
-      'absent', 'trusted': {
+      'absent', 'distrusted': {
         file { $ca_cert:
           ensure => absent,
           notify => Exec['ca_cert_update'],
