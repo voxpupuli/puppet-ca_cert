@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v4.0.0](https://github.com/voxpupuli/puppet-ca_cert/tree/v4.0.0) (2025-10-07)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-ca_cert/compare/v3.1.0...v4.0.0)
+
+**Breaking changes:**
+
+- Drop puppet, update openvox minimum version to 8.19 [\#130](https://github.com/voxpupuli/puppet-ca_cert/pull/130) ([TheMeier](https://github.com/TheMeier))
+
+**Implemented enhancements:**
+
+- puppet/archive Allow 8.x [\#129](https://github.com/voxpupuli/puppet-ca_cert/pull/129) ([TheMeier](https://github.com/TheMeier))
+
 ## [v3.1.0](https://github.com/voxpupuli/puppet-ca_cert/tree/v3.1.0) (2024-06-25)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-ca_cert/compare/v3.0.0...v3.1.0)
