@@ -35,7 +35,7 @@ describe 'ca_cert' do
             'purge'   => false,
             'recurse' => false,
             'notify'  => 'Exec[ca_cert_update]',
-          }
+          },
         )
       end
 
@@ -44,7 +44,7 @@ describe 'ca_cert' do
           {
             'ensure' => 'installed',
             'before' => ['Ca_cert::Ca[ca1]', 'Ca_cert::Ca[ca2]'],
-          }
+          },
         )
       end
 
@@ -55,7 +55,7 @@ describe 'ca_cert' do
             'logoutput'   => 'on_failure',
             'refreshonly' => true,
             'path'        => ['/usr/sbin', '/usr/bin', '/bin'],
-          }
+          },
         )
       end
 

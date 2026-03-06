@@ -57,7 +57,7 @@ describe 'ca_cert::ca' do
               'group'   => ca_file_group,
               'mode'    => ca_file_mode,
               'notify'  => 'Exec[ca_cert_update]',
-            }
+            },
           )
         end
       end
@@ -81,7 +81,7 @@ describe 'ca_cert::ca' do
                 'allow_insecure' => false,
                 'before'         => ["File[#{trusted_cert_dir}/#{title}.#{ca_file_extension}]"],
                 'notify'         => 'Exec[ca_cert_update]',
-              }
+              },
             )
             is_expected.to contain_file("#{trusted_cert_dir}/#{title}.#{ca_file_extension}").only_with(
               {
@@ -90,7 +90,7 @@ describe 'ca_cert::ca' do
                 'group' => ca_file_group,
                 'mode' => ca_file_mode,
                 'notify' => 'Exec[ca_cert_update]',
-              }
+              },
             )
           end
         end
@@ -113,7 +113,7 @@ describe 'ca_cert::ca' do
               {
                 'ensure' => 'absent',
                 'notify' => 'Exec[ca_cert_update]',
-              }
+              },
             )
           end
         end
@@ -153,7 +153,7 @@ describe 'ca_cert::ca' do
                 'allow_insecure' => false,
                 'before'         => ["File[#{distrusted_cert_dir}/#{title}.#{ca_file_extension}]"],
                 'notify'         => 'Exec[ca_cert_update]',
-              }
+              },
             )
             is_expected.to contain_file("#{distrusted_cert_dir}/#{title}.#{ca_file_extension}").only_with(
               {
@@ -162,7 +162,7 @@ describe 'ca_cert::ca' do
                 'group' => ca_file_group,
                 'mode' => ca_file_mode,
                 'notify' => 'Exec[ca_cert_update]',
-              }
+              },
             )
           end
         end
@@ -176,7 +176,7 @@ describe 'ca_cert::ca' do
             {
               'ensure' => 'absent',
               'notify' => 'Exec[ca_cert_update]',
-            }
+            },
           )
         end
       end
