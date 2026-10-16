@@ -207,7 +207,7 @@ Manage a CA Certificate in the the shared system-wide truststore.
 
 #### Examples
 
-##### 
+#####
 
 ```puppet
 ca_cert::ca { 'globalsign_org_intermediate':
@@ -296,4 +296,3 @@ Data type: `Optional[String[1]]`
 Proxy type ( See `archive::proxy_type )
 
 Default value: `undef`
-
