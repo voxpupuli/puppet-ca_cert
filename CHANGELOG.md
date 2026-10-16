@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v4.2.0](https://github.com/voxpupuli/puppet-ca_cert/tree/v4.2.0) (2026-10-16)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-ca_cert/compare/v4.1.0...v4.2.0)
+
+**Implemented enhancements:**
+
+- puppet/archive: Allow 9.x [\#144](https://github.com/voxpupuli/puppet-ca_cert/pull/144) ([bastelfreak](https://github.com/bastelfreak))
+
 ## [v4.1.0](https://github.com/voxpupuli/puppet-ca_cert/tree/v4.1.0) (2026-10-16)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-ca_cert/compare/v4.0.0...v4.1.0)
